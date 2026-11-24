@@ -641,6 +641,15 @@ The test file was removed afterwards.
 
 **Minor open item:** a mostly-English Hinglish request ("Riverton annual report ka saransh batao") is detected as English, so it's answered in English.
 
+### P2.23 New README media from the live site (2026-11-25)
+The README GIF and screenshots predated the mode guide, suggestions, private documents and citation repair. `frontend/e2e/readme-media.mjs` (it replaces `record-demo.mjs`) drives the **live demo** in Edge and captures:
+- **`demo.gif`** (23 frames, 0.6 MB): the Medical coverage card → typing "glauco" shows real MedQuAD questions → "What is Glaucoma?" streams in grounded in 3 sources (1.9 s) → a citation highlights its source card.
+- **`mode-guide.png`:** Research mode's coverage card.
+- **`research.png`:** a cited answer with 5 papers from 2026, in 2.8 s.
+- **`private-docs.png`:** an uploaded 22-page PDF answered with "Roads… 2,115 crore rupees [1]", all sources "Your document", in 0.9 s. The script removes the uploaded file afterwards.
+
+The two outdated screenshots (`empty-state.png`, `medical-hindi.png`) were removed. The capture used 3 Groq questions.
+
 ---
 
 ## Remaining backlog (updated 2026-11-25, end of P2.22)

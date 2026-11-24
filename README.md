@@ -4,7 +4,7 @@
 
 **Live demo: [billie.kindwater-b6a0b879.uaenorth.azurecontainerapps.io](https://billie.kindwater-b6a0b879.uaenorth.azurecontainerapps.io)**. Each visitor gets a daily question limit, and chats are private to the browser. If nobody has used it recently, the first visit takes about a minute while the server starts.
 
-![Billie: a medical question streams into a cited answer, with the emergency banner and source cards](docs/images/demo.gif)
+![Billie: Medical mode shows what it contains, typing suggests real questions from the index, and the answer streams in with citations](docs/images/demo.gif)
 
 | Mode | Corpus | What you can ask |
 |---|---|---|
@@ -30,6 +30,12 @@
 - **Fast where it can be on a CPU.** Repeated questions come from an answer cache in ~0.1 s; models are pre-loaded at startup; duplicate passages are removed so every source slot adds information; **Stop** really stops the local model.
 - **Feedback loop.** 👍/👎 on every answer (a 👎 also evicts it from the cache), regenerate, edit-and-resend, and conversation deep links.
 - **Production habits.** Streaming SSE API, SQLite conversation history, structured JSON logs with request IDs, Prometheus metrics, rate limiting, CSP headers, fail-closed auth in production, validated uploads, a prompt-injection guard, atomic and resumable index builds, Docker, and CI with lint, type checks and tests.
+
+## Screenshots
+
+| Each mode says what it contains | Ask about your own document (private, 1 hour) |
+|---|---|
+| ![Research mode coverage card: paper count, years, biggest areas, good for / not covered, and examples](docs/images/mode-guide.png) | ![A question about an uploaded PDF answered with citations to "Your document"](docs/images/private-docs.png) |
 
 ## Quick start (Windows, macOS, Linux)
 
