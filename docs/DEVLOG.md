@@ -396,11 +396,50 @@ Re-runs of the affected cases: all pass. Results: `docs/evaluation/stress_test/`
 
 **Bug found on the way:** the stress-test p90 formula (see P2.15).
 
+### P2.17 Live public demo on Azure Container Apps (2026-11-25)
+**Hosting decision:** Hugging Face Docker Spaces need PRO (P2.15). Free alternatives were checked against Billie's ~2 GB memory need:
+- Render's free tier has 512 MB and sleeps when idle.
+- Oracle Always Free needs a card, and idle servers can be reclaimed.
+- Cloud Run needs a card.
+- The Heroku student credit only covers 512 MB.
+- DigitalOcean's student credit ended in July 2026.
+
+**Chosen: Azure for Students** ($100 credit per year, no card, so no real-money risk) with **Container Apps**, which scales to zero.
+
+**Constraints found on the student subscription:**
+1. A policy allows only 5 regions (UAE North, India South Central, East Asia, Indonesia Central, Malaysia West). Container Apps isn't offered in India South Central, so the app runs in **UAE North**, the closest allowed region.
+2. **ACR Tasks are blocked** (`TasksOperationsNotAllowed`), so Azure can't build the image itself, and there's no Docker on the laptop.
+   - Workaround: a manual GitHub Actions workflow (`build-image.yml`) builds `deploy/huggingface/Dockerfile` and pushes it to the registry.
+   - The ~400 MB index bundle is attached to a release.
+   - Only a repository owner can store Actions secrets on a personal-account repo, so the build runs from the owner's fork (`Max0786234/Billie`). The fork holds the registry password secret and the index release. Code still lives in `Vishaljhaaa/Billie`.
+
+**Resources** (resource group `billie-rg`):
+- Container Registry, Basic tier: ~$5/month, the only fixed cost
+- Container Apps environment with log storage off
+- Container App `billie`: 2 vCPU / 4 GiB, min 0 / max 1 replica, external ingress on port 7860
+- Secrets: Groq key, Gemini key, admin key
+- A $10/month budget alert (80% actual, 100% forecast)
+
+The keys were read from local files and passed straight to Azure; they were never printed, committed or logged.
+
+**Verification on the live URL:**
+- `/api/status`: Groq ready, `embeddinggemma` available, all three corpora on hybrid search (knowledge 22, MedQuAD 27,582 passages / 16,407 vectors, arXiv 50,000 / 50,000). Production and demo mode on.
+- Questions, all grounded and cited:
+  - medical (English): 1.7 s
+  - Hinglish "madhumeh hota kya hai": 2.3 s, answered in Hinglish
+  - research: 2.6 s, citing 5 papers
+  - general: 1.0 s
+- Image questions: 24 s the first time (vision 21.9 s, a Gemini latency outlier), then **5.8 s** (vision 3.7 s).
+- Privacy and access: a second visitor id sees 0 of the first visitor's 5 chats; changing settings without the admin key returns 401; the quota counter decremented as expected.
+
 ---
 
 ## Remaining backlog (updated 2026-11-24, end of P2.16)
 Open items:
-1. **Hosting the public demo.** Hugging Face now requires PRO for Docker Spaces (402). Ready to deploy with `deploy/huggingface/` on HF PRO or any Docker host with ~2 GB RAM. Secrets needed: `GROQ_API_KEY`, `GEMINI_API_KEY`, `BILLIE_ADMIN_KEY`.
+1. **Redeploying after code changes:**
+   1. `gh repo sync Max0786234/Billie`
+   2. `gh workflow run build-image.yml -R Max0786234/Billie`
+   3. `az containerapp update -g billie-rg -n billie --image billiemaxacr.azurecr.io/billie:<sha>`
 2. Grow arXiv dense coverage further: `python -m billie.ingest arxiv --embed-only --embed-limit 100000` (~1 h per 30k on this CPU).
 3. Refresh the README screenshots (they predate feedback buttons and citation repair).
 4. Retrieval for misspelled or abbreviated medical terms (e.g. "VDRL"): measure an English query-expansion step before adopting it.

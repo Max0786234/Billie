@@ -116,7 +116,7 @@ Prompt processing dominates time-to-first-token, so the design budgets context c
 - **Local** (default): two processes (`uvicorn` + Vite dev server) or `docker compose up`, with Ollama models on the host.
 - **Hosted demo** (`deploy/huggingface/`): one container serves the API and the built React app on port 7860. Answers come from Groq (text) and Gemini (images), with keys stored as host secrets. Ollama + `embeddinggemma` run *inside* the container for embeddings, because the indexes were embedded with that exact model; mixing embedding models would make the vectors incomparable.
 - **Index bundle:** `python -m billie.ingest bundle` copies MedQuAD and only the 50k embedded arXiv papers. It remaps rowids to the vector order, cutting 2.6 GB to ~300 MB with identical hybrid results for those papers.
-- **Hosting constraint found:** Hugging Face Docker Spaces now need a paid plan on the free CPU tier. The container needs ~2 GB RAM (embedding model + vectors), which rules out 512 MB free tiers without moving embeddings to an API.
+- **Hosting:** the live demo runs on **Azure Container Apps**: scale to zero, at most 1 replica, 2 vCPU / 4 GiB, keys as Azure secrets. The image is built by a manual GitHub Actions workflow, because Azure's image builder is disabled on student subscriptions, and pushed to Azure Container Registry. Hugging Face Docker Spaces now need a paid plan. The container needs ~2 GB RAM (embedding model + vectors), which rules out 512 MB free tiers unless embeddings move to an API.
 
 ## Testing
 

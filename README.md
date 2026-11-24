@@ -2,6 +2,8 @@
 
 **A local-first, retrieval-augmented AI assistant that answers from documents and cites every claim.** Billie searches ~1 million documents with hybrid BM25 + semantic retrieval, streams answers from free cloud models (Groq for text, Gemini for images) or fully offline local models, falling back automatically, reads images, and replies in the user's language.
 
+**Live demo: [billie.kindwater-b6a0b879.uaenorth.azurecontainerapps.io](https://billie.kindwater-b6a0b879.uaenorth.azurecontainerapps.io)**. Each visitor gets a daily question limit, and chats are private to the browser. If nobody has used it recently, the first visit takes about a minute while the server starts.
+
 ![Billie: a medical question streams into a cited answer, with the emergency banner and source cards](docs/images/demo.gif)
 
 | Mode | Corpus | What you can ask |
@@ -59,7 +61,23 @@ Embedding runs checkpoint as they go. If interrupted, rerun with `--embed-only` 
 docker compose up --build            # http://localhost:8000 (Ollama runs as a service and pulls the models)
 ```
 
-A single-container image for a public demo (Groq + Gemini, embeddings inside the container, prebuilt indexes, demo mode on) is in [`deploy/huggingface/`](deploy/huggingface). `python -m billie.ingest bundle` shrinks the indexes from 2.6 GB to ~300 MB for it.
+### Public demo deployment
+
+The live demo runs as one container on **Azure Container Apps**:
+
+- Text answers come from Groq and images are read by Gemini; the API keys are stored as Azure secrets.
+- Embeddings run inside the container with Ollama, because the indexes were built with that exact model.
+- Demo mode is on: chats are private to each visitor, and questions are capped per visitor and per day.
+- It scales to zero when idle, so it costs nothing between visits and stays within the student credit.
+
+| Piece | Where |
+|---|---|
+| Image recipe | [`deploy/huggingface/Dockerfile`](deploy/huggingface/Dockerfile): React build → Ollama + `embeddinggemma` → Python API on port 7860 (the same image also runs on a Hugging Face Docker Space) |
+| Search indexes | `python -m billie.ingest bundle` → MedQuAD + the 50k embedded arXiv papers (2.6 GB → ~300 MB), attached to a GitHub release |
+| Image build | [`.github/workflows/build-image.yml`](.github/workflows/build-image.yml), run manually; pushes to Azure Container Registry. Azure's own builder is disabled on student subscriptions, so GitHub Actions builds it |
+| Hosting | Azure Container Apps (UAE North): 2 vCPU / 4 GB, 0–1 replicas, HTTPS ingress, $10/month budget alert |
+
+Measured on the live deployment: text answers 1.0–2.6 s, image questions ~6 s. The first request after idle includes a cold start.
 
 ## How it works
 
