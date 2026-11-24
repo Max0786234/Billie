@@ -1,0 +1,495 @@
+{
+  "summary": {
+    "abbreviation_questions": 20,
+    "top4_success_before": 19,
+    "top4_success_after": 19,
+    "liveqa_questions_evaluated": 39,
+    "liveqa_questions_triggering": 8,
+    "liveqa_ndcg_before": 0.408,
+    "liveqa_ndcg_after": 0.275
+  },
+  "cases": [
+    {
+      "q": "what is the VDRL test",
+      "gold": [
+        "syphilis"
+      ],
+      "expanded": "What is the Venereal Disease Research Laboratory (VDRL) test?",
+      "before": false,
+      "after": false,
+      "titles_before": [
+        "How to diagnose Von Hippel-Lindau disease ?",
+        "What are the treatments for cone-rod dystrophy ?",
+        "What are the treatments for Parkinson disease ?",
+        "What is (are) VLDLR-associated cerebellar hypoplasia ?"
+      ],
+      "titles_after": [
+        "How to diagnose VACTERL association ?",
+        "how is rabies diagnosed?",
+        "How to diagnose Hallermann-Streiff syndrome ?",
+        "How to diagnose Von Hippel-Lindau disease ?"
+      ]
+    },
+    {
+      "q": "COPD symptoms",
+      "gold": [
+        "COPD",
+        "chronic obstructive pulmonary"
+      ],
+      "expanded": "Chronic obstructive pulmonary disease (COPD) symptoms",
+      "before": true,
+      "after": true,
+      "titles_before": [
+        "What are the symptoms of COPD ?",
+        "What is (are) COPD ?",
+        "What causes COPD ?",
+        "What is (are) COPD ?"
+      ],
+      "titles_after": [
+        "What is (are) COPD ?",
+        "What is (are) COPD ?",
+        "What is (are) COPD ?",
+        "What is (are) Chronic Bronchitis ?"
+      ]
+    },
+    {
+      "q": "is CMT inherited",
+      "gold": [
+        "Charcot-Marie-Tooth"
+      ],
+      "expanded": "Is Charcot-Marie-Tooth disease (CMT) inherited?",
+      "before": true,
+      "after": true,
+      "titles_before": [
+        "What is (are) Charcot-Marie-Tooth Disease ?",
+        "What is (are) Charcot-Marie-Tooth Disease ?",
+        "What is (are) Charcot-Marie-Tooth disease type 4 ?",
+        "What is the outlook for Charcot-Marie-Tooth Disease ?"
+      ],
+      "titles_after": [
+        "What is (are) Charcot-Marie-Tooth Disease ?",
+        "What is (are) Charcot-Marie-Tooth disease type 4 ?",
+        "What is (are) Charcot-Marie-Tooth Disease ?",
+        "What is (are) Charcot-Marie-Tooth disease type 2F ?"
+      ]
+    },
+    {
+      "q": "what causes ALS",
+      "gold": [
+        "amyotrophic lateral sclerosis"
+      ],
+      "expanded": "What causes amyotrophic lateral sclerosis (ALS)?",
+      "before": true,
+      "after": true,
+      "titles_before": [
+        "What causes Juvenile amyotrophic lateral sclerosis ?",
+        "What causes Amyotrophic lateral sclerosis ?",
+        "What is (are) amyotrophic lateral sclerosis ?",
+        "What are the genetic changes related to amyotrophic lateral sclerosis ?"
+      ],
+      "titles_after": [
+        "What causes Juvenile amyotrophic lateral sclerosis ?",
+        "What causes Amyotrophic lateral sclerosis ?",
+        "What is (are) Juvenile amyotrophic lateral sclerosis ?",
+        "What is (are) Amyotrophic lateral sclerosis ?"
+      ]
+    },
+    {
+      "q": "can HPV be prevented",
+      "gold": [
+        "papillomavirus",
+        "HPV"
+      ],
+      "expanded": "Can human papillomavirus (HPV) be prevented?",
+      "before": true,
+      "after": true,
+      "titles_before": [
+        "Do you have information about HPV",
+        "How to prevent Anal Cancer ?",
+        "What is (are) Genital Warts ?",
+        "How to prevent Oral Cavity and Oropharyngeal Cancer ?"
+      ],
+      "titles_after": [
+        "what diseases are vaccine preventable",
+        "Who is at risk for Oropharyngeal Cancer? ?",
+        "Who is at risk for Anal Cancer? ?",
+        "How to prevent ?"
+      ]
+    },
+    {
+      "q": "IBS treatment",
+      "gold": [
+        "irritable bowel"
+      ],
+      "expanded": "Irritable bowel syndrome (IBS) treatment",
+      "before": true,
+      "after": true,
+      "titles_before": [
+        "What is (are) Irritable Bowel Syndrome ?",
+        "What to do for Irritable Bowel Syndrome in Children ?",
+        "What are the treatments for Irritable Bowel Syndrome in Children ?",
+        "What to do for Irritable Bowel Syndrome in Children ?"
+      ],
+      "titles_after": [
+        "What are the treatments for Irritable Bowel Syndrome in Children ?",
+        "What is (are) Irritable Bowel Syndrome ?",
+        "What to do for Irritable Bowel Syndrome in Children ?",
+        "What is (are) Irritable Bowel Syndrome in Children ?"
+      ]
+    },
+    {
+      "q": "what is GERD",
+      "gold": [
+        "gastroesophageal reflux",
+        "GER"
+      ],
+      "expanded": "What is gastroesophageal reflux disease (GERD)?",
+      "before": true,
+      "after": true,
+      "titles_before": [
+        "What is (are) GERD ?",
+        "What is (are) Heartburn ?",
+        "What is (are) Gastroparesis ?",
+        "What is (are) Esophagus Disorders ?"
+      ],
+      "titles_after": [
+        "What is (are) GERD ?",
+        "What is (are) Esophagus Disorders ?",
+        "What is (are) Gastroparesis ?",
+        "What is (are) Barrett esophagus ?"
+      ]
+    },
+    {
+      "q": "PCOS symptoms",
+      "gold": [
+        "polycystic ovary"
+      ],
+      "expanded": "Polycystic ovary syndrome (PCOS) symptoms",
+      "before": true,
+      "after": true,
+      "titles_before": [
+        "What is (are) Polycystic ovarian syndrome ?",
+        "What is (are) Polycystic Ovary Syndrome ?",
+        "What is (are) Ovarian Cysts ?",
+        "What are the symptoms of Polycystic ovarian syndrome ?"
+      ],
+      "titles_after": [
+        "What is (are) Polycystic Ovary Syndrome ?",
+        "What is (are) Polycystic ovarian syndrome ?",
+        "What is (are) Fowler's syndrome ?",
+        "What is (are) Ovarian Cysts ?"
+      ]
+    },
+    {
+      "q": "how is DVT diagnosed",
+      "gold": [
+        "deep vein thrombosis",
+        "venous thromboembolism"
+      ],
+      "expanded": "How is deep vein thrombosis (DVT) diagnosed?",
+      "before": true,
+      "after": true,
+      "titles_before": [
+        "How to diagnose Deep Vein Thrombosis ?",
+        "What are the symptoms of Deep Vein Thrombosis ?",
+        "What is (are) Deep Vein Thrombosis ?",
+        "What are the treatments for Deep Vein Thrombosis ?"
+      ],
+      "titles_after": [
+        "How to diagnose Deep Vein Thrombosis ?",
+        "What is (are) Deep Vein Thrombosis ?",
+        "What are the symptoms of Deep Vein Thrombosis ?",
+        "Who is at risk for Deep Vein Thrombosis? ?"
+      ]
+    },
+    {
+      "q": "ADHD in adults",
+      "gold": [
+        "attention deficit"
+      ],
+      "expanded": "Attention Deficit Hyperactivity Disorder (ADHD) in adults",
+      "before": true,
+      "after": true,
+      "titles_before": [
+        "What is (are) Attention Deficit-Hyperactivity Disorder ?",
+        "What is the outlook for Attention Deficit-Hyperactivity Disorder ?",
+        "What is (are) Attention Deficit Hyperactivity Disorder ?",
+        "what research (or clinical trials) is being done for Attention Deficit-Hyperactivity Disorder ?"
+      ],
+      "titles_after": [
+        "What is (are) Attention Deficit-Hyperactivity Disorder ?",
+        "What is the outlook for Attention Deficit-Hyperactivity Disorder ?",
+        "What are the treatments for Attention Deficit-Hyperactivity Disorder ?",
+        "what research (or clinical trials) is being done for Attention Deficit-Hyperactivity Disorder ?"
+      ]
+    },
+    {
+      "q": "what is CKD",
+      "gold": [
+        "kidney disease"
+      ],
+      "expanded": "What is chronic kidney disease (CKD)?",
+      "before": true,
+      "after": true,
+      "titles_before": [
+        "What is (are) Growth Failure in Children with Chronic Kidney Disease ?",
+        "What is (are) Nutrition for Early Chronic Kidney Disease in Adults ?",
+        "What is (are) Nutrition for Advanced Chronic Kidney Disease in Adults ?",
+        "What is (are) Chronic Kidney Disease ?"
+      ],
+      "titles_after": [
+        "What is (are) Chronic Kidney Disease ?",
+        "What is (are) Nutrition for Advanced Chronic Kidney Disease in Adults ?",
+        "What is (are) Nutrition for Early Chronic Kidney Disease in Adults ?",
+        "What is (are) Mineral and Bone Disorder in Chronic Kidney Disease ?"
+      ]
+    },
+    {
+      "q": "SLE treatment options",
+      "gold": [
+        "lupus"
+      ],
+      "expanded": null,
+      "before": true,
+      "after": true,
+      "titles_before": [
+        "What are the treatments for Lupus Nephritis ?",
+        "What is (are) systemic lupus erythematosus ?",
+        "What to do for Lupus Nephritis ?",
+        "How many people are affected by systemic lupus erythematosus ?"
+      ],
+      "titles_after": [
+        "What are the treatments for Lupus Nephritis ?",
+        "What is (are) systemic lupus erythematosus ?",
+        "What to do for Lupus Nephritis ?",
+        "How many people are affected by systemic lupus erythematosus ?"
+      ]
+    },
+    {
+      "q": "UTI causes",
+      "gold": [
+        "urinary tract infection"
+      ],
+      "expanded": "Urinary tract infection (UTI) causes",
+      "before": true,
+      "after": true,
+      "titles_before": [
+        "What causes Urinary Tract Infections ?",
+        "What to do for What I need to know about My Child's Urinary Tract Infection ?",
+        "What is (are) Urinary Tract Infections ?",
+        "What is (are) Urinary Tract Infections ?"
+      ],
+      "titles_after": [
+        "What is (are) What I need to know about My Child's Urinary Tract Infection ?",
+        "What is (are) Urinary Tract Infection In Adults ?",
+        "What causes Urinary Tract Infections ?",
+        "What is (are) Urinary Tract Infections ?"
+      ]
+    },
+    {
+      "q": "is RA genetic",
+      "gold": [
+        "rheumatoid arthritis"
+      ],
+      "expanded": "Is rheumatoid arthritis (RA) genetic?",
+      "before": true,
+      "after": true,
+      "titles_before": [
+        "What is (are) Rheumatoid Arthritis ?",
+        "What causes Felty's syndrome ?",
+        "What are the genetic changes related to rheumatoid arthritis ?",
+        "What to do for Renal Artery Stenosis ?"
+      ],
+      "titles_after": [
+        "What is (are) Rheumatoid Arthritis ?",
+        "Is rheumatoid arthritis inherited ?",
+        "What causes Rheumatoid Arthritis ?",
+        "What are the genetic changes related to rheumatoid arthritis ?"
+      ]
+    },
+    {
+      "q": "early signs of MS",
+      "gold": [
+        "multiple sclerosis"
+      ],
+      "expanded": "Early signs of multiple sclerosis (MS)?",
+      "before": true,
+      "after": true,
+      "titles_before": [
+        "What is (are) Multiple Sclerosis ?",
+        "What causes Multiple sclerosis ?",
+        "How to diagnose Multiple sclerosis ?",
+        "What is the outlook for Multiple Sclerosis ?"
+      ],
+      "titles_after": [
+        "What causes Multiple sclerosis ?",
+        "How to diagnose Multiple sclerosis ?",
+        "What is (are) Multiple Sclerosis ?",
+        "What is the outlook for Multiple Sclerosis ?"
+      ]
+    },
+    {
+      "q": "how does TB spread",
+      "gold": [
+        "tuberculosis"
+      ],
+      "expanded": "How does tuberculosis (TB) spread?",
+      "before": true,
+      "after": true,
+      "titles_before": [
+        "What is (are) Tuberculosis ?",
+        "What are the treatments for Tuberculosis (TB) ?",
+        "How to diagnose Tuberculosis (TB) ?",
+        "what research is being done for Tuberculosis (TB) ?"
+      ],
+      "titles_after": [
+        "What is (are) Tuberculosis ?",
+        "What are the treatments for Tuberculosis (TB) ?",
+        "How to diagnose Tuberculosis (TB) ?",
+        "what research is being done for Tuberculosis (TB) ?"
+      ]
+    },
+    {
+      "q": "AMD risk factors",
+      "gold": [
+        "macular degeneration"
+      ],
+      "expanded": "Age-related macular degeneration (AMD) risk factors",
+      "before": true,
+      "after": true,
+      "titles_before": [
+        "Who is at risk for Age-related Macular Degeneration? ?",
+        "Who is at risk for Age-related Macular Degeneration? ?",
+        "What is (are) Age-related Macular Degeneration ?",
+        "What is (are) Age-related Macular Degeneration ?"
+      ],
+      "titles_after": [
+        "Who is at risk for Age-related Macular Degeneration? ?",
+        "Who is at risk for Age-related Macular Degeneration? ?",
+        "What is (are) Age-related Macular Degeneration ?",
+        "What is (are) Age-related Macular Degeneration ?"
+      ]
+    },
+    {
+      "q": "BPH treatment",
+      "gold": [
+        "prostate"
+      ],
+      "expanded": "Benign prostatic hyperplasia (BPH) treatment",
+      "before": true,
+      "after": true,
+      "titles_before": [
+        "What is (are) Enlarged Prostate (BPH) ?",
+        "What are the treatments for Prostate Enlargement: Benign Prostatic Hyperplasia ?",
+        "What are the treatments for Prostate Enlargement: Benign Prostatic Hyperplasia ?",
+        "What is (are) Prostate Cancer ?"
+      ],
+      "titles_after": [
+        "How to prevent Prostate Enlargement: Benign Prostatic Hyperplasia ?",
+        "What are the treatments for Prostate Enlargement: Benign Prostatic Hyperplasia ?",
+        "What is (are) Enlarged Prostate (BPH) ?",
+        "What to do for Prostate Enlargement: Benign Prostatic Hyperplasia ?"
+      ]
+    },
+    {
+      "q": "what is HHT",
+      "gold": [
+        "hereditary hemorrhagic telangiectasia"
+      ],
+      "expanded": "What is hereditary hemorrhagic telangiectasia (HHT)?",
+      "before": true,
+      "after": true,
+      "titles_before": [
+        "What is (are) Hereditary hemorrhagic telangiectasia ?",
+        "What are the treatments for Hereditary hemorrhagic telangiectasia ?",
+        "What is (are) Heparin-induced thrombocytopenia ?",
+        "What is (are) Hypotrichosis-lymphedema-telangiectasia syndrome ?"
+      ],
+      "titles_after": [
+        "What is (are) Hereditary hemorrhagic telangiectasia ?",
+        "What are the treatments for Hereditary hemorrhagic telangiectasia ?",
+        "What are the treatments for hereditary hemorrhagic telangiectasia ?",
+        "What are the genetic changes related to hereditary hemorrhagic telangiectasia ?"
+      ]
+    },
+    {
+      "q": "how to prevent SIDS",
+      "gold": [
+        "sudden infant death"
+      ],
+      "expanded": "how to prevent sudden infant death syndrome (SIDS)?",
+      "before": true,
+      "after": true,
+      "titles_before": [
+        "What is (are) Sudden infant death syndrome ?",
+        "What is (are) Sudden Infant Death Syndrome ?",
+        "How to prevent Alagille Syndrome ?",
+        "How to prevent Childhood Nephrotic Syndrome ?"
+      ],
+      "titles_after": [
+        "What is (are) Sudden infant death syndrome ?",
+        "What is (are) Sudden Infant Death Syndrome ?",
+        "What are the symptoms of Sudden infant death syndrome ?",
+        "What is (are) sudden infant death with dysgenesis of the testes syndrome ?"
+      ]
+    }
+  ],
+  "liveqa": [
+    {
+      "qid": "7",
+      "question": "DVT. Can a birth control called Ocella cause DVT? My daughter experiences pains cramping,redness and swelling in her thigh and also really bad huge blood clots ",
+      "expanded": "DVT. Can a birth control called Ocella cause DVT? My daughter experiences pains, cramping, redness and swelling in her thigh, and also really bad huge blood clots during her menstrual cycles after she was prescribed Osella for birth control. Also these symptoms worsened after she gave birth. This ha",
+      "ndcg_before": 0.551,
+      "ndcg_after": 0.551
+    },
+    {
+      "qid": "11",
+      "question": "Macular Degeneration. I am a non-smoker , retired military veteran who was subjected to working conditions where the majority of fellow workers were smokers. Co",
+      "expanded": "Macular Degeneration. I am a non-smoker, retired military veteran who was subjected to working conditions where the majority of fellow workers were smokers. Could or does second hand smoke contribute or is a cause for getting Early Age-Related Macular Degeneration (AMD)? I was diagnosed with early A",
+      "ndcg_before": 0.138,
+      "ndcg_after": 0.138
+    },
+    {
+      "qid": "14",
+      "question": "vasculitis. Yes my wife has been dianosed with giant cell vasculitis Our doctors are not clear about this so im asking for help From you . She has vomited somet",
+      "expanded": "vasculitis. Yes my wife has been diagnosed with giant cell vasculitis. Our doctors are not clear about this so I'm asking for help from you. She has vomited something like coffee grounds and swelling in her feet and legs is really bad. migraines and face swelling to. no blood clots but nothing to go",
+      "ndcg_before": 0.0,
+      "ndcg_after": 0.0
+    },
+    {
+      "qid": "24",
+      "question": "Ear Ache. My son was treated for otitis media on [DATE]. Pains started the previous night. He is taking amoxicillin and antipyrine-benzocaine 5.5%-1.5% ear drop",
+      "expanded": null,
+      "ndcg_before": 0.5,
+      "ndcg_after": 0.5
+    },
+    {
+      "qid": "38",
+      "question": "ClinicalTrials.gov - Question - general information. My question to you is: what is the reason that there is very little attentions is to Antiphosoholipid Syndr",
+      "expanded": "ClinicalTrials.gov - Question - general information. My question to you is: what is the reason that there is very little attention given to Antiphospholipid Syndrome? To find the causes and possibly some type of cure for us who struggle with this auto-immune blood disorder? I guess that since it is ",
+      "ndcg_before": 0.228,
+      "ndcg_after": 0.196
+    },
+    {
+      "qid": "81",
+      "question": "CVID. I have recently been diagnosed with CVID. As a person with thyroid a thyroid tumor greater than 1 cm. and several thyroid cysys I am concerned about cance",
+      "expanded": "What is CVID? I have recently been diagnosed with chronic immune deficiency (CVID). As a person with thyroid, a thyroid tumor greater than 1 cm and several thyroid cysts, I am concerned about cancer. What are the current statistics for thyroid cancer in individuals with CVID? The tumor is being moni",
+      "ndcg_before": 1.0,
+      "ndcg_after": 0.387
+    },
+    {
+      "qid": "86",
+      "question": "Testing for EDS. I would like to know if you can point me in the direction of a laboratory in Southern California, Specifically San Bernardino County or LA Coun",
+      "expanded": "Testing for Ehlers-Danlos Syndrome (EDS). I would like to know if you can point me in the direction of a laboratory in Southern California, specifically San Bernardino County or LA County or even Riverside County that does genetic testing for EDS or Osteogenesis Imperfecta and do you know if the two",
+      "ndcg_before": 0.0,
+      "ndcg_after": 0.0
+    },
+    {
+      "qid": "101",
+      "question": "NSAIDS as a potential cause of ED. How long has this non prescription drug been implicated in erectile dysfunction?",
+      "expanded": "Nonsteroidal anti-inflammatory drugs (NSAIDs) as a potential cause of erectile dysfunction. How long has this non-prescription drug been implicated in erectile dysfunction?",
+      "ndcg_before": 0.848,
+      "ndcg_after": 0.43
+    }
+  ]
+}

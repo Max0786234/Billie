@@ -1,12 +1,12 @@
 # syntax=docker/dockerfile:1
-# Billie on a Hugging Face Docker Space (free "CPU basic": 2 vCPU, 16 GB RAM).
+# Billie as one container (live on Azure Container Apps; also runs as a Hugging Face Docker Space).
 #
 # * Answers come from Groq (text) and Gemini (images); their keys are Space secrets.
 # * Embeddings (hybrid search, citation repair, sentiment) run locally in the container
 #   with Ollama + embeddinggemma - the same model the indexes were built with.
 # * Indexes are prebuilt (`python -m billie.ingest bundle`): MedQuAD + 50k arXiv papers.
 #
-# Build context = the folder made by deploy/huggingface/stage.py.
+# Build context = the folder made by deploy/stage.py.
 
 # ---- 1. React frontend ------------------------------------------------------------
 FROM node:22-alpine AS web

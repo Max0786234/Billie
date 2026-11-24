@@ -9,14 +9,14 @@
 | Mode | Corpus | What you can ask |
 |---|---|---|
 | **General** | Billie's docs + your uploaded PDFs / Markdown | "How does Billie decide which documents to use?" |
-| **Medical** | MedQuAD: 16,407 NIH question-answer pairs | "What are the early symptoms of glaucoma?" Â· "à¤®à¤§à¥à¤®à¥‡à¤¹ à¤•à¥‡ à¤²à¤•à¥à¤·à¤£ à¤•à¥à¤¯à¤¾ à¤¹à¥ˆà¤‚?" |
+| **Medical** | MedQuAD: 16,407 NIH question-answer pairs | "What are the early symptoms of glaucoma?" · "मधुमेह के लक्षण क्या हैं?" |
 | **Research** | 980,539 computer-science papers from arXiv | "Compare approaches to reducing hallucination in RAG" |
 
 ## Highlights
 
 - **Hybrid retrieval.** BM25 through SQLite FTS5 (searches 980k papers on disk in ~0.4 s) plus dense cosine search over multilingual embeddings, fused with Reciprocal Rank Fusion. Degrades gracefully to BM25 if the embedding model is down.
 - **Grounded, cited answers.** Sources are numbered in the prompt; every `[n]` in the answer is checked. The UI marks answers as grounded, ungrounded (cites a source that doesn't exist) or abstained ("not in the documents").
-- **Fast cloud answers, offline fallback.** The recommended setup uses Groq (`qwen/qwen3.8-27b`) for text and Gemini 3.5 Flash-Lite for images, both on free tiers: ~1â€“3 s per answer. If the cloud fails or hits a rate limit, the local Ollama model answers instead. Anthropic Claude, OpenAI, OpenRouter or any OpenAI-compatible server can be switched in from the Settings panel.
+- **Fast cloud answers, offline fallback.** The recommended setup uses Groq (`qwen/qwen3.8-27b`) for text and Gemini 3.5 Flash-Lite for images, both on free tiers: ~1–3 s per answer. If the cloud fails or hits a rate limit, the local Ollama model answers instead. Anthropic Claude, OpenAI, OpenRouter or any OpenAI-compatible server can be switched in from the Settings panel.
 - **Shows what it knows.** Each mode opens with a coverage card computed from its index. Medical, for example, lists 16,407 NIH answers on 5,126 topics, the kinds of questions, the sources, and what isn't covered. Examples are taken from questions that passed the stress test, and typing suggests real questions or paper titles from the index. When Billie can't answer, it points to a better-suited mode or the closest topics it does have, instead of leaving a dead end.
 - **Public demo mode.** `BILLIE_DEMO=1` gives every visitor private chats and caps questions per visitor and per day, so a public link can't drain a free model quota.
 - **Ask about your own documents, privately.** On the demo, a visitor can upload up to 3 files (PDF, Markdown or text) and ask about them in General mode alongside Billie's docs.
@@ -28,7 +28,7 @@
 - **Sentiment-aware.** A softmax classifier trained on multilingual sentiment data, using the same embedding model as search. Worried or frustrated users get a gentler, clearer answer.
 - **Medical safety net.** A deterministic detector (English, Hindi, Spanish) shows an emergency banner with phone numbers or crisis helplines for chest pain, stroke signs, overdose or self-harm, whatever the model writes. It caught a real overdose question in the benchmark set.
 - **Fast where it can be on a CPU.** Repeated questions come from an answer cache in ~0.1 s; models are pre-loaded at startup; duplicate passages are removed so every source slot adds information; **Stop** really stops the local model.
-- **Feedback loop.** ðŸ‘/ðŸ‘Ž on every answer (a ðŸ‘Ž also evicts it from the cache), regenerate, edit-and-resend, and conversation deep links.
+- **Feedback loop.** 👍/👎 on every answer (a 👎 also evicts it from the cache), regenerate, edit-and-resend, and conversation deep links.
 - **Production habits.** Streaming SSE API, SQLite conversation history, structured JSON logs with request IDs, Prometheus metrics, rate limiting, CSP headers, fail-closed auth in production, validated uploads, a prompt-injection guard, atomic and resumable index builds, Docker, and CI with lint, type checks and tests.
 
 ## Quick start (Windows, macOS, Linux)
@@ -47,7 +47,7 @@ ollama pull embeddinggemma         # multilingual embeddings
 
 Open **http://127.0.0.1:5173**. The API and its interactive docs are at http://127.0.0.1:8000/docs.
 
-This runs fully offline. For ~10Ã— faster answers, open **Settings** and add free API keys: a [Groq](https://console.groq.com/keys) key for text and a [Gemini](https://aistudio.google.com/apikey) key for images. Billie keeps the local models as automatic fallback. Keys are stored only in the git-ignored `data/` folder.
+This runs fully offline. For ~10× faster answers, open **Settings** and add free API keys: a [Groq](https://console.groq.com/keys) key for text and a [Gemini](https://aistudio.google.com/apikey) key for images. Billie keeps the local models as automatic fallback. Keys are stored only in the git-ignored `data/` folder.
 
 Billie works immediately with small bundled samples. To index the full corpora (see [`datasets/README.md`](datasets/README.md) for downloads):
 
@@ -77,13 +77,13 @@ The live demo runs as one container on **Azure Container Apps**:
 
 | Piece | Where |
 |---|---|
-| Image recipe | [`deploy/huggingface/Dockerfile`](deploy/huggingface/Dockerfile): React build â†’ Ollama + `embeddinggemma` â†’ Python API on port 7860 (the same image also runs on a Hugging Face Docker Space) |
-| Search indexes | `python -m billie.ingest bundle` â†’ MedQuAD + the 50k embedded arXiv papers (2.6 GB â†’ ~300 MB), attached to a GitHub release |
+| Image recipe | [`deploy/Dockerfile`](deploy/Dockerfile): React build → Ollama + `embeddinggemma` → Python API on port 7860 (the same image also runs as a Hugging Face Docker Space; see [`deploy/README.md`](deploy/README.md)) |
+| Search indexes | `python -m billie.ingest bundle` → MedQuAD + the 50k embedded arXiv papers (2.6 GB → ~300 MB), attached to a GitHub release |
 | Image build | [`.github/workflows/build-image.yml`](.github/workflows/build-image.yml), run manually; pushes to Azure Container Registry. Azure's own builder is disabled on student subscriptions, so GitHub Actions builds it |
-| Hosting | Azure Container Apps in UAE North, the closest region allowed for Azure for Students accounts. 2 vCPU / 4 GB while running; switched off when idle (0â€“1 copies); public HTTPS link |
-| Cost | â‰ˆ $5/month for the image registry. Running it stays within Azure's free monthly allowance at demo traffic. Both come out of the Azure for Students credit (no card). An email alert fires if monthly spending passes $10 |
+| Hosting | Azure Container Apps in UAE North, the closest region allowed for Azure for Students accounts. 2 vCPU / 4 GB while running; switched off when idle (0–1 copies); public HTTPS link |
+| Cost | ≈ $5/month for the image registry. Running it stays within Azure's free monthly allowance at demo traffic. Both come out of the Azure for Students credit (no card). An email alert fires if monthly spending passes $10 |
 
-Measured on the live deployment: text answers 1.0â€“2.6 s, image questions ~6 s. The first request after idle includes a cold start.
+Measured on the live deployment: text answers 1.0–2.6 s, image questions ~6 s. The first request after idle includes a cold start.
 
 ## How it works
 
@@ -107,7 +107,7 @@ Each stage streams a status event to the UI, so a CPU-only laptop still feels re
 
 ### Medical retrieval on real consumer questions
 
-Queries are the [TREC 2017 LiveQA Medical](https://github.com/abachaa/LiveQA_MedicalTask_TREC2017) test questions: real messages people sent to the U.S. National Library of Medicine, typos included. Relevance comes from the MedQuAD authors' [human judgments](https://github.com/abachaa/MedQuAD) (1-Incorrect â€¦ 4-Excellent). The evaluation covers the **39 questions** that have an answer graded 3 or 4 in Billie's index. Three MedlinePlus subsets ship without answers for copyright reasons, so the remaining questions can't be scored fairly. Unjudged answers count as non-relevant, so absolute numbers are conservative.
+Queries are the [TREC 2017 LiveQA Medical](https://github.com/abachaa/LiveQA_MedicalTask_TREC2017) test questions: real messages people sent to the U.S. National Library of Medicine, typos included. Relevance comes from the MedQuAD authors' [human judgments](https://github.com/abachaa/MedQuAD) (1-Incorrect … 4-Excellent). The evaluation covers the **39 questions** that have an answer graded 3 or 4 in Billie's index. Three MedlinePlus subsets ship without answers for copyright reasons, so the remaining questions can't be scored fairly. Unjudged answers count as non-relevant, so absolute numbers are conservative.
 
 | Query text | Retriever | nDCG@10 | Recall@10 | MRR@10 | Success@5 |
 |---|---|---|---|---|---|
@@ -119,13 +119,13 @@ Queries are the [TREC 2017 LiveQA Medical](https://github.com/abachaa/LiveQA_Med
 | | **Hybrid (RRF)** | **0.537** | **0.743** | **0.514** | **0.795** |
 
 What this shows:
-- **Semantic search matters most for real, messy questions.** On the original messages, nDCG@10 rises 47% over BM25 alone (0.309 â†’ 0.453). People describe symptoms in their own words, not in MedQuAD's vocabulary.
+- **Semantic search matters most for real, messy questions.** On the original messages, nDCG@10 rises 47% over BM25 alone (0.309 → 0.453). People describe symptoms in their own words, not in MedQuAD's vocabulary.
 - **Hybrid is the most consistent.** It's best or tied on every metric except recall@10 for the original messages, where dense alone retrieves more relevant answers. A tuned fusion weight might close that gap. It isn't tuned here, because 39 test questions are too few to tune on without overfitting.
 - **Clean questions help every retriever,** but the ordering holds: hybrid > dense > BM25.
 
 Dense search covers the first chunk of every MedQuAD answer (16,407 vectors); BM25 covers all 27,582 passages.
 
-**Latency** (retrieval only, laptop CPU, including the query embedding): BM25 p50 12â€“18 ms; hybrid p50 55â€“68 ms, p95 81â€“178 ms. Over the 980k-paper arXiv index, BM25 takes ~0.3â€“0.6 s.
+**Latency** (retrieval only, laptop CPU, including the query embedding): BM25 p50 12–18 ms; hybrid p50 55–68 ms, p95 81–178 ms. Over the 980k-paper arXiv index, BM25 takes ~0.3–0.6 s.
 
 Reproduce with `python -m evals.retrieval_liveqa` (per-query output in [`docs/evaluation/retrieval`](docs/evaluation/retrieval)).
 
@@ -136,9 +136,9 @@ The same 39 questions run through the full live pipeline (`python -m evals.answe
 | | Prompt v1 | Prompt v2 (stricter citation rules) | **v1 + citation repair (shipped)** |
 |---|---|---|---|
 | Grounded / abstained / ungrounded | 72% / 28% / 0% | 77% / 23% / 0% | 77% / 23% / 0% |
-| Uncited factual sentences | 57 | 73 âŒ | **46** |
+| Uncited factual sentences | 57 | 73 ❌ | **46** |
 | Cited sentences | 70 | 59 | **81** |
-| Cited sentences supported by their source | 85.7% | 85.6% | 84% (model) Â· **93.8% (automatic, n=8)** |
+| Cited sentences supported by their source | 85.7% | 85.6% | 84% (model) · **93.8% (automatic, n=8)** |
 | Similarity to NLM expert answers (top-passage baseline: 0.59) | 0.67 | 0.67 | 0.675 |
 
 - **Stricter prompt wording made the small model cite *less*.** It was measured, then reverted.
@@ -155,8 +155,8 @@ The same 100 cases ran on both setups:
 |---|---|---|
 | Passed | 96/100 (before the fixes below) | **100/100** |
 | Mean / median / p90 latency | 26.1 s / 23.6 s / 40.7 s | **2.0 s / 1.7 s / 3.1 s** |
-| General Â· Medical Â· Research (mean) | 14.4 s Â· 27.9 s Â· 33.1 s | 2.3 s Â· 1.8 s Â· 2.2 s |
-| Non-English Â· images Â· emergencies | 38.9 s Â· 79 s Â· â€“ | 3.0 s Â· 4.4 s Â· 1.2 s |
+| General · Medical · Research (mean) | 14.4 s · 27.9 s · 33.1 s | 2.3 s · 1.8 s · 2.2 s |
+| Non-English · images · emergencies | 38.9 s · 79 s · – | 3.0 s · 4.4 s · 1.2 s |
 | Cached repeats | 0.1 s | 0.0 s |
 | Non-English quality (read by hand) | Word-level errors | Fluent Hindi, Hinglish, Bengali, Spanish, French |
 
@@ -173,11 +173,12 @@ Details: [`docs/evaluation/stress_test`](docs/evaluation/stress_test).
 
 | Model | Correct | Right passage found | Notes |
 |---|---|---|---|
-| Local qwen3:4b-instruct | **28/30** | 25/26 | Facts 10/11, tables 8/8, combined figures 4/4, lists 2/2, unanswerable 4/4; ~9 s per answer |
-| Groq qwen3.8-27b (10 hardest) | **9/10** | 8/9 | ~0.9 s per answer |
+| Local qwen3:4b-instruct (32 questions) | **31/32** | 28/28 | Facts 10/11, tables 8/8, combined figures 4/4, lists 2/2, summaries 3/3, unanswerable 4/4 |
+| Groq qwen3.8-27b (13 hardest) | **12/13** | — | ~1 s per answer; summaries 3/3 in 1–3 s |
 
 - The evaluation found two real bugs, both now fixed and covered by tests: repeated headings crashed uploads, and a PDF without headings collapsed to a single search result.
-- **Limitation:** "summarise the whole document" doesn't work well. Billie answers from the 4 most relevant passages, which suits specific questions, not whole-document summaries.
+- **Summaries:** questions answer from the 4 most relevant passages. A summary request ("summarise my report", "key points") instead uses the most informative passage from each part of the document, which took summaries from 0/1 to 3/3.
+- **Measured and rejected:** spelling out medical abbreviations before search gave no gain (19/20 both ways) and hurt real LiveQA questions (nDCG 0.408 → 0.275), so it isn't used (`python -m evals.abbreviations_eval`).
 
 ### Sentiment
 
@@ -199,8 +200,8 @@ The classifier adds one ~30 ms embedding call and no extra model download. On th
 
 ### Tests
 
-- **Backend:** 174 pytest tests, offline, in ~13 s. They cover BM25/RRF math, resumable embedding, LLM providers via mocked HTTP, the full chat pipeline with a scripted LLM, the API, security, language detection, and demo-mode isolation and quotas.
-- **Frontend:** 15 Vitest tests (SSE parsing, citation rendering, the streaming chat hook, regenerate, feedback, the mode guide) and 4 Playwright end-to-end tests in Microsoft Edge against the live stack (cited answer, emergency banner + Stop, dialogs).
+- **Backend:** 177 pytest tests, offline, in ~13 s. They cover BM25/RRF math, resumable embedding, LLM providers via mocked HTTP, the full chat pipeline with a scripted LLM, the API, security, language detection, and demo-mode isolation and quotas.
+- **Frontend:** 15 Vitest tests (SSE parsing, citation rendering, the streaming chat hook, regenerate, feedback, the mode guide) and 5 Playwright end-to-end tests in Microsoft Edge against the real stack on local models (`scripts/e2e_api.py`): the mode guide, typing suggestions, a cited answer, the emergency banner + Stop, and the dialogs.
 - **Static checks:** `ruff`, `ruff format`, `mypy` and `tsc` are all clean, and CI runs them on every push.
 
 ## Project layout
@@ -209,7 +210,7 @@ The classifier adds one ~30 ms embedding call and no extra model download. On th
 backend/
   src/billie/
     api/          FastAPI app, SSE streaming, auth, rate limiting, metrics
-    chat/         pipeline (analyse â†’ retrieve â†’ generate â†’ verify), prompts
+    chat/         pipeline (analyse → retrieve → generate → verify), prompts
     retrieval/    SQLite FTS5 index, embeddings, hybrid RRF retriever, chunking
     corpora/      knowledge base / MedQuAD / arXiv loaders, index service
     llm/          provider protocol + Ollama, OpenAI-compatible, Anthropic, runtime settings
@@ -232,22 +233,22 @@ Everything has a working default. See [`.env.example`](.env.example) for the ful
 |---|---|---|
 | `BILLIE_ENV` | `development` | `production` refuses to start without an admin key (and a chat key unless it's a public demo) |
 | `BILLIE_LLM_PROVIDER` / `BILLIE_LLM_MODEL` | `ollama` / `qwen3:4b-instruct` | Initial chat model (changeable in the UI) |
-| `GROQ_API_KEY`, `GEMINI_API_KEY` | â€“ | Free cloud models for text and images (or paste keys in Settings) |
-| `BILLIE_VISION_MODEL` / `BILLIE_VISION_CLOUD` | `gemma3:4b` / â€“ | Local and optional cloud image readers |
+| `GROQ_API_KEY`, `GEMINI_API_KEY` | – | Free cloud models for text and images (or paste keys in Settings) |
+| `BILLIE_VISION_MODEL` / `BILLIE_VISION_CLOUD` | `gemma3:4b` / – | Local and optional cloud image readers |
 | `BILLIE_LOCAL_FALLBACK` | `1` | Fall back to the local model when the cloud fails |
 | `BILLIE_DEMO` | `0` | Public demo: private chats per visitor, daily question caps |
 | `BILLIE_EMBED_MODEL` | `embeddinggemma` | Semantic search; `off` = keyword search only |
-| `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, â€¦ | â€“ | Other optional cloud providers |
+| `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, … | – | Other optional cloud providers |
 
 ## Limitations
 
-- Speed depends on the model: with the default cloud setup (Groq for text, Gemini for images) a cited answer takes ~1â€“3 s and an image question ~3â€“7 s. On the local fallback (CPU-only, 4B model) answers take ~15â€“35 s, because decoding is memory-bandwidth bound (~9 tokens/s); repeats are instant from the cache.
+- Speed depends on the model: with the default cloud setup (Groq for text, Gemini for images) a cited answer takes ~1–3 s and an image question ~3–7 s. On the local fallback (CPU-only, 4B model) answers take ~15–35 s, because decoding is memory-bandwidth bound (~9 tokens/s); repeats are instant from the cache.
 - MedQuAD is U.S.-centric and partly dated, and drug answers were removed upstream. Medical mode is educational, not medical advice.
 - Dense search covers the newest 50k arXiv papers (CPU time; `--embed-limit` grows it incrementally); BM25 covers all 980k.
 - Citation checking confirms that cited sources exist and were provided, not that every sentence is entailed by its source.
 
 ## Acknowledgements
 
-MedQuAD (Ben Abacha & Demner-Fushman, *BMC Bioinformatics* 2019, CC BY 4.0) Â· TREC 2017 LiveQA Medical Â· arXiv metadata via Kaggle (CC0) Â· `cardiffnlp/tweet_sentiment_multilingual` Â· Ollama, Qwen, Gemma.
+MedQuAD (Ben Abacha & Demner-Fushman, *BMC Bioinformatics* 2019, CC BY 4.0) · TREC 2017 LiveQA Medical · arXiv metadata via Kaggle (CC0) · `cardiffnlp/tweet_sentiment_multilingual` · Ollama, Qwen, Gemma.
 
 ![Research mode: recent arXiv papers compared with citations](docs/images/research.png)

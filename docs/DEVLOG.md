@@ -595,15 +595,60 @@ The test file was removed afterwards.
 
 The test file was removed afterwards.
 
+### P2.21 Housekeeping, end-to-end tests, and a measured negative: abbreviation expansion (2026-11-25)
+- **Scratch folders deleted (owner OK):**
+  - `repo/` (old clone; its history is in `billie/.git`)
+  - `zip_extract/` (536 MB; `billie/datasets/` has its own copies)
+  - `hf-space/` (396 MB staging copy; the indexes live in the GitHub release)
+
+  The original zip is kept.
+- **`deploy/huggingface/` → `deploy/`,** since the demo runs on Azure.
+  - The Space card is kept as `deploy/space_README.md`; `deploy/README.md` explains the container and the Azure setup.
+  - The workflow, `stage.py`, README and ARCHITECTURE were updated, and `stage.py` was smoke-tested from the new location.
+- **README encoding repaired.**
+  - A PowerShell `Get-Content`/`Set-Content` round trip in P2.20 had turned UTF-8 characters into mojibake ("â†’", broken Hindi).
+  - The README was rebuilt from the last good version plus the intended edits.
+  - Rule: never write text files through Windows PowerShell 5.1.
+- **End-to-end tests re-run:** 5 pass in Edge.
+  - The start-screen test was updated for the mode guide, and a new test covers typing suggestions.
+  - `scripts/e2e_api.py` starts an API with the real indexes but **local models and throwaway state**, so e2e runs never touch the app's saved cloud settings, chat history or cache.
+- **Abbreviation expansion: measured, then rejected.**
+  - The idea: in Medical mode, one short model call spells out abbreviations (VDRL, COPD…) and search uses both forms. `evals/abbreviations_eval.py` (local model) measured it:
+    - 20 abbreviation questions with known MedQuAD topics: **19/20 before and after**, so no gain. Hybrid search already handles them: embeddings know "COPD", and MedQuAD titles often include the abbreviation.
+    - The 8 real LiveQA questions that trigger the detector: nDCG@10 **0.408 → 0.275**, which is worse. The added text dilutes messy consumer questions.
+  - Not added to the pipeline. The helpers live in the evaluation script so the result is reproducible (`docs/evaluation/retrieval/abbreviations.json`).
+  - "VDRL" fails with or without expansion: MedQuAD appears to have no syphilis-test passage, so it's a gap in the data.
+
+### P2.22 Summaries of visitors' documents (2026-11-25)
+**Problem (P2.20):** "summarise my document" failed on both models. Question-driven search returns the 4 passages most similar to the request, which in a long report are generic text.
+
+**Change:**
+- `wants_summary()` recognises overview requests in English, Hinglish and Hindi ("summarise", "overview", "key points", "what is this document about", "saransh", "सारांश").
+- When the visitor has documents, `PrivateDocuments.summary_hits()` replaces search:
+  - each targeted document is split into equal parts, and the **most informative passage** of each part is taken (figures and names beat narrative filler), 6 passages in total;
+  - if the question names a file, the one whose name shares the most words with the question is used ("Riverton's annual report" picks the Riverton PDF over `billie_project_report.pdf`); otherwise all files.
+- A task instruction tells the model the sources are excerpts from across the document, and to cite each point and say so.
+
+**Results** (3 summary questions; 32 questions in total now):
+- Local: summaries **3/3** (was 0/1), overall **31/32**, right passages found **28/28**.
+- Groq: summaries **3/3** in 1.2–3 s. The answers are structured and say "based on the provided excerpts".
+- **Cost:** a summary takes ~55–60 s on the local model, because a longer answer is written from 6 passages.
+
+**Tests:** 3 new tests:
+- recognising summary requests (and not normal questions)
+- facts drawn from at least 5 of 6 parts of the *named* file, or from all files when none is named
+- the pipeline uses summary mode with only the visitor's file and adds the summary instruction
+
+**Minor open item:** a mostly-English Hinglish request ("Riverton annual report ka saransh batao") is detected as English, so it's answered in English.
+
 ---
 
-## Remaining backlog (updated 2026-11-24, end of P2.16)
-Open items:
-1. **Redeploying after code changes:**
+## Remaining backlog (updated 2026-11-25, end of P2.22)
+1. **Rotate the Groq and Gemini keys.** They were pasted in chat. Update the Azure secrets (`az containerapp secret set`) and `data/llm_settings.json`.
+2. **Redeploying after code changes:**
    1. `gh repo sync Max0786234/Billie`
    2. `gh workflow run build-image.yml -R Max0786234/Billie`
    3. `az containerapp update -g billie-rg -n billie --image billiemaxacr.azurecr.io/billie:<sha>`
-2. Grow arXiv dense coverage further: `python -m billie.ingest arxiv --embed-only --embed-limit 100000` (~1 h per 30k on this CPU).
-3. Refresh the README screenshots (they predate feedback buttons and citation repair).
-4. Retrieval for misspelled or abbreviated medical terms (e.g. "VDRL"): measure an English query-expansion step before adopting it.
-5. Owner decision: delete the `repo/` and `zip_extract/` scratch folders.
+3. Hinglish requests made mostly of English words can be detected as English.
+4. Whole-document summaries on the local model take ~1 minute.
+5. **GitHub About box:** description, website and topics. This needs the repo owner.

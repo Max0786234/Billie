@@ -1,0 +1,22 @@
+[
+  {"q": "what is the VDRL test", "gold": ["syphilis"]},
+  {"q": "COPD symptoms", "gold": ["COPD", "chronic obstructive pulmonary"]},
+  {"q": "is CMT inherited", "gold": ["Charcot-Marie-Tooth"]},
+  {"q": "what causes ALS", "gold": ["amyotrophic lateral sclerosis"]},
+  {"q": "can HPV be prevented", "gold": ["papillomavirus", "HPV"]},
+  {"q": "IBS treatment", "gold": ["irritable bowel"]},
+  {"q": "what is GERD", "gold": ["gastroesophageal reflux", "GER"]},
+  {"q": "PCOS symptoms", "gold": ["polycystic ovary"]},
+  {"q": "how is DVT diagnosed", "gold": ["deep vein thrombosis", "venous thromboembolism"]},
+  {"q": "ADHD in adults", "gold": ["attention deficit"]},
+  {"q": "what is CKD", "gold": ["kidney disease"]},
+  {"q": "SLE treatment options", "gold": ["lupus"]},
+  {"q": "UTI causes", "gold": ["urinary tract infection"]},
+  {"q": "is RA genetic", "gold": ["rheumatoid arthritis"]},
+  {"q": "early signs of MS", "gold": ["multiple sclerosis"]},
+  {"q": "how does TB spread", "gold": ["tuberculosis"]},
+  {"q": "AMD risk factors", "gold": ["macular degeneration"]},
+  {"q": "BPH treatment", "gold": ["prostate"]},
+  {"q": "what is HHT", "gold": ["hereditary hemorrhagic telangiectasia"]},
+  {"q": "how to prevent SIDS", "gold": ["sudden infant death"]}
+]

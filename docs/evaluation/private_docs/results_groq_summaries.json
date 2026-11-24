@@ -1,0 +1,162 @@
+[
+  {
+    "id": "S02",
+    "kind": "summary",
+    "doc": "riverton",
+    "q": "Summarise the main achievements in Riverton's 2025 annual report.",
+    "min_of": 3,
+    "terms": [
+      "treatment plant",
+      "electric bus",
+      "trees",
+      "homes",
+      "dengue",
+      "leakage",
+      "STEM",
+      "air quality"
+    ],
+    "retrieval": true,
+    "correct": true,
+    "detail": "answer has 3/8, sources have 3",
+    "answer": "Based on the provided excerpts from the Riverton Annual Report 2025, the main achievements include: [5]\n\n*   **Public Transport:** Average daily bus ridership increased from 312,000 in Q1 to 365,000 in Q4, supported by the expansion of bus depots [2].\n*   **Health:** Reported dengue cases dropped from 4,820 in 2024 to 2,910 in 2025, while childhood vaccination coverage remained high, with Polio at 97% and Measles at 94% [3].\n*   **Environment:** The annual average air quality index improved from 104 to 92, and 48,000 trees were planted across the city's 1,150 hectares of green space [5].\n*   **Sanitation:** 71% of the city's daily 2,300 tonnes of solid waste was segregated at source, with wet waste processed by three biogas plants [4].\n*   **Finance & Administration:** The council managed a total budget of 9,860 crore rupees and employed 24,600 staff members [1][6].\n\nThis summary is based on the available excerpts from the document.",
+    "grounded": true,
+    "abstained": false,
+    "sources": [
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      }
+    ],
+    "cited_private": true,
+    "model": "qwen/qwen3.8-27b",
+    "seconds": 3.0
+  },
+  {
+    "id": "S04",
+    "kind": "summary",
+    "doc": "billie_report",
+    "q": "Give me an overview of the Billie project report.",
+    "min_of": 3,
+    "terms": [
+      "hybrid",
+      "MedQuAD",
+      "arXiv",
+      "citation",
+      "Groq",
+      "sentiment",
+      "Azure",
+      "test"
+    ],
+    "retrieval": true,
+    "correct": true,
+    "detail": "answer has 6/8, sources have 8",
+    "answer": "Based on the provided excerpts, here is an overview of the Billie project report:\n\n*   **Performance and Evaluation:** The system achieved 0% ungrounded answers in end-to-end evaluations, with automatically added citations supported 93.8% of the time [1]. In a 96-question stress test, the local 4B model scored 96%, while the cloud setup achieved a perfect 100% [1].\n*   **Speed:** The local CPU model takes approximately 26 seconds per answer, whereas the Groq + Gemini cloud setup averages 2.0 seconds, with cached repeats taking only 0.1 seconds [1].\n*   **Retrieval Architecture:** The project uses a hybrid retrieval approach combining SQLite FTS5 (BM25) for keyword search and embeddinggemma for semantic search [3]. This hybrid method (using Reciprocal Rank Fusion) outperformed individual methods in medical retrieval evaluations, achieving a Success@5 of 0.795 on NIST paraphrase data [4].\n*   **System Components:** The pipeline includes steps for typo correction, parallel retrieval, and a \"Guard Loop\" that stops streams repeating phrases [2]. It also features a sentiment classifier with 63.6% accuracy across 8 languages [1].\n*   **Deployment and Fixes:** The project was published to GitHub and deployed on Azure Container Apps [5]. Key fixes included separating the vision provider from the chat provider to handle images correctly and adjusting refusal labeling to ensure accurate scoring [6].\n\n*Note: This summary is based on the provided excerpts from the project report.*",
+    "grounded": true,
+    "abstained": false,
+    "sources": [
+      {
+        "source": "Your document · billie_project_report.pdf",
+        "title": "Stage"
+      },
+      {
+        "source": "Your document · billie_project_report.pdf",
+        "title": "Stage"
+      },
+      {
+        "source": "Your document · billie_project_report.pdf",
+        "title": "Stage"
+      },
+      {
+        "source": "Your document · billie_project_report.pdf",
+        "title": "Stage"
+      },
+      {
+        "source": "Your document · billie_project_report.pdf",
+        "title": "Stage"
+      },
+      {
+        "source": "Your document · billie_project_report.pdf",
+        "title": "Stage"
+      }
+    ],
+    "cited_private": true,
+    "model": "qwen/qwen3.8-27b",
+    "seconds": 1.7
+  },
+  {
+    "id": "S05",
+    "kind": "summary",
+    "doc": "riverton",
+    "q": "Riverton annual report ka saransh batao",
+    "min_of": 3,
+    "terms": [
+      "treatment plant",
+      "bus",
+      "trees",
+      "homes",
+      "dengue",
+      "leakage",
+      "STEM",
+      "air quality",
+      "Kharadi",
+      "48,000",
+      "12,400",
+      "220"
+    ],
+    "retrieval": true,
+    "correct": true,
+    "detail": "answer has 5/12, sources have 5",
+    "answer": "Here is a summary of the Riverton Annual Report 2025 based on the provided excerpts: [5]\n\n*   **Finance:** The council’s total budget for 2025 was 9,860 crore rupees, with the largest allocations going to Roads (2,115 crore) and Public transport (1,725 crore) [1].\n*   **Public Transport:** Average daily bus ridership increased throughout the year, reaching 365,000 in Q4, while the council expanded bus depots and improved parking management [2].\n*   **Health:** Reported dengue cases dropped significantly from 4,820 in 2024 to 2,910 in 2025, and childhood vaccination coverage remained high, with Polio at 97% and Measles at 94% [3].\n*   **Sanitation:** The city generates 2,300 tonnes of solid waste daily, with 71% segregated at source and wet waste processed by three biogas plants [4].\n*   **Environment:** Riverton has 1,150 hectares of green space, and the council planted 48,000 trees in 2025, contributing to an improved air quality index of 92 [5].\n*   **Administration:** The council employs 24,600 staff members, with Roads receiving the highest number of complaints (22,410) [6].",
+    "grounded": true,
+    "abstained": false,
+    "sources": [
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      }
+    ],
+    "cited_private": true,
+    "model": "qwen/qwen3.8-27b",
+    "seconds": 1.2
+  }
+]

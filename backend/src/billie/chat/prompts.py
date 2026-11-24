@@ -145,6 +145,7 @@ def build_messages(
     images: tuple[ImagePart, ...] = (),
     interpreted_question: str | None = None,
     safety_hint: str | None = None,
+    task_hint: str | None = None,
 ) -> list[Message]:
     if hits:
         system = SYSTEM_PROMPTS[mode]
@@ -170,6 +171,8 @@ def build_messages(
     instructions = [reply_instruction(language_name)]
     if safety_hint:
         instructions.insert(0, safety_hint)
+    if task_hint:  # e.g. summarising a whole document from excerpts
+        instructions.append(task_hint)
     tone = TONE_HINTS.get(sentiment, "")
     if tone:
         instructions.append(tone)

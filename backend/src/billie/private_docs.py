@@ -30,7 +30,7 @@ from pathlib import Path
 import numpy as np
 
 from billie.corpora.knowledge import iter_knowledge
-from billie.retrieval.base import Passage
+from billie.retrieval.base import Passage, SearchHit
 from billie.retrieval.embeddings import Embedder
 from billie.retrieval.hybrid import HybridRetriever
 from billie.retrieval.index import PassageIndex, build_index
@@ -128,6 +128,50 @@ class PrivateDocuments:
             return None
         self._touch(owner)
         return HybridRetriever(index, self.embedder, collapse_chunks=False)  # keep every chunk of a document
+
+    def summary_hits(self, owner: str | None, question: str, k: int = 6) -> list[SearchHit]:
+        """Passages spread across the document(s) a summary request is about.
+
+        Question-driven search returns the 4 passages most similar to "summarise this", which for
+        a long report are mostly generic text (evaluation, DEVLOG P2.20). For an overview, Billie
+        instead splits each document into equal parts and takes the most informative passage of
+        each part (numbers and names over filler). If the question names a file, only that one.
+        """
+        if owner is None or not _OWNER.match(owner):
+            return []
+        index = self._index(owner)
+        if not index.exists():
+            return []
+        self._touch(owner)
+        conn = sqlite3.connect(f"file:{index.db_path}?mode=ro", uri=True)
+        try:
+            rows = conn.execute("SELECT rowid FROM passages ORDER BY rowid").fetchall()
+        finally:
+            conn.close()
+        passages = index.get(r[0] for r in rows)
+        by_file: dict[str, list[Passage]] = {}
+        for rowid in sorted(passages):
+            p = passages[rowid]
+            by_file.setdefault(str(p.metadata.get("file")), []).append(p)
+        words = set(re.findall(r"[a-z0-9]{3,}", question.lower()))
+        # The file whose name shares the most words with the question ("Riverton's annual report"
+        # picks riverton_annual_report_2025.pdf over billie_project_report.pdf); else all files.
+        overlap = {
+            f: len(words & set(re.findall(r"[a-z0-9]{3,}", Path(f).stem.lower().replace("_", " ")))) for f in by_file
+        }
+        best = max(overlap.values(), default=0)
+        files = [f for f, n in overlap.items() if n == best] if best else list(by_file)
+        picks: list[Passage] = []
+        per_file = max(2, k // len(files))
+        for file in files:
+            doc = by_file[file]
+            size = max(1, len(doc) // per_file)
+            for start in range(0, len(doc), size):
+                segment = doc[start : start + size]
+                picks.append(max(segment, key=_informativeness))
+                if sum(1 for p in picks if p.metadata.get("file") == file) >= per_file:
+                    break
+        return [SearchHit(passage=p, score=0.0, rank=n, components={"summary": n}) for n, p in enumerate(picks[:k], 1)]
 
     # -------------------------------------------------------------- write
     def add(self, owner: str, filename: str, data: bytes) -> list[PrivateDocument]:
@@ -285,6 +329,16 @@ class PrivateDocuments:
         finally:
             conn.close()
         return {str(name): int(n) for name, n in rows}
+
+
+def _informativeness(passage: Passage) -> float:
+    """Prefer passages carrying facts (figures, names) over generic narrative."""
+    text = passage.text
+    tokens = text.split()
+    digits = len(re.findall(r"\d", text))
+    names = sum(1 for t in tokens[1:] if t[:1].isupper())
+    variety = len(set(t.lower() for t in tokens)) / max(len(tokens), 1)
+    return min(digits, 40) + 0.5 * names + 10 * variety
 
 
 def _vector_cache(path: Path) -> Path:

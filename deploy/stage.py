@@ -1,8 +1,8 @@
 """Assemble the Hugging Face Space folder (Docker build context) from this repository.
 
     cd backend
-    .venv/Scripts/python ../deploy/huggingface/stage.py ../../hf-space
-    hf upload <user>/billie ../../hf-space . --repo-type space
+    .venv/Scripts/python ../deploy/stage.py ../../billie-image
+    # then build it (see .github/workflows/build-image.yml) or upload it as a Hugging Face Space
 
 The Space gets only what the image needs: backend source, frontend source, the
 knowledge base, the bundled samples, and prebuilt indexes (MedQuAD + the 50k
@@ -18,7 +18,7 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-REPO = HERE.parents[1]
+REPO = HERE.parent
 IGNORE = shutil.ignore_patterns(
     "__pycache__", "*.pyc", ".venv", "node_modules", "dist", "*.tsbuildinfo", ".env*", "test-results", "playwright-report"
 )
@@ -33,8 +33,9 @@ def main(out: Path) -> int:
     shutil.copytree(REPO / "frontend", out / "frontend", ignore=IGNORE)
     shutil.copytree(REPO / "knowledge", out / "knowledge", ignore=IGNORE)
     shutil.copytree(REPO / "datasets" / "samples", out / "datasets" / "samples", ignore=IGNORE)
-    for name in ("Dockerfile", "start.sh", "README.md"):
+    for name in ("Dockerfile", "start.sh"):
         shutil.copy2(HERE / name, out / name)
+    shutil.copy2(HERE / "space_README.md", out / "README.md")  # Hugging Face reads the Space card from README.md
     (out / ".gitattributes").write_text("*.sqlite filter=lfs diff=lfs merge=lfs -text\n*.npy filter=lfs diff=lfs merge=lfs -text\n")
     if not (out / "index" / "arxiv.sqlite").exists():
         subprocess.run(
@@ -50,4 +51,4 @@ def main(out: Path) -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main(Path(sys.argv[1] if len(sys.argv) > 1 else "hf-space")))
+    raise SystemExit(main(Path(sys.argv[1] if len(sys.argv) > 1 else "billie-image")))

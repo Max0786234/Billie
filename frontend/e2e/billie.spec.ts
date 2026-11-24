@@ -1,14 +1,25 @@
 import { expect, test } from "@playwright/test";
 
 test.describe("Billie end to end", () => {
-  test("home page shows the three modes and example questions", async ({ page }) => {
+  test("each mode explains what it contains, with examples that work", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByRole("heading", { name: "What would you like to know?" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "General mode" })).toBeVisible();
     for (const mode of ["General", "Medical", "Research"]) {
       await expect(page.getByRole("button", { name: mode, exact: true })).toBeVisible();
     }
     await page.getByRole("button", { name: "Medical", exact: true }).click();
-    await expect(page.getByText("What are the early symptoms of glaucoma?")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Medical mode" })).toBeVisible();
+    await expect(page.getByText(/expert answers on [\d,]+ health topics/)).toBeVisible(); // computed from the index
+    await expect(page.getByText("Not covered")).toBeVisible();
+    await expect(page.getByRole("button", { name: "Is Huntington disease inherited?" })).toBeVisible();
+  });
+
+  test("typing suggests real questions from the index", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: "Medical", exact: true }).click();
+    await page.getByLabel("Message").fill("glauc");
+    const list = page.getByRole("listbox", { name: "Suggested questions" });
+    await expect(list.getByRole("option", { name: "What is Glaucoma?" })).toBeVisible();
   });
 
   test("a question streams a grounded, cited answer and citations open their source", async ({ page }) => {

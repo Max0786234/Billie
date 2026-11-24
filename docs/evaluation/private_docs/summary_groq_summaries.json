@@ -1,0 +1,10 @@
+{
+  "questions": 3,
+  "correct": 3,
+  "retrieval_hit": "3/3",
+  "by_kind": {
+    "summary": "3/3"
+  },
+  "mean_seconds": 2.0,
+  "model": "qwen/qwen3.8-27b"
+}

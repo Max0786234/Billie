@@ -173,14 +173,23 @@ class ChatPipeline:
 
         yield _event("status", stage="retrieving")
         query = contextual_query(search_question, history)
+        # "Summarise my document": excerpts spread across the visitor's file, not the 4 passages
+        # most similar to the word "summarise" (which are generic text in a long report).
+        summary_hits = (
+            self.private.summary_hits(turn.owner, question)
+            if private_search is not None and self.private is not None and wants_summary(question)
+            else []
+        )
         if image_description:
             # Explicit keywords from the vision model retrieve far better than its prose description.
             query = f"{query} {image_terms or image_description[:300]}"
         t = time.perf_counter()
-        result: SearchResult = self.corpora.retriever(CORPUS_FOR_MODE[turn.mode]).search(
-            query, top_k=self.top_k[turn.mode]
+        result: SearchResult = (
+            SearchResult(hits=summary_hits, mode="summary", note="Excerpts spread across your document.")
+            if summary_hits
+            else self.corpora.retriever(CORPUS_FOR_MODE[turn.mode]).search(query, top_k=self.top_k[turn.mode])
         )
-        if private_search is not None:
+        if private_search is not None and not summary_hits:
             mine = private_search.search(query, top_k=self.top_k[turn.mode])
             result = replace(result, hits=merge_hits(mine.hits, result.hits, self.top_k[turn.mode]))
         timings["retrieval_ms"] = _ms(t)
@@ -231,6 +240,7 @@ class ChatPipeline:
             images=direct_images,
             interpreted_question=translated,
             safety_hint=PROMPT_HINT if alert.triggered else None,
+            task_hint=SUMMARY_HINT if summary_hits else None,
         )
         provider = None
         chunks: list[str] = []
@@ -539,6 +549,23 @@ def merge_hits(mine: list[SearchHit], shared: list[SearchHit], top_k: int) -> li
     tagged = [(h.score, 1, i, h) for i, h in enumerate(mine)] + [(h.score, 0, i, h) for i, h in enumerate(shared)]
     tagged.sort(key=lambda t: (-t[0], -t[1], t[2]))
     return [replace(h, rank=n) for n, (_, _, _, h) in enumerate(tagged[:top_k], start=1)]
+
+
+SUMMARY_HINT = (
+    "The user wants a summary of their document. The sources are excerpts taken from across the whole "
+    "document; summarise its main points from them, cite each point, and say the summary is based on excerpts."
+)
+_SUMMARY_REQUEST = re.compile(
+    r"\b(summari[sz]e|summary|overview|tl;?dr|gist|main points|key points|key takeaways|highlights|"
+    r"what (is|'s) (this|the|my) (document|file|report|pdf|paper) about|"
+    r"what does (this|the|my) (document|file|report|pdf|paper) (say|cover|contain)|saransh)\b|सारांश",
+    re.IGNORECASE,
+)
+
+
+def wants_summary(question: str) -> bool:
+    """An overview request ("summarise my report", "key points", "what is this file about")."""
+    return bool(_SUMMARY_REQUEST.search(question))
 
 
 BETTER_MODE_MIN = 0.45

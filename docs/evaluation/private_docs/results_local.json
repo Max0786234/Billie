@@ -35,7 +35,7 @@
     ],
     "cited_private": true,
     "model": "qwen3:4b-instruct",
-    "seconds": 7.6
+    "seconds": 11.4
   },
   {
     "id": "F02",
@@ -79,7 +79,7 @@
     ],
     "cited_private": true,
     "model": "qwen3:4b-instruct",
-    "seconds": 8.8
+    "seconds": 9.6
   },
   {
     "id": "F03",
@@ -117,7 +117,7 @@
     ],
     "cited_private": true,
     "model": "qwen3:4b-instruct",
-    "seconds": 8.9
+    "seconds": 10.0
   },
   {
     "id": "F04",
@@ -156,7 +156,7 @@
     ],
     "cited_private": true,
     "model": "qwen3:4b-instruct",
-    "seconds": 8.1
+    "seconds": 13.8
   },
   {
     "id": "F05",
@@ -197,7 +197,7 @@
     ],
     "cited_private": true,
     "model": "qwen3:4b-instruct",
-    "seconds": 3.0
+    "seconds": 8.7
   },
   {
     "id": "F06",
@@ -235,7 +235,7 @@
     ],
     "cited_private": true,
     "model": "qwen3:4b-instruct",
-    "seconds": 2.3
+    "seconds": 11.2
   },
   {
     "id": "F07",
@@ -276,7 +276,7 @@
     ],
     "cited_private": true,
     "model": "qwen3:4b-instruct",
-    "seconds": 9.0
+    "seconds": 13.1
   },
   {
     "id": "F08",
@@ -314,7 +314,7 @@
     ],
     "cited_private": true,
     "model": "qwen3:4b-instruct",
-    "seconds": 2.5
+    "seconds": 12.9
   },
   {
     "id": "T01",
@@ -352,7 +352,7 @@
     ],
     "cited_private": true,
     "model": "qwen3:4b-instruct",
-    "seconds": 9.9
+    "seconds": 13.5
   },
   {
     "id": "T02",
@@ -393,7 +393,7 @@
     ],
     "cited_private": true,
     "model": "qwen3:4b-instruct",
-    "seconds": 9.7
+    "seconds": 11.0
   },
   {
     "id": "T03",
@@ -434,7 +434,7 @@
     ],
     "cited_private": true,
     "model": "qwen3:4b-instruct",
-    "seconds": 2.9
+    "seconds": 13.4
   },
   {
     "id": "T04",
@@ -475,7 +475,7 @@
     ],
     "cited_private": true,
     "model": "qwen3:4b-instruct",
-    "seconds": 9.9
+    "seconds": 11.0
   },
   {
     "id": "T05",
@@ -513,7 +513,7 @@
     ],
     "cited_private": true,
     "model": "qwen3:4b-instruct",
-    "seconds": 2.7
+    "seconds": 14.6
   },
   {
     "id": "T06",
@@ -551,7 +551,7 @@
     ],
     "cited_private": true,
     "model": "qwen3:4b-instruct",
-    "seconds": 9.7
+    "seconds": 12.1
   },
   {
     "id": "M01",
@@ -577,7 +577,7 @@
     "retrieval": true,
     "correct": true,
     "detail": "",
-    "answer": "Dengue cases fell from 4,820 in 2024 to 2,910 in 2025 [1][2].  \nThe difference is 4,820 - 2,910 = 1,910 cases.  \n\nThus, dengue fell by 1,910 cases from 2024 to 2025 [1].",
+    "answer": "Dengue cases fell from 4,820 in 2024 to 2,910 in 2025 [1][2].  \nThe difference is 4,820 - 2,910 = 1,910 cases.  \n\nSo, dengue fell by 1,910 cases from 2024 to 2025 [1].",
     "grounded": true,
     "abstained": false,
     "sources": [
@@ -600,7 +600,7 @@
     ],
     "cited_private": true,
     "model": "qwen3:4b-instruct",
-    "seconds": 11.0
+    "seconds": 20.9
   },
   {
     "id": "M02",
@@ -652,7 +652,7 @@
     ],
     "cited_private": true,
     "model": "qwen3:4b-instruct",
-    "seconds": 9.8
+    "seconds": 10.2
   },
   {
     "id": "M03",
@@ -675,7 +675,7 @@
     "retrieval": true,
     "correct": true,
     "detail": "",
-    "answer": "The annual average air quality index improved from 104 in 2024 to 92 in 2025 [1]. This represents an improvement of 12 points.",
+    "answer": "The annual average air quality index improved from 104 in 2024 to 92 in 2025 [1]. This is an improvement of 12 points.",
     "grounded": true,
     "abstained": false,
     "sources": [
@@ -698,7 +698,7 @@
     ],
     "cited_private": true,
     "model": "qwen3:4b-instruct",
-    "seconds": 12.5
+    "seconds": 16.0
   },
   {
     "id": "M04",
@@ -743,7 +743,7 @@
     ],
     "cited_private": true,
     "model": "qwen3:4b-instruct",
-    "seconds": 16.0
+    "seconds": 17.2
   },
   {
     "id": "S01",
@@ -787,7 +787,7 @@
     ],
     "cited_private": true,
     "model": "qwen3:4b-instruct",
-    "seconds": 15.6
+    "seconds": 16.5
   },
   {
     "id": "S02",
@@ -805,13 +805,21 @@
       "STEM",
       "air quality"
     ],
-    "retrieval": false,
-    "correct": false,
-    "detail": "answer has 2/8, sources have 2",
-    "answer": "The main achievements in Riverton's 2025 annual report include: [4]\n\n- Modernisation of audited accounts and improved coordination with ward offices on grants from the state [1].  \n- Expansion and strengthening of revenue collection, along with coordination on capital works and the annual budget [2][3].  \n- Upgrading of urban forests and coordination with ward offices on heat action plans, leading to better environmental outcomes and clearer communication for residents [4].  \n- Volunteers and the council planted 48,000 trees, contributing to an improvement in air quality from 104 (2024) to 92 (2025) [4].  \n- A total of 1,150 hectares of green space remains a key part of Riverton’s environmental infrastructure [4].",
+    "retrieval": true,
+    "correct": true,
+    "detail": "answer has 3/8, sources have 3",
+    "answer": "The main achievements in Riverton's 2025 annual report include: [5]\n\n- A reduction in dengue cases from 4,820 in 2024 to 2,910 in 2025 due to a city-wide fogging and larvae-control drive [3].  \n- Improved childhood vaccination coverage: measles (94%), polio (97%), DPT (91%), and hepatitis B (89%) [3].  \n- Enhanced public transport with expanded bus depots and improved coordination on parking management [2].  \n- Increased green space with 1,150 hectares of parks and 48,000 trees planted by volunteers [5].  \n- Improved air quality, with the annual average AQI dropping from 104 in 2024 to 92 in 2025 [5].  \n- Better waste management: 71% of daily solid waste (2,300 tonnes) was segregated at source; wet waste is processed by three biogas plants [4].  \n- Strengthened primary care and school health checks through coordination with ward offices [3].  \n- Classroom improvements and digital classroom initiatives supported by residents [4].  \n\nThese achievements were achieved through coordinated efforts with ward offices, improving service delivery and communication for residents across the city [1][2][3][4][5][6]. The summary is based on excerpts from the Riverton Annual Report 2025 [5].",
     "grounded": true,
     "abstained": false,
     "sources": [
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
       {
         "source": "Your document · riverton_annual_report_2025.pdf",
         "title": "Riverton Annual Report 2025"
@@ -831,7 +839,7 @@
     ],
     "cited_private": true,
     "model": "qwen3:4b-instruct",
-    "seconds": 19.1
+    "seconds": 59.0
   },
   {
     "id": "S03",
@@ -871,86 +879,95 @@
     ],
     "cited_private": true,
     "model": "qwen3:4b-instruct",
-    "seconds": 6.6
+    "seconds": 16.5
   },
   {
-    "id": "U01",
-    "kind": "unanswerable",
-    "doc": "riverton",
-    "q": "What is the mayor's annual salary?",
-    "retrieval": null,
+    "id": "S04",
+    "kind": "summary",
+    "doc": "billie_report",
+    "q": "Give me an overview of the Billie project report.",
+    "min_of": 3,
+    "terms": [
+      "hybrid",
+      "MedQuAD",
+      "arXiv",
+      "citation",
+      "Groq",
+      "sentiment",
+      "Azure",
+      "test"
+    ],
+    "retrieval": true,
     "correct": true,
-    "detail": "declined=True invented=[]",
-    "answer": "I could not find information about the mayor's annual salary in the available documents. The sources mention Mayor Anjali Deshmukh and her role, but do not include any details about her salary. You might rephrase the question to focus on a different aspect, such as the council’s activities or budget processes.",
-    "grounded": null,
-    "abstained": true,
+    "detail": "answer has 4/8, sources have 8",
+    "answer": "The Billie project report outlines key stages and improvements in the development and evaluation of the Billie system. It includes retrieval methods such as SQLite FTS5 with BM25 for keyword search and embeddinggemma-based semantic search, achieving fast query times (5–25 ms per query on MedQuAD, up to 0.6 s over 980k papers) [3]. The report details evaluation results showing improved retrieval performance: dense search outperforms BM25 in nDCG@10 and recall metrics, with hybrid RRF methods achieving even better scores, especially under paraphrase conditions [4]. A major focus is on grounding responses—ensuring answers are supported by real sources or marked as \"ungrounded\" if not found—and refining refusal handling to label non-existent information as \"abstained\" rather than repeating false claims [2][6]. The system also includes features like answer caching, coverage cards for visibility of topic scope, and fixes such as integrating vision capabilities via Gemini or local models and resolving missing sentiment model issues in Docker deployments [5][6]. A full cloud stress test achieved 100% success with a mean response time of 2.0 seconds, demonstrating reliability under load [5].",
+    "grounded": true,
+    "abstained": false,
     "sources": [
       {
-        "source": "Your document · riverton_annual_report_2025.pdf",
-        "title": "Riverton Annual Report 2025"
+        "source": "Your document · billie_project_report.pdf",
+        "title": "Stage"
       },
       {
-        "source": "Your document · riverton_annual_report_2025.pdf",
-        "title": "Riverton Annual Report 2025"
+        "source": "Your document · billie_project_report.pdf",
+        "title": "Stage"
       },
       {
-        "source": "Your document · riverton_annual_report_2025.pdf",
-        "title": "Riverton Annual Report 2025"
+        "source": "Your document · billie_project_report.pdf",
+        "title": "Stage"
       },
       {
-        "source": "Your document · riverton_annual_report_2025.pdf",
-        "title": "Riverton Annual Report 2025"
+        "source": "Your document · billie_project_report.pdf",
+        "title": "Stage"
+      },
+      {
+        "source": "Your document · billie_project_report.pdf",
+        "title": "Stage"
+      },
+      {
+        "source": "Your document · billie_project_report.pdf",
+        "title": "Stage"
       }
     ],
-    "cited_private": false,
+    "cited_private": true,
     "model": "qwen3:4b-instruct",
-    "seconds": 15.3
+    "seconds": 60.0
   },
   {
-    "id": "U02",
-    "kind": "unanswerable",
+    "id": "S05",
+    "kind": "summary",
     "doc": "riverton",
-    "q": "How many hospital beds does Riverton have?",
-    "retrieval": null,
-    "correct": true,
-    "detail": "declined=True invented=[]",
-    "answer": "I could not find information about how many hospital beds Riverton has in the available documents. The sources mention health services, disease surveillance, and school health checks, but do not include data on hospital bed numbers. You might rephrase your question to focus on a different aspect of healthcare or infrastructure that is covered in the reports.",
-    "grounded": null,
-    "abstained": true,
-    "sources": [
-      {
-        "source": "Your document · riverton_annual_report_2025.pdf",
-        "title": "Riverton Annual Report 2025"
-      },
-      {
-        "source": "Your document · riverton_annual_report_2025.pdf",
-        "title": "Riverton Annual Report 2025"
-      },
-      {
-        "source": "Your document · riverton_annual_report_2025.pdf",
-        "title": "Riverton Annual Report 2025"
-      },
-      {
-        "source": "Your document · riverton_annual_report_2025.pdf",
-        "title": "Riverton Annual Report 2025"
-      }
+    "q": "Riverton annual report ka saransh batao",
+    "min_of": 3,
+    "terms": [
+      "treatment plant",
+      "bus",
+      "trees",
+      "homes",
+      "dengue",
+      "leakage",
+      "STEM",
+      "air quality",
+      "Kharadi",
+      "48,000",
+      "12,400",
+      "220"
     ],
-    "cited_private": false,
-    "model": "qwen3:4b-instruct",
-    "seconds": 15.5
-  },
-  {
-    "id": "U03",
-    "kind": "unanswerable",
-    "doc": "riverton",
-    "q": "What was the council's total budget in 2023?",
-    "retrieval": null,
+    "retrieval": true,
     "correct": true,
-    "detail": "declined=True invented=[]",
-    "answer": "I could not find the council's total budget for 2023 in the available documents. The sources only provide information about the 2025 budget [1][2][3][4]. To answer this question, you would need a document or data source that includes the 2023 budget figure. Please rephrase your question to refer to a year covered by the provided sources.",
-    "grounded": null,
-    "abstained": true,
+    "detail": "answer has 5/12, sources have 5",
+    "answer": "The Riverton Annual Report 2025 covers key areas of city operations and progress [5]. The total budget for 2025 was 9,860 crore rupees, allocated across departments such as water supply (1,240 crores), roads (2,115 crores), health (860 crores), education (1,430 crores), sanitation (980 crores), parks (310 crores), public transport (1,725 crores), and administration (1,200 crores) [1].  \n\nBus ridership increased across quarters from 312,000 in Q1 to 365,000 in Q4, with improvements in road safety and parking management [2]. Dengue cases dropped significantly from 4,820 in 2024 to 2,910 in 2025 due to fogging and larva control; childhood vaccination coverage remained high at 89% for Hepatitis B and 97% for Polio [3].  \n\nThe city generated 2,300 tonnes of daily solid waste, with 71% segregated at source; three biogas plants process wet waste, while the rest goes to Uruli landfill [4]. Riverton has 1,150 hectares of green space, with 48,000 trees planted in 2025 and an improved average air quality index from 104 (2024) to 92 (2025) [5].  \n\nThe council employs 24,600 staff, receiving the highest complaints for roads (22,410) and sanitation (18,240), with lower numbers in health and public transport [6]. Across all areas, the council coordinated with ward offices to improve services, ensure steady progress, and enhance communication with residents.  \n\n*Note: This summary is based on excerpts from the sources provided.*",
+    "grounded": true,
+    "abstained": false,
     "sources": [
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
       {
         "source": "Your document · riverton_annual_report_2025.pdf",
         "title": "Riverton Annual Report 2025"
@@ -970,17 +987,17 @@
     ],
     "cited_private": true,
     "model": "qwen3:4b-instruct",
-    "seconds": 15.4
+    "seconds": 55.2
   },
   {
-    "id": "U04",
+    "id": "U01",
     "kind": "unanswerable",
     "doc": "riverton",
-    "q": "Who won the Riverton marathon in 2025?",
+    "q": "What is the mayor's annual salary?",
     "retrieval": null,
     "correct": true,
     "detail": "declined=True invented=[]",
-    "answer": "I could not find information about who won the Riverton marathon in 2025 in the available documents. The sources mention topics like green space, air quality, urban forests, grants, service delivery, and data centres, but none refer to a marathon or its winner. You might rephrase your question to focus on one of these covered areas instead.",
+    "answer": "I could not find information about the mayor's annual salary in the available documents. The sources mention Mayor Anjali Deshmukh and her role, but do not include any details about her salary. You might rephrase the question to focus on topics covered in the reports, such as budgeting or capital works, for which there is more information.",
     "grounded": null,
     "abstained": true,
     "sources": [
@@ -1003,7 +1020,106 @@
     ],
     "cited_private": false,
     "model": "qwen3:4b-instruct",
-    "seconds": 15.8
+    "seconds": 16.3
+  },
+  {
+    "id": "U02",
+    "kind": "unanswerable",
+    "doc": "riverton",
+    "q": "How many hospital beds does Riverton have?",
+    "retrieval": null,
+    "correct": true,
+    "detail": "declined=True invented=[]",
+    "answer": "I could not find information about how many hospital beds Riverton has in the available documents. The sources mention health services, disease surveillance, and school health checks, but do not include data on hospital bed numbers. You might rephrase your question to focus on a different aspect of healthcare or infrastructure covered in the reports.",
+    "grounded": null,
+    "abstained": true,
+    "sources": [
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      }
+    ],
+    "cited_private": false,
+    "model": "qwen3:4b-instruct",
+    "seconds": 15.4
+  },
+  {
+    "id": "U03",
+    "kind": "unanswerable",
+    "doc": "riverton",
+    "q": "What was the council's total budget in 2023?",
+    "retrieval": null,
+    "correct": true,
+    "detail": "declined=True invented=[]",
+    "answer": "I could not find the council's total budget for 2023 in the available documents. The sources only provide information about the 2025 budget and related activities, not data from 2023. You may need to check a different document or source for that year’s budget.",
+    "grounded": null,
+    "abstained": true,
+    "sources": [
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      }
+    ],
+    "cited_private": false,
+    "model": "qwen3:4b-instruct",
+    "seconds": 16.0
+  },
+  {
+    "id": "U04",
+    "kind": "unanswerable",
+    "doc": "riverton",
+    "q": "Who won the Riverton marathon in 2025?",
+    "retrieval": null,
+    "correct": true,
+    "detail": "declined=True invented=[]",
+    "answer": "I could not find information about who won the Riverton marathon in 2025 in the available documents. The sources mention topics like air quality, tree planting, grants, service delivery, and ward offices, but none refer to a marathon or its winner. You might rephrase your question to focus on one of these covered areas.",
+    "grounded": null,
+    "abstained": true,
+    "sources": [
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      }
+    ],
+    "cited_private": false,
+    "model": "qwen3:4b-instruct",
+    "seconds": 15.7
   },
   {
     "id": "R01",
@@ -1041,7 +1157,7 @@
     ],
     "cited_private": true,
     "model": "qwen3:4b-instruct",
-    "seconds": 3.7
+    "seconds": 15.2
   },
   {
     "id": "R02",
@@ -1079,7 +1195,7 @@
     ],
     "cited_private": true,
     "model": "qwen3:4b-instruct",
-    "seconds": 6.4
+    "seconds": 19.5
   },
   {
     "id": "R03",
@@ -1117,7 +1233,7 @@
     ],
     "cited_private": true,
     "model": "qwen3:4b-instruct",
-    "seconds": 3.6
+    "seconds": 16.7
   },
   {
     "id": "R04",
@@ -1145,7 +1261,7 @@
     "retrieval": true,
     "correct": false,
     "detail": "",
-    "answer": "Before the fix, the Stop button caused generation to continue for 20–35 seconds [3]. After the fix, when the middleware was rewritten as pure ASGI and a test forbidding the old style was added, the issue was resolved, though the exact time after the fix is not specified in the sources. Therefore, the duration post-fix is not available in the provided documents.",
+    "answer": "Before the fix, the Stop button caused generation to continue for 20–35 seconds [3]. After the fix, when the middleware was rewritten as pure ASGI and a test forbidding the old style was added, the issue was resolved, though the exact time after the fix is not specified in the sources. Therefore, the duration after the fix cannot be determined from the provided information.",
     "grounded": true,
     "abstained": false,
     "sources": [
@@ -1168,7 +1284,7 @@
     ],
     "cited_private": true,
     "model": "qwen3:4b-instruct",
-    "seconds": 10.0
+    "seconds": 23.0
   },
   {
     "id": "R05",
@@ -1206,6 +1322,6 @@
     ],
     "cited_private": true,
     "model": "qwen3:4b-instruct",
-    "seconds": 3.4
+    "seconds": 16.1
   }
 ]

@@ -216,3 +216,49 @@ def test_a_document_without_headings_keeps_all_its_chunks_in_search(tmp_path):
     store.add(OWNER, "plain.txt", " ".join(facts).encode())
     hits = store.retriever(OWNER).search("parks budget approved council", top_k=4).hits
     assert len(hits) == 4 and len({h.passage.id for h in hits}) == 4
+
+
+def test_summary_requests_are_recognised():
+    from billie.chat.pipeline import wants_summary
+
+    for q in [
+        "Summarise my report",
+        "Give me an overview of the handbook",
+        "What are the key points?",
+        "What is this document about?",
+        "tl;dr",
+        "is report ka saransh batao",
+        "इस दस्तावेज़ का सारांश",
+    ]:
+        assert wants_summary(q), q
+    for q in ["What was the health budget?", "Who is the mayor?", "How is asthma treated?"]:
+        assert not wants_summary(q), q
+
+
+def test_summary_takes_informative_passages_from_across_the_named_document(tmp_path):
+    store = PrivateDocuments(tmp_path / "private", None)
+    filler = "The council coordinated with ward offices and residents saw steady progress on timelines. " * 6
+    parts = [
+        f"# Part {n}\n\n{filler}\n\nIn part {n} the city opened {100 + n} new clinics in 2025.\n\n{filler}"
+        for n in range(6)
+    ]
+    store.add(OWNER, "city_report.md", "\n\n".join(parts).encode())
+    store.add(OWNER, "other_notes.md", SECRET)
+    hits = store.summary_hits(OWNER, "Summarise the city report", k=6)
+    assert {h.passage.metadata["file"] for h in hits} == {"city_report.md"}  # the file the question names
+    found = {n for n in range(6) if any(f"{100 + n} new clinics" in h.passage.text for h in hits)}
+    assert len(found) >= 5  # facts from (almost) every part, not just the beginning
+    both = store.summary_hits(OWNER, "Summarise everything", k=6)
+    assert {h.passage.metadata["file"] for h in both} == {"city_report.md", "other_notes.md"}
+
+
+def test_summary_request_uses_spread_excerpts_and_a_summary_instruction(settings):
+    llm = FakeLLMManager(FakeProvider("The report covers the Falcon launch budget [1]."))
+    client, _ = _client(settings, llm)
+    with client:
+        _upload(client, ALICE)
+        answer = _ask(client, ALICE, "Summarise my document")
+        assert answer["retrieval_mode"] == "summary"
+        assert all(s["metadata"].get("private") for s in answer["sources"])  # only the visitor's file
+        prompt = llm.chat.calls[-1][-1].content
+        assert "summary of their document" in prompt
