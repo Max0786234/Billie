@@ -1,5 +1,6 @@
 import {
   AlertTriangle,
+  ArrowRight,
   CheckCircle2,
   Copy,
   Info,
@@ -15,6 +16,7 @@ import {
 } from "lucide-react";
 import { useRef, useState } from "react";
 import { api } from "../api/client";
+import type { Mode } from "../api/types";
 import type { UIMessage } from "../hooks/useChat";
 import { cx, formatMs } from "../lib/format";
 import { MODES, stageLabel } from "../lib/modes";
@@ -98,9 +100,11 @@ interface AssistantProps {
   message: UIMessage;
   onRegenerate?: () => void;
   onRate?: (value: 1 | -1) => void;
+  /** Ask a follow-up: a given question, or (question undefined) the same question in another mode. */
+  onAsk?: (question: string | undefined, mode: Mode | undefined) => void;
 }
 
-export function AssistantMessage({ message, onRegenerate, onRate }: AssistantProps) {
+export function AssistantMessage({ message, onRegenerate, onRate, onAsk }: AssistantProps) {
   const sources = message.sources ?? [];
   const cited = new Set(message.done?.citations ?? []);
   const [highlight, setHighlight] = useState<number | null>(null);
@@ -149,6 +153,8 @@ export function AssistantMessage({ message, onRegenerate, onRate }: AssistantPro
           </div>
         )}
 
+        {message.done && onAsk && <NextSteps message={message} onAsk={onAsk} />}
+
         {message.enrichment?.entities?.length ? (
           <div className="flex flex-wrap gap-1.5">
             {message.enrichment.entities.map((e) => (
@@ -190,6 +196,47 @@ export function AssistantMessage({ message, onRegenerate, onRate }: AssistantPro
 
         {message.done && <AnswerFooter message={message} onRegenerate={onRegenerate} onRate={onRate} />}
       </div>
+    </div>
+  );
+}
+
+/** When Billie could not answer: a better-suited mode, and the closest topics this mode does have. */
+function NextSteps({ message, onAsk }: { message: UIMessage; onAsk: NonNullable<AssistantProps["onAsk"]> }) {
+  const done = message.done!;
+  const better = done.suggested_mode ? MODES[done.suggested_mode.mode] : null;
+  const related = done.related ?? [];
+  if (!better && !related.length) return null;
+  return (
+    <div className="space-y-2.5 rounded-xl border border-zinc-200 bg-zinc-50 p-3 text-sm dark:border-zinc-800 dark:bg-zinc-900/60">
+      {better && (
+        <div className="flex flex-wrap items-center gap-2">
+          <span>This looks like a question for {better.label} mode.</span>
+          <button
+            type="button"
+            onClick={() => onAsk(undefined, better.id)}
+            className={cx("inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium text-white", better.accent.bg)}
+          >
+            Ask in {better.label} mode <ArrowRight className="size-3.5" />
+          </button>
+        </div>
+      )}
+      {related.length > 0 && (
+        <div>
+          <div className="text-xs text-zinc-500">Closest topics I do have in {MODES[message.mode].label} mode:</div>
+          <div className="mt-1.5 flex flex-wrap gap-1.5">
+            {related.map((r) => (
+              <button
+                key={r.title}
+                type="button"
+                onClick={() => onAsk(r.question, undefined)}
+                className="rounded-full border border-zinc-300 px-2.5 py-1 text-left text-xs hover:bg-white dark:border-zinc-700 dark:hover:bg-zinc-800"
+              >
+                {r.title}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

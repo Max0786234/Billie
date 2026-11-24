@@ -6,7 +6,9 @@ import type {
   DocumentInfo,
   LLMSettings,
   Mode,
+  Overview,
   ProviderPreset,
+  Suggestion,
   SystemStatus,
 } from "./types";
 
@@ -86,6 +88,9 @@ const json = (body: unknown): RequestInit => ({
 
 export const api = {
   status: () => request<SystemStatus>("/api/status"),
+  overview: () => request<Overview>("/api/overview"),
+  suggest: (mode: Mode, q: string, signal?: AbortSignal) =>
+    request<Suggestion[]>(`/api/suggest?mode=${mode}&q=${encodeURIComponent(q)}`, { signal }),
 
   conversations: () => request<ConversationSummary[]>("/api/conversations"),
   conversation: (id: string) => request<Conversation>(`/api/conversations/${id}`),

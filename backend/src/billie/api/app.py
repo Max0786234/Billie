@@ -15,7 +15,7 @@ from dataclasses import asdict
 from typing import Any
 
 import anyio
-from fastapi import Depends, FastAPI, File, HTTPException, Request, UploadFile, status
+from fastapi import Depends, FastAPI, File, HTTPException, Query, Request, UploadFile, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
@@ -31,6 +31,7 @@ from billie.api.schemas import (
     DocumentInfo,
     FeedbackRequest,
     LLMTestRequest,
+    Mode,
     RenameRequest,
     UploadedImage,
 )
@@ -38,6 +39,7 @@ from billie.api.security import TokenBucketLimiter
 from billie.api.services import Services, build_services, warm_up
 from billie.chat.pipeline import ChatTurn
 from billie.conversations import ConversationNotFound, MessageNotFound
+from billie.corpora.overview import overview, suggest
 from billie.llm.base import LLMError
 from billie.llm.manager import LLMManager, LLMSettingsUpdate
 from billie.runtime import Settings, load_settings
@@ -66,6 +68,10 @@ def create_app(settings: Settings | None = None, *, services: Services | None = 
                 log.exception("corpus preparation failed")
             finally:
                 app.state.ready.set()
+            try:
+                overview(container.corpora)  # coverage stats for the start screen (slow once on big indexes)
+            except Exception:  # pragma: no cover - the endpoint still serves basic counts
+                log.exception("coverage overview failed")
             if warm:
                 warm_up(container)
 
@@ -191,6 +197,17 @@ def create_app(settings: Settings | None = None, *, services: Services | None = 
             media_type="text/event-stream",
             headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
         )
+
+    # ------------------------------------------------------------ coverage
+    @app.get("/api/overview", tags=["chat"], dependencies=[Depends(require_api_key)])
+    def corpus_overview(request: Request):
+        """What each mode can answer: sizes, topics, sources, examples and what is not covered."""
+        return overview(services_of(request).corpora, compute=False)
+
+    @app.get("/api/suggest", tags=["chat"], dependencies=[Depends(require_api_key)])
+    def suggestions(request: Request, mode: Mode, q: str = Query(default="", max_length=200)):
+        """As-you-type suggestions from real titles in the mode's index (every one is answerable)."""
+        return suggest(services_of(request).corpora, mode, q)
 
     # ------------------------------------------------------ conversations
     @app.get("/api/conversations", tags=["conversations"], dependencies=[Depends(require_api_key)])

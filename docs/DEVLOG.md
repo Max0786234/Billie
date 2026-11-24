@@ -432,6 +432,43 @@ The keys were read from local files and passed straight to Azure; they were neve
 - Image questions: 24 s the first time (vision 21.9 s, a Gemini latency outlier), then **5.8 s** (vision 3.7 s).
 - Privacy and access: a second visitor id sees 0 of the first visitor's 5 chats; changing settings without the admin key returns 401; the quota counter decremented as expected.
 
+### P2.18 Showing users what Billie can answer (2026-11-25)
+**Problem (owner feedback):** a friend tried the live demo, asked general questions, got "not in the documents" several times and didn't know what Billie was for. A retrieval system is only as useful as its coverage, but the start screen said "Medical" or "Research" without saying what was inside. Every out-of-scope question also cost a model call.
+
+**Changes:**
+1. **Coverage card per mode.** `GET /api/overview` (`corpora/overview.py`) is computed from the live index, so the live site (50k papers) and a full local index (980k) each show their own numbers:
+   - **Medical:** 16,407 answers on 5,126 topics, the NIH sources, and question types (What is, Symptoms, Treatment, Inheritance…)
+   - **Research:** paper count, years and the biggest categories
+   - **General:** the documents
+   - every mode: "good for" and "not covered" lists
+
+   Scanning 980k arXiv rows takes ~18 s, so the stats are computed in the background at startup and cached in `<index>.overview.json` per index build. Until then the endpoint serves the basic counts.
+2. **Examples that work.** Each mode's examples were taken from stress-test questions that passed on the default setup, including Hindi, Hinglish and Spanish ones.
+3. **Suggestions as you type** (`GET /api/suggest`). A prefix search on index *titles* (FTS5 `title : ("word" "prefix"*)`): MedQuAD titles are real questions, and arXiv titles are papers.
+   - For MedQuAD, titles are cleaned up ("What is (are) X ?" → "What is X?", "What are the treatments for X" → "How is X treated?", doubled "??" removed) and short titles are shown first. Long ones are page-title quirks such as "Who is at risk for Am I at Risk for Type 2 Diabetes? …??".
+   - Measured: 3–20 ms on MedQuAD, ~0.1–0.8 s over 980k papers locally (debounced in the UI), and fast on the 50k live index.
+4. **Dead ends turned into next steps** (only when the answer abstained or nothing was found; ~60 ms):
+   - **Better mode:** the question's embedding is compared with the best passage in each corpus.
+   - **Calibration:** in-scope questions scored ≥ 0.48 against their corpus, off-topic ones ≤ 0.37 everywhere (15 sample questions). So a mode is suggested only if it scores ≥ 0.45 *and* beats the current one by ≥ 0.08. One click re-asks there.
+   - **Closest topics in this mode:** only passages with cosine ≥ 0.45 to the question, and none at all when another mode fits better.
+     - The first browser run showed asbestos and osteoporosis offered for a BM25 question.
+     - Checked on 8 dead-end cases: off-topic passages scored ≤ 0.38 (now hidden); near misses 0.39–0.47.
+     - One known false match remains: "VDRL test" matches Von Hippel-Lindau disease at 0.47.
+   - A refusal no longer shows "1 sentence not linked to a source": a refusal makes no claims to verify.
+5. The header taglines no longer hard-code corpus sizes; they said "~980,000 papers" on a site that has 50,000.
+
+**Tests:** 8 new backend tests (`tests/test_guidance.py`) cover the overview, its disk cache, prefix suggestions, title cleaning, related topics on abstained answers, no guidance on grounded answers, the better-mode rule with the calibrated values, and the endpoints. There are also 2 new frontend tests for the guide.
+- Backend **160 passed**, frontend **15 passed**; ruff, mypy and tsc clean.
+- Browser check in Edge (`e2e/guide-check.mjs`):
+  - the coverage cards and suggestions render
+  - a BM25 question asked in Medical mode declines and suggests General mode
+  - one click switches and gives a grounded answer in 0.6 s
+
+API checks on fresh questions in Medical mode:
+- the BM25 question suggests General and shows no noise topics
+- "best smartphone camera" gets only an honest decline
+- "ibuprofen side effects" offers osteoarthritis treatment and immune thrombocytopenia
+
 ---
 
 ## Remaining backlog (updated 2026-11-24, end of P2.16)

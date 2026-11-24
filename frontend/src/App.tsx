@@ -1,9 +1,10 @@
 import { AlertTriangle, PanelLeftOpen } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { api } from "./api/client";
-import type { ConversationSummary, LLMSettings, Mode, SystemStatus } from "./api/types";
+import type { ConversationSummary, LLMSettings, Mode, Overview, SystemStatus } from "./api/types";
 import { Composer } from "./components/Composer";
 import { DocumentsDialog } from "./components/DocumentsDialog";
+import { ModeGuide } from "./components/ModeGuide";
 import { AssistantMessage, UserMessage } from "./components/MessageView";
 import { SettingsDialog } from "./components/SettingsDialog";
 import { Sidebar } from "./components/Sidebar";
@@ -27,6 +28,7 @@ export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [llm, setLlm] = useState<LLMSettings | null>(null);
   const [status, setStatus] = useState<SystemStatus | null>(null);
+  const [overview, setOverview] = useState<Overview | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const stickToBottom = useRef(true);
@@ -53,6 +55,7 @@ export default function App() {
     refreshConversations();
     api.llmSettings().then(setLlm).catch(() => undefined);
     api.status().then(setStatus).catch((e: Error) => setLoadError(e.message));
+    api.overview().then(setOverview).catch(() => undefined); // the guide falls back to built-in text
     // Deep link: ?c=<conversation id> reopens a saved conversation.
     const linked = new URLSearchParams(window.location.search).get("c");
     if (linked && /^[0-9a-f]{32}$/.test(linked)) {
@@ -82,6 +85,20 @@ export default function App() {
     const conversation = await chat.load(id);
     setMode(conversation.mode);
     setSidebarOpen(false);
+  };
+
+  /** Follow a suggestion from an answer: same mode, or start over in a better-suited mode. */
+  const ask = (question: string | undefined, target: Mode | undefined, previous: string | undefined) => {
+    const text = question ?? previous;
+    if (!text) return;
+    stickToBottom.current = true;
+    if (target && target !== mode) {
+      chat.reset();
+      setMode(target);
+      void chat.send(text, target);
+    } else {
+      void chat.send(text, mode);
+    }
   };
 
   const info = MODES[mode];
@@ -173,7 +190,7 @@ export default function App() {
         >
           <div className="mx-auto max-w-3xl px-4 py-6">
             {chat.messages.length === 0 ? (
-              <EmptyState mode={mode} onPick={(q) => void chat.send(q, mode)} />
+              <ModeGuide mode={mode} overview={overview?.modes[mode]} onPick={(q) => void chat.send(q, mode)} />
             ) : (
               <div className="space-y-7">
                 {chat.messages.map((m, i) => {
@@ -185,6 +202,7 @@ export default function App() {
                     <AssistantMessage
                       key={m.key}
                       message={m}
+                      onAsk={isLast && !chat.busy ? (q, target) => ask(q, target, chat.messages[i - 1]?.content) : undefined}
                       onRegenerate={isLast && !chat.busy ? () => chat.regenerate() : undefined}
                       onRate={m.messageId !== undefined ? (v) => void chat.rate(m.key, m.messageId!, v) : undefined}
                     />
@@ -217,31 +235,6 @@ export default function App() {
       }} />}
       {dialog === "documents" && <DocumentsDialog onClose={() => setDialog(null)} />}
       {dialog === "status" && <StatusDialog onClose={() => setDialog(null)} />}
-    </div>
-  );
-}
-
-function EmptyState({ mode, onPick }: { mode: Mode; onPick: (q: string) => void }) {
-  const info = MODES[mode];
-  return (
-    <div className="flex flex-col items-center pt-[12vh] text-center">
-      <div className={cx("flex size-12 items-center justify-center rounded-2xl text-white shadow-sm", info.accent.bg)}>
-        <info.icon className="size-6" />
-      </div>
-      <h2 className="mt-4 text-2xl font-semibold tracking-tight">What would you like to know?</h2>
-      <p className="mt-1.5 max-w-md text-sm text-zinc-500">{info.tagline}</p>
-      <div className="mt-8 grid w-full max-w-xl gap-2">
-        {info.examples.map((q) => (
-          <button
-            key={q}
-            type="button"
-            onClick={() => onPick(q)}
-            className="rounded-xl border border-zinc-200 px-4 py-3 text-left text-sm text-zinc-700 transition hover:bg-zinc-50 dark:border-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-900"
-          >
-            {q}
-          </button>
-        ))}
-      </div>
     </div>
   );
 }

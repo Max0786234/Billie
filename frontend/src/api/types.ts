@@ -67,6 +67,9 @@ export interface DoneEvent {
   not_found?: boolean;
   auto_citations?: { sentence: string; n: number; score: number }[];
   unverified_sentences?: number;
+  /** Dead-end guidance: closest topics in this mode, and a better-suited mode if one clearly fits. */
+  related?: Suggestion[];
+  suggested_mode?: { mode: Mode; score: number } | null;
   citations: number[];
   invalid_citations: number[];
   used_llm: boolean;
@@ -163,4 +166,36 @@ export interface DocumentInfo {
   name: string;
   size: number;
   modified: number;
+}
+
+/** A question the user can click: a real title from the index and the question to send for it. */
+export interface Suggestion {
+  title: string;
+  question: string;
+}
+
+export interface NamedCount {
+  name: string;
+  count: number;
+}
+
+/** What one mode can answer, computed from its index (GET /api/overview). */
+export interface ModeOverview {
+  corpus: string;
+  passages: number;
+  vectors: number;
+  questions?: number;
+  topics?: number;
+  sources?: NamedCount[];
+  question_types?: NamedCount[];
+  years?: [number, number] | null;
+  categories?: NamedCount[];
+  documents?: NamedCount[];
+  good_for: string[];
+  not_covered: string[];
+  examples: string[];
+}
+
+export interface Overview {
+  modes: Record<Mode, ModeOverview>;
 }

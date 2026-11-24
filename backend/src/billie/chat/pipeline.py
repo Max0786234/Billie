@@ -35,6 +35,7 @@ from billie.chat.prompts import (
     split_image_description,
 )
 from billie.conversations import ConversationStore
+from billie.corpora.overview import clean_title, question_for
 from billie.corpora.service import CORPUS_FOR_MODE, CorpusService
 from billie.llm.base import GenerationOptions, ImagePart, LLMError, Message, complete
 from billie.llm.manager import LLMManager
@@ -284,6 +285,17 @@ class ChatPipeline:
         grounded: bool | None = None if (not hits or not used_llm or abstained) else not invalid
         cited_sources = [sources[n - 1] for n in valid]
 
+        # ---- dead ends become next steps: closest topics here, or a better-suited mode ----
+        related: list[dict[str, str]] = []
+        suggested_mode: dict[str, Any] | None = None
+        if abstained or not_found:
+            t = time.perf_counter()
+            suggested_mode = self._better_mode(turn.mode, search_question)
+            if suggested_mode is None:  # another mode fits: this mode's closest topics would be noise
+                relevance = self._relevance(search_question, source_vectors_future)
+                related = _related_topics(CORPUS_FOR_MODE[turn.mode], hits, relevance)
+            timings["guidance_ms"] = _ms(t)
+
         # ---- memory ---------------------------------------------------------------
         timings["total_ms"] = _ms(started)
         meta = {
@@ -306,7 +318,9 @@ class ChatPipeline:
             "cache_key": key,
             "not_found": not_found,
             "auto_citations": auto_citations,
-            "unverified_sentences": len(unverified),
+            "unverified_sentences": 0 if abstained else len(unverified),  # a refusal has no claims to verify
+            "related": related,
+            "suggested_mode": suggested_mode,
         }
         self.conversations.append(conversation_id, "user", question, turn.mode, meta={"image_ids": turn.image_ids})
         message_id = self.conversations.append(
@@ -323,6 +337,43 @@ class ChatPipeline:
         if key and self.cache and used_llm and grounded is not False and not notes:
             self.cache.put(key, meta_event, done_event)
         yield _event("done", **done_event)
+
+    # --------------------------------------------------------------- guidance
+    def _better_mode(self, mode: str, question: str) -> dict[str, Any] | None:
+        """Another mode whose corpus clearly matches the question better, if any.
+
+        Calibrated on sample questions (DEVLOG P2.18): in-scope questions score >= 0.48 against
+        their corpus, off-topic ones <= 0.37 everywhere. Suggest only a clear winner.
+        """
+        embedder = self.corpora.embedder
+        if embedder is None:
+            return None
+        try:
+            vector = embedder.embed_queries([question])[0]  # usually cached from retrieval
+        except LLMError:
+            return None
+        scores: dict[str, float] = {}
+        for other, corpus in CORPUS_FOR_MODE.items():
+            index = self.corpora.index(corpus)
+            if index.has_vectors() and index.embedding_model in (None, embedder.model):
+                top = index.search_dense(vector, 1)
+                scores[other] = top[0][1] if top else 0.0
+        current = scores.get(mode, 0.0)
+        best = max((m for m in scores if m != mode), key=lambda m: scores[m], default=None)
+        if best and scores[best] >= BETTER_MODE_MIN and scores[best] >= current + BETTER_MODE_MARGIN:
+            return {"mode": best, "score": round(scores[best], 3)}
+        return None
+
+    def _relevance(self, question: str, source_vectors_future: Any) -> list[float] | None:
+        """Cosine of the question to each retrieved passage, or None if embeddings are unavailable."""
+        embedder = self.corpora.embedder
+        if embedder is None or source_vectors_future is None:
+            return None
+        try:
+            vector = embedder.embed_queries([question])[0]
+            return [float(score) for score in source_vectors_future.result() @ vector]
+        except LLMError:
+            return None
 
     # ------------------------------------------------------------------ cache
     def _cache_key(self, turn: ChatTurn, question: str) -> str:
@@ -464,6 +515,31 @@ _REFUSAL_OPENER = re.compile(
 def opens_with_refusal(answer: str) -> bool:
     """True if the answer's first sentence declines (not found / won't help)."""
     return bool(_REFUSAL_OPENER.search(answer.strip()[:200]))
+
+
+BETTER_MODE_MIN = 0.45
+BETTER_MODE_MARGIN = 0.08
+
+
+RELATED_MIN = 0.45  # same scale as BETTER_MODE_MIN: below it a passage is not about the question
+
+
+def _related_topics(
+    corpus: str, hits: list[SearchHit], relevance: list[float] | None = None, limit: int = 3
+) -> list[dict[str, str]]:
+    """The closest things this mode does know about, as questions the user can click."""
+    out: list[dict[str, str]] = []
+    seen: set[str] = set()
+    for n, hit in enumerate(hits):
+        if relevance is not None and relevance[n] < RELATED_MIN:
+            continue
+        title = clean_title(corpus, hit.passage.title)
+        if title.casefold() not in seen:
+            seen.add(title.casefold())
+            out.append({"title": title, "question": question_for(corpus, title)})
+        if len(out) == limit:
+            break
+    return out
 
 
 def _title(question: str) -> str:

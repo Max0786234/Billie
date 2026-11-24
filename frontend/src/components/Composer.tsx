@@ -1,7 +1,7 @@
-import { ArrowUp, ImagePlus, Loader2, Square, X } from "lucide-react";
+import { ArrowUp, ImagePlus, Loader2, Search, Square, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { api } from "../api/client";
-import type { Mode } from "../api/types";
+import type { Mode, Suggestion } from "../api/types";
 import { cx } from "../lib/format";
 import { MODES } from "../lib/modes";
 
@@ -25,6 +25,9 @@ export function Composer({ mode, busy, onSend, onStop }: Props) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
+  const [active, setActive] = useState(-1);
+  const [dismissed, setDismissed] = useState<string | null>(null);
   const textRef = useRef<HTMLTextAreaElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -36,6 +39,29 @@ export function Composer({ mode, busy, onSend, onStop }: Props) {
   }, [text]);
 
   useEffect(() => textRef.current?.focus(), [mode]);
+
+  // As-you-type suggestions: real titles from this mode's index, so each one is answerable.
+  useEffect(() => {
+    const query = text.trim();
+    if (busy || query.length < 2 || text.length > 120 || text.includes("\n") || dismissed === text) {
+      setSuggestions([]);
+      return;
+    }
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => {
+      api
+        .suggest(mode, query, controller.signal)
+        .then((found) => {
+          setSuggestions(found);
+          setActive(-1);
+        })
+        .catch(() => undefined); // aborted or offline: no suggestions, typing still works
+    }, 180);
+    return () => {
+      window.clearTimeout(timer);
+      controller.abort();
+    };
+  }, [text, mode, busy, dismissed]);
 
   const addFiles = async (files: Iterable<File>) => {
     const images = [...files].filter((f) => f.type.startsWith("image/"));
@@ -54,20 +80,22 @@ export function Composer({ mode, busy, onSend, onStop }: Props) {
     }
   };
 
-  const submit = () => {
-    if (busy || uploading || !text.trim()) return;
-    onSend(text.trim(), attachments.map((a) => a.id));
+  const send = (question: string) => {
+    if (busy || uploading || !question.trim()) return;
+    onSend(question.trim(), attachments.map((a) => a.id));
     attachments.forEach((a) => URL.revokeObjectURL(a.preview));
     setText("");
     setAttachments([]);
+    setSuggestions([]);
   };
+  const submit = () => send(text);
 
   const accent = MODES[mode].accent;
 
   return (
     <div
       className={cx(
-        "rounded-2xl border bg-white shadow-sm transition dark:bg-zinc-900",
+        "relative rounded-2xl border bg-white shadow-sm transition dark:bg-zinc-900",
         dragging ? "border-zinc-400 ring-4 ring-zinc-200 dark:ring-zinc-800" : "border-zinc-200 dark:border-zinc-800",
       )}
       onDragOver={(e) => {
@@ -81,6 +109,34 @@ export function Composer({ mode, busy, onSend, onStop }: Props) {
         void addFiles(e.dataTransfer.files);
       }}
     >
+      {suggestions.length > 0 && (
+        <div
+          role="listbox"
+          aria-label="Suggested questions"
+          className="absolute right-0 bottom-full left-0 z-20 mb-2 overflow-hidden rounded-xl border border-zinc-200 bg-white text-left shadow-lg dark:border-zinc-700 dark:bg-zinc-900"
+        >
+          <div className="flex items-center gap-1.5 px-3 pt-2 pb-1 text-[11px] font-medium tracking-wide text-zinc-500 uppercase">
+            <Search className="size-3" /> In the {MODES[mode].corpus} index
+          </div>
+          {suggestions.map((s, i) => (
+            <button
+              key={s.title}
+              type="button"
+              role="option"
+              aria-selected={i === active}
+              onMouseDown={(e) => e.preventDefault()} // keep focus in the text box
+              onClick={() => send(s.question)}
+              className={cx(
+                "block w-full truncate px-3 py-1.5 text-left text-sm",
+                i === active ? "bg-zinc-100 dark:bg-zinc-800" : "hover:bg-zinc-50 dark:hover:bg-zinc-800/60",
+              )}
+              title={s.question}
+            >
+              {s.title}
+            </button>
+          ))}
+        </div>
+      )}
       {(attachments.length > 0 || uploading) && (
         <div className="flex flex-wrap gap-2 px-3 pt-3">
           {attachments.map((a) => (
@@ -118,6 +174,24 @@ export function Composer({ mode, busy, onSend, onStop }: Props) {
           }
         }}
         onKeyDown={(e) => {
+          if (suggestions.length) {
+            if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+              e.preventDefault();
+              const last = suggestions.length - 1;
+              // -1 = nothing selected (Enter sends what was typed).
+              setActive((a) => (e.key === "ArrowDown" ? (a >= last ? -1 : a + 1) : a <= -1 ? last : a - 1));
+              return;
+            }
+            if (e.key === "Escape") {
+              setDismissed(text);
+              return;
+            }
+            if (e.key === "Enter" && active >= 0 && active < suggestions.length) {
+              e.preventDefault();
+              send(suggestions[active]?.question ?? text);
+              return;
+            }
+          }
           if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
             e.preventDefault();
             submit();

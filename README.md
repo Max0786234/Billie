@@ -17,6 +17,7 @@
 - **Hybrid retrieval.** BM25 through SQLite FTS5 (searches 980k papers on disk in ~0.4 s) plus dense cosine search over multilingual embeddings, fused with Reciprocal Rank Fusion. Degrades gracefully to BM25 if the embedding model is down.
 - **Grounded, cited answers.** Sources are numbered in the prompt; every `[n]` in the answer is checked. The UI marks answers as grounded, ungrounded (cites a source that doesn't exist) or abstained ("not in the documents").
 - **Fast cloud answers, offline fallback.** The recommended setup uses Groq (`qwen/qwen3.8-27b`) for text and Gemini 3.5 Flash-Lite for images, both on free tiers: ~1–3 s per answer. If the cloud fails or hits a rate limit, the local Ollama model answers instead. Anthropic Claude, OpenAI, OpenRouter or any OpenAI-compatible server can be switched in from the Settings panel.
+- **Shows what it knows.** Each mode opens with a coverage card computed from its index. Medical, for example, lists 16,407 NIH answers on 5,126 topics, the kinds of questions, the sources, and what isn't covered. Examples are taken from questions that passed the stress test, and typing suggests real questions or paper titles from the index. When Billie can't answer, it points to a better-suited mode or the closest topics it does have, instead of leaving a dead end.
 - **Public demo mode.** `BILLIE_DEMO=1` gives every visitor private chats and caps questions per visitor and per day, so a public link can't drain a free model quota.
 - **Multimodal.** Attach a photo or screenshot; a vision model (Gemini, or local gemma3:4b offline) reads it and extracts search terms that drive retrieval.
 - **Multilingual.** Language detection by script rules, romanised-Hindi ("Hinglish") detection and py3langid. Non-English questions get an English search query, and the answer comes back in the user's language.
@@ -75,7 +76,8 @@ The live demo runs as one container on **Azure Container Apps**:
 | Image recipe | [`deploy/huggingface/Dockerfile`](deploy/huggingface/Dockerfile): React build → Ollama + `embeddinggemma` → Python API on port 7860 (the same image also runs on a Hugging Face Docker Space) |
 | Search indexes | `python -m billie.ingest bundle` → MedQuAD + the 50k embedded arXiv papers (2.6 GB → ~300 MB), attached to a GitHub release |
 | Image build | [`.github/workflows/build-image.yml`](.github/workflows/build-image.yml), run manually; pushes to Azure Container Registry. Azure's own builder is disabled on student subscriptions, so GitHub Actions builds it |
-| Hosting | Azure Container Apps (UAE North): 2 vCPU / 4 GB, 0–1 replicas, HTTPS ingress, $10/month budget alert |
+| Hosting | Azure Container Apps in UAE North, the closest region allowed for Azure for Students accounts. 2 vCPU / 4 GB while running; switched off when idle (0–1 copies); public HTTPS link |
+| Cost | ≈ $5/month for the image registry. Running it stays within Azure's free monthly allowance at demo traffic. Both come out of the Azure for Students credit (no card). An email alert fires if monthly spending passes $10 |
 
 Measured on the live deployment: text answers 1.0–2.6 s, image questions ~6 s. The first request after idle includes a cold start.
 
@@ -181,8 +183,8 @@ The classifier adds one ~30 ms embedding call and no extra model download. On th
 
 ### Tests
 
-- **Backend:** 152 pytest tests, offline, in ~13 s. They cover BM25/RRF math, resumable embedding, LLM providers via mocked HTTP, the full chat pipeline with a scripted LLM, the API, security, language detection, and demo-mode isolation and quotas.
-- **Frontend:** 13 Vitest tests (SSE parsing, citation rendering, the streaming chat hook, regenerate, feedback) and 4 Playwright end-to-end tests in Microsoft Edge against the live stack (cited answer, emergency banner + Stop, dialogs).
+- **Backend:** 160 pytest tests, offline, in ~13 s. They cover BM25/RRF math, resumable embedding, LLM providers via mocked HTTP, the full chat pipeline with a scripted LLM, the API, security, language detection, and demo-mode isolation and quotas.
+- **Frontend:** 15 Vitest tests (SSE parsing, citation rendering, the streaming chat hook, regenerate, feedback, the mode guide) and 4 Playwright end-to-end tests in Microsoft Edge against the live stack (cited answer, emergency banner + Stop, dialogs).
 - **Static checks:** `ruff`, `ruff format`, `mypy` and `tsc` are all clean, and CI runs them on every push.
 
 ## Project layout

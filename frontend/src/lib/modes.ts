@@ -34,7 +34,7 @@ export const MODES: Record<Mode, ModeInfo> = {
     id: "medical",
     label: "Medical",
     icon: HeartPulse,
-    tagline: "Health information from 16,000+ NIH question-answer pairs (MedQuAD).",
+    tagline: "Health information from NIH question-answer pairs (MedQuAD).",
     corpus: "MedQuAD",
     accent: {
       text: "text-teal-600 dark:text-teal-400",
@@ -52,7 +52,7 @@ export const MODES: Record<Mode, ModeInfo> = {
     id: "research",
     label: "Research",
     icon: GraduationCap,
-    tagline: "Explore ~980,000 computer-science papers from arXiv.",
+    tagline: "Find and compare computer-science papers from arXiv.",
     corpus: "arXiv",
     accent: {
       text: "text-amber-600 dark:text-amber-400",
