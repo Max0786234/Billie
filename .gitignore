@@ -1,41 +1,43 @@
-# Python
+# ---- Python
 __pycache__/
 *.py[cod]
-*.pyo
-*.pyd
-
-# Virtual environments
 .venv/
-env/
 venv/
-
-# Data and artifacts (ignored from git — keep locally or publish separately)
-/data/
-/artifacts/
-/dataset/arxiv/arxiv-metadata-oai-snapshot.json
-/dataset/MedQuAD/
-
-# Keep small sample datasets tracked for tests
-!dataset/arxiv_sample/
-!dataset/medquad_sample/
-
-# Chroma local store and sqlite state
-data/chroma/
-*.sqlite3
-*.db
-
-# Logs
-.log
-
-# Package distributions
-dist/
-build/
 *.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
 
-# OS files
+# ---- Node / frontend
+node_modules/
+frontend/dist/
+
+# ---- Secrets
+.env
+.env.*
+!.env.example
+
+# ---- Runtime state (indexes, sessions, uploads) — always regenerated
+/data/*
+!/data/.gitkeep
+
+# ---- Large datasets — provided locally, never committed
+/datasets/*
+!/datasets/samples/
+!/datasets/README.md
+
+# ---- OS / editors
 .DS_Store
 Thumbs.db
-.env
-.pytest_cache/
-__pycache__/
-data/
+.idea/
+.vscode/
+
+# ---- Third-party evaluation data (downloaded on demand)
+backend/evals/datasets/sentiment/
+backend/evals/datasets/liveqa/
+
+# ---- Playwright
+frontend/test-results/
+frontend/playwright-report/

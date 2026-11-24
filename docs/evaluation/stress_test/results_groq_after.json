@@ -1,0 +1,316 @@
+[
+  {
+    "id": "G02",
+    "mode": "general",
+    "kind": "how-it-works",
+    "question": "How does hybrid search work in Billie?",
+    "expect": "answer",
+    "pass": true,
+    "problems": [],
+    "answer": "Billie performs hybrid search by running two parallel queries: a BM25 keyword search and a semantic search [1]. The BM25 search uses SQLite FTS5 to find exact matches for rare words and technical terms, while the semantic search uses local text embeddings to identify passages with similar meaning, even if the wording differs [1]. The results from both searches are then merged using Reciprocal Rank Fusion (RRF) to create a final ranked list of relevant passages [1].",
+    "outcome": "grounded",
+    "language": "en",
+    "sentiment": "neutral",
+    "alert": false,
+    "sources": [
+      "How Billie Works › 2. Retrieve evidence with hybrid search",
+      "How Billie Works › 1. Understand the question",
+      "About Billie",
+      "How Billie Works › Models"
+    ],
+    "translated_query": null,
+    "retrieval_mode": "hybrid",
+    "citations": [
+      1
+    ],
+    "auto_citations": 0,
+    "unverified_sentences": 0,
+    "cached": false,
+    "answer_chars": 469,
+    "timings_ms": {
+      "retrieval_ms": 2.9,
+      "first_token_ms": 1015.6,
+      "generation_ms": 1185.3,
+      "citation_repair_ms": 0.1,
+      "total_ms": 1709.8
+    },
+    "wall_s": 1.7
+  },
+  {
+    "id": "G09",
+    "mode": "general",
+    "kind": "short-fact",
+    "question": "What languages does Billie support?",
+    "expect": "answer",
+    "pass": true,
+    "problems": [],
+    "answer": "Billie supports many languages, including English, Hindi, Bengali, and Spanish [1]. It detects the language you write in and replies in that same language, even if the source documents are primarily in English [1][2].",
+    "outcome": "grounded",
+    "language": "en",
+    "sentiment": "positive",
+    "alert": false,
+    "sources": [
+      "Frequently Asked Questions › Does Billie support languages other than English?",
+      "About Billie › What Billie can do in every mode",
+      "How Billie Works › 1. Understand the question",
+      "About Billie"
+    ],
+    "translated_query": null,
+    "retrieval_mode": "hybrid",
+    "citations": [
+      1,
+      2
+    ],
+    "auto_citations": 0,
+    "unverified_sentences": 0,
+    "cached": false,
+    "answer_chars": 217,
+    "timings_ms": {
+      "retrieval_ms": 1.1,
+      "first_token_ms": 240.6,
+      "generation_ms": 334.0,
+      "citation_repair_ms": 0.0,
+      "total_ms": 401.0
+    },
+    "wall_s": 0.5
+  },
+  {
+    "id": "M02",
+    "mode": "medical",
+    "kind": "symptoms",
+    "question": "What are the symptoms of type 2 diabetes?",
+    "expect": "answer",
+    "pass": true,
+    "problems": [],
+    "answer": "The symptoms of type 2 diabetes can be very mild or even absent, which is why many people do not know they have the disease [3]. Common signs include:\n\n*   Increased thirst\n*   Increased hunger\n*   Fatigue\n*   Increased urination, especially at night\n*   Unexplained weight loss\n*   Blurred vision\n*   Numbness or tingling in the feet or hands\n*   Sores that do not heal [3][4]\n\nPlease consult a healthcare professional for personal advice.",
+    "outcome": "grounded",
+    "language": "en",
+    "sentiment": "neutral",
+    "alert": false,
+    "sources": [
+      "What causes Causes of Diabetes ?",
+      "What is (are) Am I at Risk for Type 2 Diabetes? Taking Steps to Lower Your Risk ",
+      "What are the symptoms of Am I at Risk for Type 2 Diabetes? Taking Steps to Lower",
+      "What are the symptoms of I Can Lower My Risk for Type 2 Diabetes: A Guide for Am"
+    ],
+    "translated_query": null,
+    "retrieval_mode": "hybrid",
+    "citations": [
+      3,
+      4
+    ],
+    "auto_citations": 0,
+    "unverified_sentences": 1,
+    "cached": false,
+    "answer_chars": 440,
+    "timings_ms": {
+      "retrieval_ms": 41.4,
+      "first_token_ms": 255.9,
+      "generation_ms": 466.1,
+      "citation_repair_ms": 142.0,
+      "total_ms": 706.0
+    },
+    "wall_s": 0.7
+  },
+  {
+    "id": "M05",
+    "mode": "medical",
+    "kind": "genetics",
+    "question": "Is Huntington disease inherited?",
+    "expect": "answer",
+    "pass": true,
+    "problems": [],
+    "answer": "Yes, Huntington disease is inherited in an autosomal dominant pattern, which means that having a change in just one of the two copies of the HTT gene is enough to cause the condition [1][2]. Most people with the disease inherit the altered gene from one affected parent [1][2]. When a person with Huntington disease has children, each child has a 50% chance of inheriting the mutated gene [2]. In rare cases, the disease can occur due to a new mutation in the HTT gene, even if neither parent has the disorder [1][2]. Please consult a healthcare professional for personal advice.",
+    "outcome": "grounded",
+    "language": "en",
+    "sentiment": "neutral",
+    "alert": false,
+    "sources": [
+      "Is Huntington disease inherited ?",
+      "Is Huntington disease inherited ?",
+      "Is Juvenile Huntington disease inherited ?",
+      "What is (are) Huntington disease ?"
+    ],
+    "translated_query": null,
+    "retrieval_mode": "hybrid",
+    "citations": [
+      1,
+      2
+    ],
+    "auto_citations": 0,
+    "unverified_sentences": 0,
+    "cached": false,
+    "answer_chars": 579,
+    "timings_ms": {
+      "retrieval_ms": 12.0,
+      "first_token_ms": 263.3,
+      "generation_ms": 523.1,
+      "citation_repair_ms": 120.3,
+      "total_ms": 705.5
+    },
+    "wall_s": 0.7
+  },
+  {
+    "id": "M18",
+    "mode": "medical",
+    "kind": "long-consumer",
+    "question": "My mother is 62, she has had high blood sugar for a few years, and recently she feels tingling and burning in her feet especially at night, and sometimes she doesn't notice small cuts on her toes. What could this be and how is it usually treated?",
+    "expect": "answer",
+    "pass": true,
+    "problems": [],
+    "answer": "Based on the symptoms described, your mother may be experiencing **diabetic neuropathy**, specifically peripheral neuropathy, which is nerve damage caused by high blood sugar levels over time [1][3]. This condition often causes tingling, burning, or numbness in the feet, and these feelings are frequently worse at night [2][4]. The loss of sensation that prevents her from noticing small cuts is a common sign of this nerve damage, which can lead to ulcers or infections if not managed [3].\n\nTreatment typically focuses on two main goals: preventing further damage and relieving pain.\n*   **Blood Sugar Control:** The first step is to bring blood sugar levels under control through diet and medication [1].\n*   **Foot Care:** It is crucial to wear properly fitting shoes and routinely check feet for cuts or infections [1].\n*   **Pain Relief:** Doctors may prescribe analgesics, low-dose antidepressants, or anticonvulsant medications to help with pain, burning, or tingling [1].\n*   **Home Remedies:** Some people find relief through regular walking, warm baths, or using elastic stockings [1].\n\nPlease consult a healthcare professional for a proper diagnosis and personalized treatment plan.",
+    "outcome": "grounded",
+    "language": "en",
+    "sentiment": "neutral",
+    "alert": false,
+    "sources": [
+      "What are the treatments for Diabetic Neuropathy ?",
+      "What is (are) Prevent diabetes problems: Keep your nervous system healthy ?",
+      "What is (are) Diabetic Foot ?",
+      "What is (are) Diabetic Neuropathies: The Nerve Damage of Diabetes ?"
+    ],
+    "translated_query": null,
+    "retrieval_mode": "hybrid",
+    "citations": [
+      1,
+      3,
+      2,
+      4
+    ],
+    "auto_citations": 0,
+    "unverified_sentences": 1,
+    "cached": false,
+    "answer_chars": 1194,
+    "timings_ms": {
+      "retrieval_ms": 31.1,
+      "first_token_ms": 266.0,
+      "generation_ms": 766.5,
+      "citation_repair_ms": 30.2,
+      "total_ms": 935.3
+    },
+    "wall_s": 0.9
+  },
+  {
+    "id": "M22",
+    "mode": "medical",
+    "kind": "hindi",
+    "question": "अस्थमा का इलाज कैसे होता है?",
+    "expect": "answer",
+    "pass": true,
+    "problems": [],
+    "answer": "अस्थमा एक दीर्घकालिक रोग है जिसका कोई स्थायी इलाज (cure) नहीं है, लेकिन इलाज का मुख्य उद्देश्य रोग को नियंत्रित करना है [2]। इसके लिए आपको अपने डॉक्टर के साथ मिलकर अपने अस्थमा का प्रबंधन करना चाहिए और वे जो दवाएं लिखते हैं, उन्हें सही ढंग से लेना चाहिए [1][2]। अच्छा नियंत्रण आपको सांस लेने में तकलीफ, खांसी और सीने में कसाव जैसे लक्षणों से राहत देता है और आपकी सामान्य गतिविधियों को बनाए रखने में मदद करता है [2]।\n\nकृपया व्यक्तिगत सलाह के लिए अपने स्वास्थ्य विशेषज्ञ से सलाह लें।",
+    "outcome": "grounded",
+    "language": "hi",
+    "sentiment": "neutral",
+    "alert": false,
+    "sources": [
+      "How to prevent Asthma ?",
+      "What are the treatments for Asthma ?",
+      "What is (are) Asthma ?",
+      "What is (are) Asthma in Children ?"
+    ],
+    "translated_query": "How is asthma treated?",
+    "retrieval_mode": "hybrid",
+    "citations": [
+      2,
+      1
+    ],
+    "auto_citations": 0,
+    "unverified_sentences": 1,
+    "cached": false,
+    "answer_chars": 480,
+    "timings_ms": {
+      "translation_ms": 368.4,
+      "retrieval_ms": 28.2,
+      "first_token_ms": 372.5,
+      "generation_ms": 725.9,
+      "citation_repair_ms": 43.1,
+      "total_ms": 1220.4
+    },
+    "wall_s": 1.2
+  },
+  {
+    "id": "R02",
+    "mode": "research",
+    "kind": "survey",
+    "question": "Recent approaches to reduce hallucination in large language models",
+    "expect": "answer",
+    "pass": true,
+    "problems": [],
+    "answer": "Recent approaches to reducing hallucinations in large language models (LLMs) and multimodal large language models (MLLMs) include: [4]\n\n*   **Layer-wise Analysis and Skipping:** The paper \"Mitigating Hallucinations in Large Language Models Via Decoder Layer Skipping\" (2026) identifies that hallucinations often originate from deeper decoder layers and proposes DeLask, a framework that dynamically skips these specific layers during decoding [3].\n*   **Uncertainty Estimation:** \"Reducing LLM Hallucinations using Epistemic Neural Networks\" (2023) attaches small epistemic neural networks to frozen LLMs (like Llama-2 7B) to improve output joint distributions and uncertainty estimates, often combined with contrastive decoding [2].\n*   **Preference Optimization:** \"Mitigating Hallucination in Multimodal Large Language Model via Hallucination-targeted Direct Preference Optimization\" (2024) introduces HDPO, which uses specific preference pair data to target diverse causes of hallucinations in MLLMs, addressing the inconsistent improvements seen in previous Direct Preference Optimization (DPO) applications [4].\n*   **Anomaly Detection:** \"Hallucination as an Anomaly: Dynamic Intervention via Probabilistic Circuits\" (2026) proposes PCNET, a probabilistic circuit that detects hallucinations as geometric anomalies on the factual manifold to avoid corrupting originally correct generations [5].\n*   **Mechanistic Intervention:** \"FADE: Mitigating Hallucinations by Reducing Language-Prior Dominance in Large Vision-Language Models\" (2026) investigates information flow in transformer layers, finding that Feed-Forward Network (FFN) modules at critical layers act as the source of language priors that can override visual evidence, and aims to mitigate this dominance [1].",
+    "outcome": "grounded",
+    "language": "en",
+    "sentiment": "neutral",
+    "alert": false,
+    "sources": [
+      "FADE: Mitigating Hallucinations by Reducing Language-Prior Dominance in Large Vi",
+      "Reducing LLM Hallucinations using Epistemic Neural Networks",
+      "Mitigating Hallucinations in Large Language Models Via Decoder Layer Skipping",
+      "Mitigating Hallucination in Multimodal Large Language Model via Hallucination-ta",
+      "Hallucination as an Anomaly: Dynamic Intervention via Probabilistic Circuits"
+    ],
+    "translated_query": null,
+    "retrieval_mode": "hybrid",
+    "citations": [
+      4,
+      3,
+      2,
+      5,
+      1
+    ],
+    "auto_citations": 1,
+    "unverified_sentences": 0,
+    "cached": false,
+    "answer_chars": 1778,
+    "timings_ms": {
+      "retrieval_ms": 836.6,
+      "first_token_ms": 272.8,
+      "generation_ms": 1040.7,
+      "citation_repair_ms": 33.7,
+      "total_ms": 1966.1
+    },
+    "wall_s": 2.0
+  },
+  {
+    "id": "R14",
+    "mode": "research",
+    "kind": "long-thesis",
+    "question": "I'm writing a thesis on detecting misinformation on social media using multimodal deep learning that combines text and images. Which recent papers should I read, and what methods do they propose?",
+    "expect": "answer",
+    "pass": true,
+    "problems": [],
+    "answer": "For your thesis on multimodal misinformation detection using text and images, you should read the following recent papers, which propose specific deep learning architectures:\n\n*   **\"F2IND-IT! -- Multimodal Fuzzy Fake Indian News Detection using Images and Text\" (2026)** proposes a framework that uses a ResNet-50 CNN for visual features and a DistilBERT encoder for textual embeddings, fused via an Adaptive Neuro-Fuzzy Inference System (ANFIS) and a lightweight attention-based module [2].\n*   **\"Multimodal Misinformation Detection Using Early Fusion of Linguistic, Visual, and Social Features\" (2025)** investigates an early fusion approach that integrates text, images, and social features to classify misinformation, analyzing a dataset of 1,529 tweets [3].\n*   **\"Detecting Misinformation in Multimedia Content through Cross-Modal Entity Consistency: A Dual Learning Approach\" (2024)** addresses the limitations of scalar representations by proposing a dual learning approach that focuses on cross-modal entity consistency across high-dimensional text and image representations [5].\n*   **\"ReMMD: Realistic Multilingual Multi-Image Agentic Verification for Multimodal Misinformation Detection\" (2026)** introduces an agentic verification framework designed for realistic scenarios involving multilingual narratives and multiple images, addressing the gap left by benchmarks that isolate single images or short captions [4].\n*   **\"Exploring the Role of Audio in Multimodal Misinformation Detection\" (2024)** is also relevant as it constructs a comprehensive framework that includes audio alongside other modalities, highlighting the need to address all modalities rather than just text and images [1].",
+    "outcome": "grounded",
+    "language": "en",
+    "sentiment": "neutral",
+    "alert": false,
+    "sources": [
+      "Exploring the Role of Audio in Multimodal Misinformation Detection",
+      "F2IND-IT! -- Multimodal Fuzzy Fake Indian News Detection using Images and Text",
+      "Multimodal Misinformation Detection Using Early Fusion of Linguistic, Visual, an",
+      "ReMMD: Realistic Multilingual Multi-Image Agentic Verification for Multimodal Mi",
+      "Detecting Misinformation in Multimedia Content through Cross-Modal Entity Consis"
+    ],
+    "translated_query": null,
+    "retrieval_mode": "hybrid",
+    "citations": [
+      2,
+      3,
+      5,
+      4,
+      1
+    ],
+    "auto_citations": 0,
+    "unverified_sentences": 1,
+    "cached": false,
+    "answer_chars": 1709,
+    "timings_ms": {
+      "retrieval_ms": 1720.3,
+      "first_token_ms": 263.8,
+      "generation_ms": 965.3,
+      "citation_repair_ms": 152.8,
+      "total_ms": 2890.7
+    },
+    "wall_s": 2.9
+  }
+]

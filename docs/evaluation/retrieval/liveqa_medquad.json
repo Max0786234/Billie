@@ -1,0 +1,58 @@
+{
+  "benchmark": "TREC 2017 LiveQA-Medical test questions x MedQuAD qrels (Ben Abacha & Demner-Fushman 2019)",
+  "questions_total": 104,
+  "questions_evaluated": 39,
+  "relevance": "grade>=3 (Incomplete/Excellent) relevant; nDCG gains Related=1, Incomplete=2, Excellent=3",
+  "embedding_model": "embeddinggemma",
+  "passages_embedded": 16407,
+  "results": {
+    "original/bm25": {
+      "ndcg@10": 0.3091,
+      "recall@10": 0.404,
+      "mrr@10": 0.3387,
+      "success@5": 0.4872,
+      "latency_p50_ms": 16.2,
+      "latency_p95_ms": 47.3
+    },
+    "original/dense": {
+      "ndcg@10": 0.4528,
+      "recall@10": 0.6561,
+      "mrr@10": 0.4237,
+      "success@5": 0.5641,
+      "latency_p50_ms": 52.0,
+      "latency_p95_ms": 124.4
+    },
+    "original/hybrid (rrf)": {
+      "ndcg@10": 0.4532,
+      "recall@10": 0.5652,
+      "mrr@10": 0.4163,
+      "success@5": 0.6154,
+      "latency_p50_ms": 73.3,
+      "latency_p95_ms": 172.8
+    },
+    "paraphrase/bm25": {
+      "ndcg@10": 0.4228,
+      "recall@10": 0.5592,
+      "mrr@10": 0.4338,
+      "success@5": 0.5641,
+      "latency_p50_ms": 15.3,
+      "latency_p95_ms": 27.3
+    },
+    "paraphrase/dense": {
+      "ndcg@10": 0.4712,
+      "recall@10": 0.7118,
+      "mrr@10": 0.4693,
+      "success@5": 0.7436,
+      "latency_p50_ms": 41.7,
+      "latency_p95_ms": 55.4
+    },
+    "paraphrase/hybrid (rrf)": {
+      "ndcg@10": 0.5371,
+      "recall@10": 0.7432,
+      "mrr@10": 0.5142,
+      "success@5": 0.7949,
+      "latency_p50_ms": 56.3,
+      "latency_p95_ms": 75.0
+    }
+  }
+}

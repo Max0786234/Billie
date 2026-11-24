@@ -1,0 +1,73 @@
+{
+  "cases": 4,
+  "passed": 4,
+  "pass_rate": 1.0,
+  "pass_rate_by_mode": {
+    "general": 1.0,
+    "medical": 1.0,
+    "research": 1.0
+  },
+  "outcomes": {
+    "grounded": 4
+  },
+  "latency_fresh_s": {
+    "n": 4,
+    "mean": 26.4,
+    "p50": 24.9,
+    "p90": 30.2,
+    "max": 36.5
+  },
+  "latency_by_mode_s": {
+    "general": {
+      "n": 1,
+      "mean": 19.2,
+      "p50": 19.2,
+      "p90": 19.2,
+      "max": 19.2
+    },
+    "medical": {
+      "n": 1,
+      "mean": 19.5,
+      "p50": 19.5,
+      "p90": 19.5,
+      "max": 19.5
+    },
+    "research": {
+      "n": 2,
+      "mean": 33.4,
+      "p50": 33.4,
+      "p90": 30.2,
+      "max": 36.5
+    }
+  },
+  "latency_by_group_s": {
+    "standard": {
+      "n": 4,
+      "mean": 26.4,
+      "p50": 24.9,
+      "p90": 30.2,
+      "max": 36.5
+    }
+  },
+  "latency_cached_s": {},
+  "stage_means": {
+    "retrieval": {
+      "n": 4,
+      "mean_s": 1.19
+    },
+    "first_token": {
+      "n": 4,
+      "mean_s": 10.31
+    },
+    "generation": {
+      "n": 4,
+      "mean_s": 24.91
+    },
+    "citation_repair": {
+      "n": 4,
+      "mean_s": 0.07
+    }
+  },
+  "correlation_answer_length_vs_time": 0.99,
+  "mean_answer_chars": 672.0
+}

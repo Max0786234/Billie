@@ -1,2 +1,6 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+* text=auto eol=lf
+# Knowledge files are fingerprinted (SHA-256) by the evaluation dataset; keep bytes stable.
+knowledge/*.txt text eol=lf
+*.ps1 text eol=crlf
+*.png binary
+*.jpg binary

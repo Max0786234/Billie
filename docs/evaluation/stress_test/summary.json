@@ -1,0 +1,124 @@
+{
+  "cases": 100,
+  "passed": 96,
+  "pass_rate": 0.96,
+  "pass_rate_by_mode": {
+    "general": 0.958,
+    "medical": 0.938,
+    "research": 1.0
+  },
+  "outcomes": {
+    "grounded": 83,
+    "abstained": 15,
+    "no_sources": 2
+  },
+  "latency_fresh_s": {
+    "n": 96,
+    "mean": 26.1,
+    "p50": 23.6,
+    "p90": 40.7,
+    "max": 93.6
+  },
+  "latency_by_mode_s": {
+    "general": {
+      "n": 23,
+      "mean": 14.4,
+      "p50": 12.0,
+      "p90": 17.8,
+      "max": 60.6
+    },
+    "medical": {
+      "n": 46,
+      "mean": 27.9,
+      "p50": 23.6,
+      "p90": 37.3,
+      "max": 93.6
+    },
+    "research": {
+      "n": 27,
+      "mean": 33.1,
+      "p50": 32.3,
+      "p90": 40.9,
+      "max": 58.0
+    }
+  },
+  "latency_by_group_s": {
+    "standard": {
+      "n": 57,
+      "mean": 25.0,
+      "p50": 24.1,
+      "p90": 38.0,
+      "max": 48.7
+    },
+    "out-of-scope/abstain": {
+      "n": 14,
+      "mean": 12.9,
+      "p50": 14.6,
+      "p90": 17.9,
+      "max": 23.3
+    },
+    "non-english": {
+      "n": 11,
+      "mean": 38.9,
+      "p50": 30.6,
+      "p90": 58.0,
+      "max": 77.3
+    },
+    "emergency": {
+      "n": 4,
+      "mean": 19.4,
+      "p50": 19.1,
+      "p90": 19.2,
+      "max": 20.6
+    },
+    "follow-up": {
+      "n": 7,
+      "mean": 22.8,
+      "p50": 24.6,
+      "p90": 27.2,
+      "max": 27.3
+    },
+    "image": {
+      "n": 3,
+      "mean": 79.2,
+      "p50": 83.5,
+      "p90": 83.5,
+      "max": 93.6
+    }
+  },
+  "latency_cached_s": {
+    "n": 4,
+    "mean": 0.1,
+    "p50": 0.1,
+    "p90": 0.1,
+    "max": 0.2
+  },
+  "stage_means": {
+    "vision": {
+      "n": 3,
+      "mean_s": 51.39
+    },
+    "translation": {
+      "n": 11,
+      "mean_s": 1.41
+    },
+    "retrieval": {
+      "n": 96,
+      "mean_s": 0.25
+    },
+    "first_token": {
+      "n": 96,
+      "mean_s": 8.42
+    },
+    "generation": {
+      "n": 96,
+      "mean_s": 23.34
+    },
+    "citation_repair": {
+      "n": 94,
+      "mean_s": 0.68
+    }
+  },
+  "correlation_answer_length_vs_time": 0.46,
+  "mean_answer_chars": 574.0
+}

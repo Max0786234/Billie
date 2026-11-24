@@ -1,0 +1,38 @@
+{
+  "benchmark": "TREC 2017 LiveQA Medical questions with MedQuAD qrels and NLM reference answers",
+  "queries": "original",
+  "questions": 39,
+  "model": "qwen3:4b-instruct",
+  "judge": "qwen3:4b-instruct (same model: self-judging bias; spot-checked manually)",
+  "outcomes": {
+    "grounded": 0.769,
+    "abstained": 0.231,
+    "ungrounded": 0.0,
+    "fallback": 0.0,
+    "no_sources": 0.0
+  },
+  "relevant_source_retrieved": 0.59,
+  "answers_with_uncited_claims": 0.692,
+  "uncited_claims_total": 46,
+  "auto_citations_added": 8,
+  "auto_citation_support_rate": null,
+  "model_citation_support_rate": 0.84,
+  "unverified_sentences_total": 45,
+  "claims_judged": 81,
+  "claim_verdicts": {
+    "SUPPORTED": 62,
+    "PARTIAL": 12,
+    "UNSUPPORTED": 7
+  },
+  "citation_support_rate": 0.84,
+  "ref_similarity": {
+    "billie_answer_mean": 0.675,
+    "top_passage_baseline_mean": 0.59,
+    "answer_better_share": 0.795
+  },
+  "latency_seconds": {
+    "p50": 47.3,
+    "max": 61.3
+  },
+  "tag": "citation_repair"
+}

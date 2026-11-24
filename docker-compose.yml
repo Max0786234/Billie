@@ -1,0 +1,43 @@
+# One-command stack:  docker compose up --build   ->  http://localhost:8000
+# Full corpora: build the indexes once on the host (python -m billie.ingest medquad|arxiv)
+# and they are picked up from ./data; otherwise Billie starts with the bundled samples.
+services:
+  ollama:
+    image: ollama/ollama:latest
+    volumes:
+      - ollama:/root/.ollama
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      retries: 30
+
+  models:
+    # One-shot job that pulls Billie's local models into the shared Ollama volume.
+    image: ollama/ollama:latest
+    depends_on:
+      ollama:
+        condition: service_healthy
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+    entrypoint: ["sh", "-c", "ollama pull qwen3:4b-instruct && ollama pull gemma3:4b && ollama pull embeddinggemma"]
+    restart: "no"
+
+  billie:
+    build: .
+    depends_on:
+      ollama:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    environment:
+      OLLAMA_BASE_URL: http://ollama:11434
+      BILLIE_ENV: ${BILLIE_ENV:-development}
+      BILLIE_API_KEY: ${BILLIE_API_KEY:-}
+      BILLIE_ADMIN_KEY: ${BILLIE_ADMIN_KEY:-}
+      BILLIE_CORS_ORIGINS: http://localhost:8000
+    volumes:
+      - ./data:/app/data
+      - ./datasets:/app/datasets:ro
+
+volumes:
+  ollama:

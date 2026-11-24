@@ -1,0 +1,84 @@
+{
+  "cases": 8,
+  "passed": 8,
+  "pass_rate": 1.0,
+  "pass_rate_by_mode": {
+    "general": 1.0,
+    "medical": 1.0,
+    "research": 1.0
+  },
+  "outcomes": {
+    "grounded": 8
+  },
+  "latency_fresh_s": {
+    "n": 8,
+    "mean": 2.3,
+    "p50": 1.5,
+    "p90": 4.0,
+    "max": 7.7
+  },
+  "latency_by_mode_s": {
+    "general": {
+      "n": 2,
+      "mean": 1.0,
+      "p50": 1.0,
+      "p90": 0.4,
+      "max": 1.6
+    },
+    "medical": {
+      "n": 4,
+      "mean": 1.1,
+      "p50": 1.1,
+      "p90": 1.3,
+      "max": 1.8
+    },
+    "research": {
+      "n": 2,
+      "mean": 5.8,
+      "p50": 5.8,
+      "p90": 4.0,
+      "max": 7.7
+    }
+  },
+  "latency_by_group_s": {
+    "standard": {
+      "n": 7,
+      "mean": 2.4,
+      "p50": 1.3,
+      "p90": 4.0,
+      "max": 7.7
+    },
+    "non-english": {
+      "n": 1,
+      "mean": 1.8,
+      "p50": 1.8,
+      "p90": 1.8,
+      "max": 1.8
+    }
+  },
+  "latency_cached_s": {},
+  "stage_means": {
+    "translation": {
+      "n": 1,
+      "mean_s": 0.2
+    },
+    "retrieval": {
+      "n": 8,
+      "mean_s": 0.46
+    },
+    "first_token": {
+      "n": 8,
+      "mean_s": 0.88
+    },
+    "generation": {
+      "n": 8,
+      "mean_s": 1.25
+    },
+    "citation_repair": {
+      "n": 8,
+      "mean_s": 0.43
+    }
+  },
+  "correlation_answer_length_vs_time": 0.74,
+  "mean_answer_chars": 794.0
+}

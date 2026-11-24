@@ -1,0 +1,1143 @@
+[
+  {
+    "qid": "1",
+    "question": "Noonan syndrome. What are the references with noonan syndrome and polycystic renal disease",
+    "outcome": "abstained",
+    "relevant_source_retrieved": true,
+    "answer": "I could not find any information about Noonan syndrome and polycystic renal disease in the available documents. The provided sources only describe Noonan syndrome as a genetic disorder with features like facial appearance, short stature, heart defects, and developmental delay, but they do not mention polycystic renal disease or its relationship to Noonan syndrome.\n\nTo get accurate information on this topic, you may want to rephrase your question or consult medical literature that specifically addresses the connection between these two conditions.  \n\nPlease consult a healthcare professional for personal advice.",
+    "claims": [],
+    "uncited_claims": [],
+    "support": null,
+    "ref_similarity_answer": 0.7379318475723267,
+    "ref_similarity_top_passage": 0.6756201982498169,
+    "seconds": 13.7
+  },
+  {
+    "qid": "4",
+    "question": "vdrl positive. vdrl positive patients please tell me what are he doing . Diagnosis and precaution",
+    "outcome": "abstained",
+    "relevant_source_retrieved": false,
+    "answer": "I could not find information about \"VDRL positive\" patients, diagnosis, or precautions in the available documents. The provided sources discuss Rh incompatibility, von Willebrand disease, von Hippel-Lindau disease, and rheumatoid arthritis, but none address VDRL testing or its implications.\n\nYou may want to rephrase your question to focus on one of the topics covered in the sources (e.g., von Willebrand disease symptoms or diagnosis), or ask about a different condition.  \n\nPlease consult a healthcare professional for personal medical advice.",
+    "claims": [],
+    "uncited_claims": [
+      "The provided sources discuss Rh incompatibility, von Willebrand disease, von Hippel-Lindau disease, and rheumatoid arthritis, but none address VDRL testing or its implications."
+    ],
+    "support": null,
+    "ref_similarity_answer": 0.3253082036972046,
+    "ref_similarity_top_passage": 0.34374651312828064,
+    "seconds": 15.3
+  },
+  {
+    "qid": "7",
+    "question": "DVT. Can a birth control called Ocella cause DVT? My daughter experiences pains cramping,redness and swelling in her thigh and also really bad huge blood clots during her menstrual cycles after she was prescribed Osella for birth control. Also these syntoms worsened after she gave birth. This has been happening for a year now should she see discuss this with her doctor right away?",
+    "outcome": "grounded",
+    "relevant_source_retrieved": false,
+    "answer": "Some hormonal birth controls, including Ocella, can increase the risk of blood clots, such as deep vein thrombosis (DVT), especially in people who already have certain risk factors [3]. Symptoms like pain, redness, swelling, and large blood clots in the thigh—especially after childbirth or during menstrual cycles—are concerning and may be signs of DVT [1]. Since these symptoms have been occurring for a year and worsened after giving birth, it is important that your daughter see her doctor right away to evaluate whether she has developed a clot or another condition.  \n\nPlease note: This information does not replace professional medical advice. You should consult a healthcare provider for personal health concerns.",
+    "claims": [
+      {
+        "claim": "Some hormonal birth controls, including Ocella, can increase the risk of blood clots, such as deep vein thrombosis (DVT), especially in people who already have certain risk factors .",
+        "cites": [
+          3
+        ],
+        "verdict": "SUPPORTED"
+      },
+      {
+        "claim": "Symptoms like pain, redness, swelling, and large blood clots in the thigh—especially after childbirth or during menstrual cycles—are concerning and may be signs of DVT .",
+        "cites": [
+          1
+        ],
+        "verdict": "SUPPORTED"
+      }
+    ],
+    "uncited_claims": [],
+    "support": 1.0,
+    "ref_similarity_answer": 0.6525947451591492,
+    "ref_similarity_top_passage": 0.5161864757537842,
+    "seconds": 26.4
+  },
+  {
+    "qid": "9",
+    "question": "infection. can a streptococcus infection cause an invasive disease like wegeners or the symptoms of wegeners?",
+    "outcome": "abstained",
+    "relevant_source_retrieved": true,
+    "answer": "I could not find information in the provided sources about whether a streptococcus infection can cause a disease like Wegener's (now called Granulomatosis with Polyangiitis).  \n\nThe sources discuss rheumatic fever and other infections caused by group A or B Streptococcus, but do not mention Wegener’s or any connection to invasive diseases such as that.  \n\nPlease consult a healthcare professional for personal medical advice.",
+    "claims": [],
+    "uncited_claims": [],
+    "support": null,
+    "ref_similarity_answer": 0.6602885127067566,
+    "ref_similarity_top_passage": 0.5603421926498413,
+    "seconds": 20.9
+  },
+  {
+    "qid": "11",
+    "question": "Macular Degeneration. I am a non-smoker , retired military veteran who was subjected to working conditions where the majority of fellow workers were smokers. Could or does second hand smoke contribute or is a cause for getting Early AMD. I was diagnosed with early AMD in 1982 when ventilation of work spaces was nearly non existent. My genetic profile does not include any previous conditions except that I am Caucasian",
+    "outcome": "grounded",
+    "relevant_source_retrieved": false,
+    "answer": "Secondhand smoke may increase the risk for age-related macular degeneration (AMD), including early AMD [1][2]. While your diagnosis was made in 1982 when ventilation was poor, there is no direct evidence from studies linking secondhand smoke exposure specifically to early-stage AMD. However, smoking and secondhand smoke are both associated with higher risk for AMD, especially in people who have been exposed over long periods [1][2]. Since you are a non-smoker and your genetic profile does not show other conditions, the main known risks—like age, race (Caucasian), and family history—are present.  \n\nBecause early AMD typically has no symptoms at first, regular eye exams remain important for monitoring progression.\n\nPlease consult an ophthalmologist or healthcare professional to discuss your personal risk factors and vision health.",
+    "claims": [
+      {
+        "claim": "Secondhand smoke may increase the risk for age-related macular degeneration (AMD), including early AMD .",
+        "cites": [
+          1,
+          2
+        ],
+        "verdict": "UNSUPPORTED"
+      },
+      {
+        "claim": "However, smoking and secondhand smoke are both associated with higher risk for AMD, especially in people who have been exposed over long periods .",
+        "cites": [
+          1,
+          2
+        ],
+        "verdict": "PARTIAL"
+      }
+    ],
+    "uncited_claims": [
+      "While your diagnosis was made in 1982 when ventilation was poor, there is no direct evidence from studies linking secondhand smoke exposure specifically to early-stage AMD.",
+      "Since you are a non-smoker and your genetic profile does not show other conditions, the main known risks—like age, race (Caucasian), and family history—are present.",
+      "Because early AMD typically has no symptoms at first, regular eye exams remain important for monitoring progression."
+    ],
+    "support": 0.25,
+    "ref_similarity_answer": 0.6944116950035095,
+    "ref_similarity_top_passage": 0.6380091905593872,
+    "seconds": 28.0
+  },
+  {
+    "qid": "14",
+    "question": "vasculitis. Yes my wife has been dianosed with giant cell vasculitis Our doctors are not clear about this so im asking for help From you . She has vomited something like coffee grounds and swelling in her feet and legs is really bad.migranes and face swelling to.no blood clots but nothing to go on so please help if u can thank u [NAME] [CONTACT]",
+    "outcome": "grounded",
+    "relevant_source_retrieved": false,
+    "answer": "I'm sorry you're going through this — it's understandable to feel concerned when symptoms are unclear.\n\nVasculitis is inflammation of blood vessels, which can affect organs including the brain, nerves, and kidneys [1]. Giant cell vasculitis is a type of vasculitis that often affects medium-sized arteries, especially in the face or limbs. It can cause swelling (edema), particularly in feet and legs, as well as facial swelling and migraines due to inflammation affecting blood vessels [1][2].\n\nVomiting material that looks like coffee grounds may indicate bleeding in the stomach or upper digestive tract — this is a serious sign and could be related to vasculitis or another condition. While you mentioned no blood clots, internal bleeding can still occur with vascular inflammation.\n\nBecause these symptoms (especially vomiting coffee-ground material and severe swelling) could point to significant complications, **you should contact emergency services right away** if she has not already done so — this may be a medical emergency [1].\n\nPlease consult a healthcare professional for personal advice.",
+    "claims": [
+      {
+        "claim": "Vasculitis is inflammation of blood vessels, which can affect organs including the brain, nerves, and kidneys .",
+        "cites": [
+          1
+        ],
+        "verdict": "SUPPORTED"
+      },
+      {
+        "claim": "It can cause swelling (edema), particularly in feet and legs, as well as facial swelling and migraines due to inflammation affecting blood vessels .",
+        "cites": [
+          1,
+          2
+        ],
+        "verdict": "PARTIAL"
+      },
+      {
+        "claim": "Because these symptoms (especially vomiting coffee-ground material and severe swelling) could point to significant complications, **you should contact emergency services right away** if she has not already done so — this may be a medical emergency .",
+        "cites": [
+          1
+        ],
+        "verdict": "PARTIAL"
+      }
+    ],
+    "uncited_claims": [
+      "Giant cell vasculitis is a type of vasculitis that often affects medium-sized arteries, especially in the face or limbs.",
+      "Vomiting material that looks like coffee grounds may indicate bleeding in the stomach or upper digestive tract — this is a serious sign and could be related to vasculitis or another condition.",
+      "While you mentioned no blood clots, internal bleeding can still occur with vascular inflammation."
+    ],
+    "support": 0.6666666666666666,
+    "ref_similarity_answer": 0.5252993106842041,
+    "ref_similarity_top_passage": 0.4824471175670624,
+    "seconds": 35.5
+  },
+  {
+    "qid": "15",
+    "question": "can't find an answer. I was diagnosed with Fibromyalgia with chronic pain along with some other things and my blood work showed that I was missing a chromosone. How would I find out if I have a genetic for of Fibromyalgia?",
+    "outcome": "grounded",
+    "relevant_source_retrieved": true,
+    "answer": "I could not find information in the available documents about whether fibromyalgia has a genetic form or how to determine a genetic cause based on blood work showing a missing chromosome. The sources mention fibromyalgia symptoms and chromosomal syndromes like 3p- syndrome, but do not link fibromyalgia directly to a hereditary condition or explain testing for such a connection [1][4]. \n\nTo learn more about whether you have a genetic form of fibromyalgia, it is important to consult a healthcare professional who can interpret your blood work and evaluate your medical history.  \n\nPlease talk with a doctor or specialist for personal advice.",
+    "claims": [
+      {
+        "claim": "The sources mention fibromyalgia symptoms and chromosomal syndromes like 3p- syndrome, but do not link fibromyalgia directly to a hereditary condition or explain testing for such a connection .",
+        "cites": [
+          1,
+          4
+        ],
+        "verdict": "SUPPORTED"
+      }
+    ],
+    "uncited_claims": [],
+    "support": 1.0,
+    "ref_similarity_answer": 0.6800767183303833,
+    "ref_similarity_top_passage": 0.6677305698394775,
+    "seconds": 25.2
+  },
+  {
+    "qid": "21",
+    "question": "Beckwith-Wieddeman Syndrome.. Beckwith-Wieddeman Syndrome. I would like to request further knowledge on this specific disorder",
+    "outcome": "grounded",
+    "relevant_source_retrieved": true,
+    "answer": "Beckwith-Wiedemann syndrome is a condition that affects many parts of the body and is classified as an overgrowth syndrome [2]. Affected infants are typically larger than normal (macrosomia) and may have uneven growth, known as hemihyperplasia, which can become less noticeable with age [2]. The disorder affects about 1 in 13,700 newborns worldwide, though it might be more common because some cases with mild symptoms go undiagnosed [4].\n\nIn about 85% of cases, only one person in a family has the condition, and parents may have an increased risk for having another child affected, depending on the genetic cause. In some families, the syndrome follows an autosomal dominant pattern of inheritance, meaning one copy of an altered gene is usually enough to cause the disorder [1].\n\nFor diagnosis and management, resources include genetic testing, diagnostic tests, surgery if needed, genetic counseling, and palliative care [3]. \n\nPlease consult a healthcare professional for personal advice.",
+    "claims": [
+      {
+        "claim": "Beckwith-Wiedemann syndrome is a condition that affects many parts of the body and is classified as an overgrowth syndrome .",
+        "cites": [
+          2
+        ],
+        "verdict": "SUPPORTED"
+      },
+      {
+        "claim": "Affected infants are typically larger than normal (macrosomia) and may have uneven growth, known as hemihyperplasia, which can become less noticeable with age .",
+        "cites": [
+          2
+        ],
+        "verdict": "SUPPORTED"
+      },
+      {
+        "claim": "The disorder affects about 1 in 13,700 newborns worldwide, though it might be more common because some cases with mild symptoms go undiagnosed .",
+        "cites": [
+          4
+        ],
+        "verdict": "SUPPORTED"
+      },
+      {
+        "claim": "In some families, the syndrome follows an autosomal dominant pattern of inheritance, meaning one copy of an altered gene is usually enough to cause the disorder .",
+        "cites": [
+          1
+        ],
+        "verdict": "SUPPORTED"
+      },
+      {
+        "claim": "For diagnosis and management, resources include genetic testing, diagnostic tests, surgery if needed, genetic counseling, and palliative care .",
+        "cites": [
+          3
+        ],
+        "verdict": "SUPPORTED"
+      }
+    ],
+    "uncited_claims": [
+      "In about 85% of cases, only one person in a family has the condition, and parents may have an increased risk for having another child affected, depending on the genetic cause."
+    ],
+    "support": 1.0,
+    "ref_similarity_answer": 0.7490217685699463,
+    "ref_similarity_top_passage": 0.5825400948524475,
+    "seconds": 30.3
+  },
+  {
+    "qid": "24",
+    "question": "Ear Ache. My son was treated for otitis media on [DATE]. Pains started the previous night. He is taking amoxicillin and antipyrine-benzocaine 5.5%-1.5% ear drops. This morning he woke up with a bit of blood drainage. Is that normal?",
+    "outcome": "grounded",
+    "relevant_source_retrieved": true,
+    "answer": "Blood drainage from the ear is not normal and should be evaluated by a doctor immediately. While some ear infections like otitis media can cause pain and discomfort, blood in the ear may indicate a more serious issue such as damage to the eardrum or infection spreading [3]. Even if your son was treated for otitis media with amoxicillin and ear drops, any new symptoms—especially bleeding—should be checked by a healthcare provider right away.  \n\nPlease contact emergency services or see a doctor immediately if you are concerned about his condition.  \n\nAlways consult a healthcare professional before making decisions about treatment.",
+    "claims": [
+      {
+        "claim": "While some ear infections like otitis media can cause pain and discomfort, blood in the ear may indicate a more serious issue such as damage to the eardrum or infection spreading .",
+        "cites": [
+          3
+        ],
+        "verdict": "PARTIAL"
+      }
+    ],
+    "uncited_claims": [
+      "Even if your son was treated for otitis media with amoxicillin and ear drops, any new symptoms—especially bleeding—should be checked by a healthcare provider right away."
+    ],
+    "support": 0.5,
+    "ref_similarity_answer": 0.7014905214309692,
+    "ref_similarity_top_passage": 0.5568667650222778,
+    "seconds": 21.5
+  },
+  {
+    "qid": "27",
+    "question": "Dementia. Is dementia genetically passed down or could anyone get it",
+    "outcome": "grounded",
+    "relevant_source_retrieved": true,
+    "answer": "Dementia is not a single disease but a group of symptoms caused by brain disorders, and it does not always run in families [1]. While some forms of Alzheimer’s disease—like early-onset autosomal dominant Alzheimer disease—can be inherited (with a 50% chance of passing the gene to children), most cases are not directly passed down genetically [2][3]. Having a family history increases risk, but it does not mean someone will get dementia. Memory loss alone is not enough to diagnose dementia, and many people with normal brain function do not have symptoms [1].\n\nDementia can occur in anyone due to various causes such as aging, health conditions, or brain injuries—genetics may play a role only in certain types of cases.\n\nPlease consult a healthcare professional for personal advice.",
+    "claims": [
+      {
+        "claim": "Dementia is not a single disease but a group of symptoms caused by brain disorders, and it does not always run in families .",
+        "cites": [
+          1
+        ],
+        "verdict": "SUPPORTED"
+      },
+      {
+        "claim": "While some forms of Alzheimer’s disease—like early-onset autosomal dominant Alzheimer disease—can be inherited (with a 50% chance of passing the gene to children), most cases are not directly passed down genetically .",
+        "cites": [
+          2,
+          3
+        ],
+        "verdict": "SUPPORTED"
+      },
+      {
+        "claim": "Memory loss alone is not enough to diagnose dementia, and many people with normal brain function do not have symptoms .",
+        "cites": [
+          1
+        ],
+        "verdict": "SUPPORTED"
+      }
+    ],
+    "uncited_claims": [
+      "Having a family history increases risk, but it does not mean someone will get dementia.",
+      "Dementia can occur in anyone due to various causes such as aging, health conditions, or brain injuries—genetics may play a role only in certain types of cases."
+    ],
+    "support": 1.0,
+    "ref_similarity_answer": 0.7863962650299072,
+    "ref_similarity_top_passage": 0.5519636273384094,
+    "seconds": 26.2
+  },
+  {
+    "qid": "31",
+    "question": "Customer Service Request. How much urine does an average human bladder hold - in ounces?",
+    "outcome": "grounded",
+    "relevant_source_retrieved": true,
+    "answer": "An average healthy human bladder can hold up to 16 ounces (2 cups) of urine comfortably [1]. This amount is sufficient for storage during urination, which typically lasts between 2 to 5 hours. The bladder expands when full and contracts when emptying.  \n\nPlease consult a healthcare professional for personal health advice.",
+    "claims": [
+      {
+        "claim": "An average healthy human bladder can hold up to 16 ounces (2 cups) of urine comfortably .",
+        "cites": [
+          1
+        ],
+        "verdict": "SUPPORTED"
+      }
+    ],
+    "uncited_claims": [
+      "This amount is sufficient for storage during urination, which typically lasts between 2 to 5 hours.",
+      "The bladder expands when full and contracts when emptying."
+    ],
+    "support": 1.0,
+    "ref_similarity_answer": 0.7841974496841431,
+    "ref_similarity_top_passage": 0.7112936973571777,
+    "seconds": 17.0
+  },
+  {
+    "qid": "36",
+    "question": "congenital diaphragmatic hernia.. congenital diaphragmatic hernia. what are the causes of congenital diaphragmatic hernia? Can cousin marriage cause this? What kind of lung disease the baby might experience life long?",
+    "outcome": "grounded",
+    "relevant_source_retrieved": true,
+    "answer": "Congenital diaphragmatic hernia (CDH) is a birth defect where the diaphragm, which separates the chest and abdomen, does not develop properly [1][2]. This can cause organs like the stomach or intestines to move into the chest cavity, crowding the heart and lungs, potentially leading to underdevelopment of the lungs (pulmonary hypoplasia) [1][2].\n\nThe causes of CDH include genetic syndromes, chromosomal abnormalities, or single gene disorders in about 15%-20% of cases. In most cases—80% to 85%—the cause is unknown, and potential factors may involve undetectable chromosomal issues [4]. There is no evidence that cousin marriage directly causes CDH.\n\nBabies with CDH may experience lifelong lung problems due to pulmonary hypoplasia, which can lead to breathing difficulties or increased risk of respiratory complications. However, the long-term outcomes vary widely and depend on treatment and individual development.\n\nAlways consult a healthcare professional for personal medical advice.",
+    "claims": [
+      {
+        "claim": "Congenital diaphragmatic hernia (CDH) is a birth defect where the diaphragm, which separates the chest and abdomen, does not develop properly .",
+        "cites": [
+          1,
+          2
+        ],
+        "verdict": "SUPPORTED"
+      },
+      {
+        "claim": "This can cause organs like the stomach or intestines to move into the chest cavity, crowding the heart and lungs, potentially leading to underdevelopment of the lungs (pulmonary hypoplasia) .",
+        "cites": [
+          1,
+          2
+        ],
+        "verdict": "SUPPORTED"
+      },
+      {
+        "claim": "In most cases—80% to 85%—the cause is unknown, and potential factors may involve undetectable chromosomal issues .",
+        "cites": [
+          4
+        ],
+        "verdict": "SUPPORTED"
+      }
+    ],
+    "uncited_claims": [
+      "The causes of CDH include genetic syndromes, chromosomal abnormalities, or single gene disorders in about 15%-20% of cases.",
+      "There is no evidence that cousin marriage directly causes CDH.",
+      "Babies with CDH may experience lifelong lung problems due to pulmonary hypoplasia, which can lead to breathing difficulties or increased risk of respiratory complications.",
+      "However, the long-term outcomes vary widely and depend on treatment and individual development."
+    ],
+    "support": 1.0,
+    "ref_similarity_answer": 0.8343133926391602,
+    "ref_similarity_top_passage": 0.7947942614555359,
+    "seconds": 32.3
+  },
+  {
+    "qid": "37",
+    "question": "shingles. need to know about the work place and someone having shingles, especially while handling food",
+    "outcome": "grounded",
+    "relevant_source_retrieved": true,
+    "answer": "Shingles is not contagious through air or contact with food, so someone with shingles does not pose a risk for spreading it to others who handle food [2]. However, the virus can spread if there is direct skin-to-skin contact with an active shingles rash — this would typically affect someone without prior exposure to chickenpox [1][2].\n\nIn the workplace, especially in food handling, you do not need to take special precautions due to shingles itself. But if a person has an open shingles rash and is working directly with others or touching surfaces, they should avoid close contact with people who have never had chickenpox — particularly children [1][2].\n\nIf someone at work has a shingles rash, it's best that they stay home until the blisters crust over to prevent spreading the virus. This helps protect those around them and ensures food safety is maintained.\n\nPlease consult a healthcare professional for personal advice about health risks or workplace policies.",
+    "claims": [
+      {
+        "claim": "Shingles is not contagious through air or contact with food, so someone with shingles does not pose a risk for spreading it to others who handle food .",
+        "cites": [
+          2
+        ],
+        "verdict": "SUPPORTED"
+      },
+      {
+        "claim": "However, the virus can spread if there is direct skin-to-skin contact with an active shingles rash — this would typically affect someone without prior exposure to chickenpox .",
+        "cites": [
+          1,
+          2
+        ],
+        "verdict": "SUPPORTED"
+      },
+      {
+        "claim": "But if a person has an open shingles rash and is working directly with others or touching surfaces, they should avoid close contact with people who have never had chickenpox — particularly children .",
+        "cites": [
+          1,
+          2
+        ],
+        "verdict": "SUPPORTED"
+      }
+    ],
+    "uncited_claims": [
+      "In the workplace, especially in food handling, you do not need to take special precautions due to shingles itself.",
+      "If someone at work has a shingles rash, it's best that they stay home until the blisters crust over to prevent spreading the virus.",
+      "This helps protect those around them and ensures food safety is maintained."
+    ],
+    "support": 1.0,
+    "ref_similarity_answer": 0.7975385189056396,
+    "ref_similarity_top_passage": 0.756793737411499,
+    "seconds": 30.3
+  },
+  {
+    "qid": "38",
+    "question": "ClinicalTrials.gov - Question - general information. My question to you is: what is the reason that there is very little attentions is to Antiphosoholipid Syndrome? To find the causes and possibly some type of cure for us who struggle with this auto-immune blood disorder? I guess that since it is female directed (9-1 female to male) that no one important enough has died from APS? Oh, by the way, I'm a 58 year old man!",
+    "outcome": "grounded",
+    "relevant_source_retrieved": true,
+    "answer": "I could not find information in the provided sources about why there is little attention to Antiphospholipid Syndrome (APS), its causes, or whether it's under-recognized due to gender distribution or lack of severe outcomes. While APS affects more women than men—about 9 out of every 10 cases are in females—the sources do not explain the reasons for limited public awareness or research focus [2][3]. They also do not state that few people have died from APS, nor discuss why it might be under-recognized overall.\n\nYou're right to feel concerned about a condition like this—especially when living with an autoimmune disorder. However, because APS is often managed through blood thinners and monitoring of complications (like clots or pregnancy loss), the focus has been on preventing these issues rather than seeking a cure [2].\n\nPlease consult your healthcare provider or a specialist for personal advice about managing APS.",
+    "claims": [
+      {
+        "claim": "While APS affects more women than men—about 9 out of every 10 cases are in females—the sources do not explain the reasons for limited public awareness or research focus .",
+        "cites": [
+          2,
+          3
+        ],
+        "verdict": "UNSUPPORTED"
+      },
+      {
+        "claim": "However, because APS is often managed through blood thinners and monitoring of complications (like clots or pregnancy loss), the focus has been on preventing these issues rather than seeking a cure .",
+        "cites": [
+          2
+        ],
+        "verdict": "SUPPORTED"
+      }
+    ],
+    "uncited_claims": [
+      "They also do not state that few people have died from APS, nor discuss why it might be under-recognized overall.",
+      "You're right to feel concerned about a condition like this—especially when living with an autoimmune disorder."
+    ],
+    "support": 0.5,
+    "ref_similarity_answer": 0.6040287017822266,
+    "ref_similarity_top_passage": 0.34278371930122375,
+    "seconds": 30.9
+  },
+  {
+    "qid": "49",
+    "question": "bundle blockage. could you please tell me what a bundle blockage is. what are the symptoms. what is usually done for this? Thank you",
+    "outcome": "abstained",
+    "relevant_source_retrieved": false,
+    "answer": "I could not find information about \"bundle blockage\" in the provided sources. The sources discuss urine blockage in newborns, such as urinary tract defects or kidney issues, but do not mention a medical condition called \"bundle blockage.\"  \n\nBundle blockage is not a recognized term in standard medical literature related to urinary systems or newborn health. It may be a confusion with another medical term (such as bundle branch block in heart conditions), which involves the electrical system of the heart and is different from urine blockage.\n\nIf you are concerned about symptoms like chest pain, irregular heartbeat, or difficulty breathing, please contact emergency services immediately.  \n\nPlease consult a healthcare professional for personal advice.",
+    "claims": [],
+    "uncited_claims": [
+      "Bundle blockage is not a recognized term in standard medical literature related to urinary systems or newborn health.",
+      "It may be a confusion with another medical term (such as bundle branch block in heart conditions), which involves the electrical system of the heart and is different from urine blockage."
+    ],
+    "support": null,
+    "ref_similarity_answer": 0.5749672055244446,
+    "ref_similarity_top_passage": 0.3856081962585449,
+    "seconds": 26.0
+  },
+  {
+    "qid": "51",
+    "question": "Arrhthmia. can arrhythmia occurs after ablation? What is the success rate of Ablation? During my Holter test it was found that my Heart rate fluctuates from 254 to 21. How do you rate the situation?",
+    "outcome": "grounded",
+    "relevant_source_retrieved": false,
+    "answer": "I could not find information about whether arrhythmia can occur after ablation, the success rate of ablation, or how to interpret a heart rate fluctuating from 254 to 21 on a Holter test in the available documents.  \n\nThe sources explain that an arrhythmia is a problem with the heartbeat's rate or rhythm [2][3], and that palpitations can feel like skipped beats or fluttering [4]. However, they do not mention ablation procedures, their success rates, or how to interpret extreme heart rate fluctuations.  \n\nYour situation sounds concerning—especially a range from 254 to 21 beats per minute—which is outside normal limits (normal resting heart rate is typically between 60 and 100). This could indicate a serious issue that requires immediate medical evaluation.  \n\nPlease contact emergency services or your doctor right away if you are experiencing symptoms like dizziness, fainting, chest pain, or difficulty breathing—these may be signs of a life-threatening condition.  \n\nAlways consult a healthcare professional for personal advice about heart health.",
+    "claims": [
+      {
+        "claim": "The sources explain that an arrhythmia is a problem with the heartbeat's rate or rhythm , and that palpitations can feel like skipped beats or fluttering .",
+        "cites": [
+          2,
+          3,
+          4
+        ],
+        "verdict": "SUPPORTED"
+      }
+    ],
+    "uncited_claims": [
+      "Your situation sounds concerning—especially a range from 254 to 21 beats per minute—which is outside normal limits (normal resting heart rate is typically between 60 and 100).",
+      "This could indicate a serious issue that requires immediate medical evaluation."
+    ],
+    "support": 1.0,
+    "ref_similarity_answer": 0.543956995010376,
+    "ref_similarity_top_passage": 0.5166527032852173,
+    "seconds": 36.3
+  },
+  {
+    "qid": "53",
+    "question": "Nph.. Nph. I am interested in a movement class. I have nph and can find no help with exercise or support group. Any ideas from [LOCATION] Med?",
+    "outcome": "abstained",
+    "relevant_source_retrieved": false,
+    "answer": "I could not find information in the available documents about movement classes, support groups, or specific recommendations for people with \"NPH\" (which may refer to a medical condition like neurohypophyseal disease or another condition). The provided sources discuss general physical activity and treatments for conditions such as diabetes, hereditary neuropathies, and rheumatoid arthritis but do not address movement classes or support groups tailored to NPH.  \n\nFor personalized advice on safe exercise or support options, please consult a healthcare professional.",
+    "claims": [],
+    "uncited_claims": [],
+    "support": null,
+    "ref_similarity_answer": 0.4814342260360718,
+    "ref_similarity_top_passage": 0.21441806852817535,
+    "seconds": 18.9
+  },
+  {
+    "qid": "58",
+    "question": "general health. The hantavirus can lead to death?",
+    "outcome": "grounded",
+    "relevant_source_retrieved": true,
+    "answer": "Yes, hantavirus pulmonary syndrome (HPS) can be fatal. Approximately 38% of people who contract HPS die from the disease [1]. It is a severe respiratory illness that starts with mild symptoms like fatigue, fever, and muscle aches, but later progresses to serious breathing problems [2]. Because there is no specific treatment or cure for hantavirus infection, early recognition and medical care are important [3].\n\nIf you or someone you know has symptoms such as shortness of breath after possible rodent exposure, please contact a healthcare professional right away.  \n\nAlways consult a doctor before making health decisions based on this information.",
+    "claims": [
+      {
+        "claim": "Approximately 38% of people who contract HPS die from the disease .",
+        "cites": [
+          1
+        ],
+        "verdict": "SUPPORTED"
+      },
+      {
+        "claim": "It is a severe respiratory illness that starts with mild symptoms like fatigue, fever, and muscle aches, but later progresses to serious breathing problems .",
+        "cites": [
+          2
+        ],
+        "verdict": "SUPPORTED"
+      },
+      {
+        "claim": "Because there is no specific treatment or cure for hantavirus infection, early recognition and medical care are important .",
+        "cites": [
+          3
+        ],
+        "verdict": "SUPPORTED"
+      }
+    ],
+    "uncited_claims": [
+      "Yes, hantavirus pulmonary syndrome (HPS) can be fatal."
+    ],
+    "support": 1.0,
+    "ref_similarity_answer": 0.747592568397522,
+    "ref_similarity_top_passage": 0.719391942024231,
+    "seconds": 25.6
+  },
+  {
+    "qid": "59",
+    "question": "general health. Is there always elevated temperature associated with appendicitis?",
+    "outcome": "grounded",
+    "relevant_source_retrieved": true,
+    "answer": "No, there is not always an elevated temperature associated with appendicitis. While fever can occur as a symptom of appendicitis, especially when the condition progresses or becomes severe, it is not present in all cases [1]. The main symptom is abdominal pain that starts gradually and worsens over time, often on the right side of the abdomen [1]. Other symptoms may include loss of appetite, nausea, and swelling in the abdomen [1].\n\nAlways consult a healthcare professional for personal medical advice.",
+    "claims": [
+      {
+        "claim": "While fever can occur as a symptom of appendicitis, especially when the condition progresses or becomes severe, it is not present in all cases .",
+        "cites": [
+          1
+        ],
+        "verdict": "SUPPORTED"
+      },
+      {
+        "claim": "The main symptom is abdominal pain that starts gradually and worsens over time, often on the right side of the abdomen .",
+        "cites": [
+          1
+        ],
+        "verdict": "PARTIAL"
+      },
+      {
+        "claim": "Other symptoms may include loss of appetite, nausea, and swelling in the abdomen .",
+        "cites": [
+          1
+        ],
+        "verdict": "SUPPORTED"
+      }
+    ],
+    "uncited_claims": [
+      "No, there is not always an elevated temperature associated with appendicitis."
+    ],
+    "support": 0.8333333333333334,
+    "ref_similarity_answer": 0.8023750185966492,
+    "ref_similarity_top_passage": 0.8924297094345093,
+    "seconds": 18.6
+  },
+  {
+    "qid": "63",
+    "question": "patau sydrome/ trisomy 13. i was wondering the condition of trisomy progresses over time (gets worse as they become older) also, how to diognose the disorder thank you!",
+    "outcome": "grounded",
+    "relevant_source_retrieved": true,
+    "answer": "Trisomy 13, also known as Patau syndrome, is a chromosomal condition caused by having three copies of chromosome 13 instead of two [3]. The physical and developmental abnormalities associated with trisomy 13 are present at birth and do not typically progress or get worse over time in the way that some other conditions might [1]. However, complications such as heart defects or brain abnormalities may require ongoing medical care.\n\nDiagnosis of trisomy 13 is usually made before birth through prenatal testing (such as amniocentesis or chorionic villus sampling) or after birth via genetic testing, which can detect the presence of an extra chromosome 13 [4].\n\nPlease consult a healthcare professional for personal advice.",
+    "claims": [
+      {
+        "claim": "Trisomy 13, also known as Patau syndrome, is a chromosomal condition caused by having three copies of chromosome 13 instead of two .",
+        "cites": [
+          3
+        ],
+        "verdict": "SUPPORTED"
+      },
+      {
+        "claim": "The physical and developmental abnormalities associated with trisomy 13 are present at birth and do not typically progress or get worse over time in the way that some other conditions might .",
+        "cites": [
+          1
+        ],
+        "verdict": "PARTIAL"
+      },
+      {
+        "claim": "Diagnosis of trisomy 13 is usually made before birth through prenatal testing (such as amniocentesis or chorionic villus sampling) or after birth via genetic testing, which can detect the presence of an extra chromosome 13 .",
+        "cites": [
+          4
+        ],
+        "verdict": "SUPPORTED"
+      }
+    ],
+    "uncited_claims": [
+      "However, complications such as heart defects or brain abnormalities may require ongoing medical care."
+    ],
+    "support": 0.8333333333333334,
+    "ref_similarity_answer": 0.7955273389816284,
+    "ref_similarity_top_passage": 1.0,
+    "seconds": 25.3
+  },
+  {
+    "qid": "69",
+    "question": "diverticulitis. can diverticulosis or diverticulitis be detected by a cat scan if there is no infection at that time?",
+    "outcome": "abstained",
+    "relevant_source_retrieved": true,
+    "answer": "You could not find it in the available documents. The sources do not mention whether diverticulosis or diverticulitis can be detected by a CAT scan (or CT scan) when there is no infection.  \n\nTo rephrase your question, you might ask: \"Can diverticulosis or diverticulitis be seen on a CT scan even if there's no infection?\" This would allow better alignment with the available information.  \n\nPlease consult a healthcare professional for personal advice.",
+    "claims": [],
+    "uncited_claims": [],
+    "support": null,
+    "ref_similarity_answer": 0.7524423599243164,
+    "ref_similarity_top_passage": 0.662609338760376,
+    "seconds": 21.5
+  },
+  {
+    "qid": "70",
+    "question": "CAUSE OF A COLD. i UNDERSTAND CONTAGION AND TRANSFERRENCE OF COLD \"GERMS\" WHY ARE SOME PEOPLE AFFECTED AND OTHERS NOT?",
+    "outcome": "grounded",
+    "relevant_source_retrieved": true,
+    "answer": "Cold germs spread when someone with a cold coughs or sneezes, sending tiny droplets into the air [3]. You can get a cold by touching your eyes, nose, or mouth after coming in contact with these germs on surfaces [1].  \n\nNot everyone gets sick even if they're exposed because our bodies have natural defenses—like strong immune systems—that may stop germs from causing illness. Also, some people might be more likely to catch a cold due to factors like weakened immunity, stress, or being around many others in close contact [3][1].\n\nHowever, the available sources do not explain why some individuals are affected and others aren’t—this detail is beyond what's covered in the provided documents.\n\nPlease consult a healthcare professional for personal advice.",
+    "claims": [
+      {
+        "claim": "Cold germs spread when someone with a cold coughs or sneezes, sending tiny droplets into the air .",
+        "cites": [
+          3
+        ],
+        "verdict": "SUPPORTED"
+      },
+      {
+        "claim": "You can get a cold by touching your eyes, nose, or mouth after coming in contact with these germs on surfaces .",
+        "cites": [
+          1
+        ],
+        "verdict": "SUPPORTED"
+      },
+      {
+        "claim": "Also, some people might be more likely to catch a cold due to factors like weakened immunity, stress, or being around many others in close contact .",
+        "cites": [
+          1,
+          3
+        ],
+        "verdict": "PARTIAL"
+      }
+    ],
+    "uncited_claims": [
+      "Not everyone gets sick even if they're exposed because our bodies have natural defenses—like strong immune systems—that may stop germs from causing illness.",
+      "However, the available sources do not explain why some individuals are affected and others aren’t—this detail is beyond what's covered in the provided documents."
+    ],
+    "support": 0.8333333333333334,
+    "ref_similarity_answer": 0.6088908314704895,
+    "ref_similarity_top_passage": 0.677603006362915,
+    "seconds": 28.7
+  },
+  {
+    "qid": "73",
+    "question": "ClinicalTrials.gov - Question - general information.. My granddaughter was born with Klippel-Tranaunay Syndrome...There is very little information about this. We are looking for the current research and treatments available. She is 5 months old now and her leg seems to be most affected. We want to get her help as soon as possible to address the symptoms and treat her condition",
+    "outcome": "grounded",
+    "relevant_source_retrieved": true,
+    "answer": "Klippel-Trenaunay syndrome (KTS) is a rare condition characterized by a port-wine birthmark, abnormal overgrowth of soft tissues and bones, and vein malformations [1]. There is no cure for KTS; treatment focuses on managing symptoms [4]. Laser surgery can help reduce or remove skin lesions like port-wine stains [4], and surgical options may be considered to correct limb size differences, though orthopedic devices might be more suitable in some cases [4].\n\nFor current research and clinical trials related to KTS, ClinicalTrials.gov is a resource where you can find ongoing studies. However, there are no specific treatments listed for KTS in the available sources, so information on active trials may require direct search on that site.\n\nPlease consult a healthcare professional or a specialist at hospitals such as Cincinnati Children's Hospital Medical Center, Cleveland Clinic, or Seattle Children's Hospital for personalized care and diagnosis [3].\n\nAlways talk to a doctor before making decisions about your granddaughter’s health.",
+    "claims": [
+      {
+        "claim": "Klippel-Trenaunay syndrome (KTS) is a rare condition characterized by a port-wine birthmark, abnormal overgrowth of soft tissues and bones, and vein malformations .",
+        "cites": [
+          1
+        ],
+        "verdict": "PARTIAL"
+      },
+      {
+        "claim": "There is no cure for KTS; treatment focuses on managing symptoms .",
+        "cites": [
+          4
+        ],
+        "verdict": "SUPPORTED"
+      },
+      {
+        "claim": "Laser surgery can help reduce or remove skin lesions like port-wine stains , and surgical options may be considered to correct limb size differences, though orthopedic devices might be more suitable in some cases .",
+        "cites": [
+          4
+        ],
+        "verdict": "SUPPORTED"
+      },
+      {
+        "claim": "Please consult a healthcare professional or a specialist at hospitals such as Cincinnati Children's Hospital Medical Center, Cleveland Clinic, or Seattle Children's Hospital for personalized care and diagnosis .",
+        "cites": [
+          3
+        ],
+        "verdict": "SUPPORTED"
+      }
+    ],
+    "uncited_claims": [
+      "For current research and clinical trials related to KTS, ClinicalTrials.gov is a resource where you can find ongoing studies.",
+      "However, there are no specific treatments listed for KTS in the available sources, so information on active trials may require direct search on that site."
+    ],
+    "support": 0.875,
+    "ref_similarity_answer": 0.7420273423194885,
+    "ref_similarity_top_passage": 0.6282737255096436,
+    "seconds": 31.5
+  },
+  {
+    "qid": "75",
+    "question": "Inherited Ricketts. Mother has inherited ricketts. Passing A child but not B child. How likely would B child pass it on their child?",
+    "outcome": "abstained",
+    "relevant_source_retrieved": false,
+    "answer": "I could not find information about \"inherited Ricketts\" or how a mother with Ricketts passes the condition to children, especially distinguishing between child A and B, or whether one child can pass it on. The provided sources discuss genetic conditions like Rett syndrome, Hirschsprung disease, Factor V Leiden thrombophilia, and Beckwith-Wiedemann syndrome—but none mention \"Ricketts\" as a hereditary condition.\n\nPlease clarify the question or provide more accurate details so I can assist you properly. Always consult a healthcare professional for personal health concerns.",
+    "claims": [],
+    "uncited_claims": [
+      "The provided sources discuss genetic conditions like Rett syndrome, Hirschsprung disease, Factor V Leiden thrombophilia, and Beckwith-Wiedemann syndrome—but none mention \"Ricketts\" as a hereditary condition."
+    ],
+    "support": null,
+    "ref_similarity_answer": 0.5504826903343201,
+    "ref_similarity_top_passage": 0.6009483933448792,
+    "seconds": 20.4
+  },
+  {
+    "qid": "79",
+    "question": "Shingles. I am looking for information on how to prevent a shingles outbreak",
+    "outcome": "grounded",
+    "relevant_source_retrieved": true,
+    "answer": "To help prevent a shingles outbreak, you can get the shingles vaccine called Zostavax. This vaccine is approved by the U.S. Food and Drug Administration for people age 60 and older. It works by boosting your immune system to help protect against shingles [2][3]. Even if you have had shingles before, you can still get the vaccine to reduce future outbreaks [2][3]. There is no maximum age for getting the vaccine, and only one dose is needed [2][3].\n\nPlease consult a healthcare professional for personal advice.",
+    "claims": [
+      {
+        "claim": "It works by boosting your immune system to help protect against shingles .",
+        "cites": [
+          2,
+          3
+        ],
+        "verdict": "SUPPORTED"
+      },
+      {
+        "claim": "Even if you have had shingles before, you can still get the vaccine to reduce future outbreaks .",
+        "cites": [
+          2,
+          3
+        ],
+        "verdict": "SUPPORTED"
+      },
+      {
+        "claim": "There is no maximum age for getting the vaccine, and only one dose is needed .",
+        "cites": [
+          2,
+          3
+        ],
+        "verdict": "SUPPORTED"
+      }
+    ],
+    "uncited_claims": [
+      "To help prevent a shingles outbreak, you can get the shingles vaccine called Zostavax.",
+      "Food and Drug Administration for people age 60 and older."
+    ],
+    "support": 1.0,
+    "ref_similarity_answer": 0.8181132078170776,
+    "ref_similarity_top_passage": 0.6500833630561829,
+    "seconds": 22.3
+  },
+  {
+    "qid": "80",
+    "question": "General health. my father age 65 his always leg pain which use medicine",
+    "outcome": "grounded",
+    "relevant_source_retrieved": false,
+    "answer": "I see you're concerned about your father's leg pain. Leg pain at age 65 can have many causes, such as osteoarthritis, which is common in older adults [1][4]. If the pain is due to joint wear (like arthritis), doctors often start with acetaminophen for mild pain relief because it has few side effects [1]. If that doesn’t help, non-steroidal anti-inflammatory drugs like ibuprofen or naproxen may be used — these can reduce both pain and inflammation [1][4].\n\nHowever, I cannot confirm whether your father’s leg pain is from osteoarthritis or another condition. Only a healthcare provider can diagnose the cause based on symptoms and tests.\n\nPlease talk to your father's doctor about his specific situation so they can recommend safe and appropriate treatments for him.",
+    "claims": [
+      {
+        "claim": "Leg pain at age 65 can have many causes, such as osteoarthritis, which is common in older adults .",
+        "cites": [
+          1,
+          4
+        ],
+        "verdict": "PARTIAL"
+      },
+      {
+        "claim": "If the pain is due to joint wear (like arthritis), doctors often start with acetaminophen for mild pain relief because it has few side effects .",
+        "cites": [
+          1
+        ],
+        "verdict": "PARTIAL"
+      },
+      {
+        "claim": "If that doesn’t help, non-steroidal anti-inflammatory drugs like ibuprofen or naproxen may be used — these can reduce both pain and inflammation .",
+        "cites": [
+          1,
+          4
+        ],
+        "verdict": "SUPPORTED"
+      }
+    ],
+    "uncited_claims": [
+      "I see you're concerned about your father's leg pain.",
+      "However, I cannot confirm whether your father’s leg pain is from osteoarthritis or another condition.",
+      "Only a healthcare provider can diagnose the cause based on symptoms and tests."
+    ],
+    "support": 0.6666666666666666,
+    "ref_similarity_answer": 0.5657804012298584,
+    "ref_similarity_top_passage": 0.6389464735984802,
+    "seconds": 30.4
+  },
+  {
+    "qid": "81",
+    "question": "CVID. I have recently been diagnosed with CVID. As a person with thyroid a thyroid tumor greater than 1 cm. and several thyroid cysys I am concerned about cancer. What are the current stats. The tumor is being monitored by my endocrinologist",
+    "outcome": "grounded",
+    "relevant_source_retrieved": true,
+    "answer": "I'm sorry to hear you're feeling worried — it's completely natural when dealing with a diagnosis like this.  \n\nThyroid cancer is relatively rare compared to other cancers, and most thyroid tumors are benign (not cancer). A tumor greater than 1 cm in size does not automatically mean cancer [1]. The risk of developing thyroid cancer increases slightly with age, especially between 25 and 65 years old, and being a woman or having a family history of thyroid disease can raise the risk a little [1]. However, many people with thyroid nodules (like cysts) do not have cancer.  \n\nYour endocrinologist is right to monitor it closely — regular check-ups, imaging tests, and blood work help determine if changes are happening over time. There’s no specific statistic in the provided sources about how common thyroid cancer is among people with CVID, so we can’t give a precise number based on that data [1][4].  \n\nPlease remember to talk to your doctor or healthcare provider for personalized advice about your situation and any concerns you have.  \nAlways consult a healthcare professional before making decisions about health.",
+    "claims": [
+      {
+        "claim": "A tumor greater than 1 cm in size does not automatically mean cancer .",
+        "cites": [
+          1
+        ],
+        "verdict": "PARTIAL"
+      },
+      {
+        "claim": "The risk of developing thyroid cancer increases slightly with age, especially between 25 and 65 years old, and being a woman or having a family history of thyroid disease can raise the risk a little .",
+        "cites": [
+          1
+        ],
+        "verdict": "SUPPORTED"
+      },
+      {
+        "claim": "There’s no specific statistic in the provided sources about how common thyroid cancer is among people with CVID, so we can’t give a precise number based on that data .",
+        "cites": [
+          1,
+          4
+        ],
+        "verdict": "SUPPORTED"
+      }
+    ],
+    "uncited_claims": [
+      "Thyroid cancer is relatively rare compared to other cancers, and most thyroid tumors are benign (not cancer).",
+      "However, many people with thyroid nodules (like cysts) do not have cancer.",
+      "Your endocrinologist is right to monitor it closely — regular check-ups, imaging tests, and blood work help determine if changes are happening over time."
+    ],
+    "support": 0.8333333333333334,
+    "ref_similarity_answer": 0.4667101204395294,
+    "ref_similarity_top_passage": 0.2932746410369873,
+    "seconds": 36.6
+  },
+  {
+    "qid": "82",
+    "question": "diabete. whats diabete",
+    "outcome": "grounded",
+    "relevant_source_retrieved": true,
+    "answer": "Diabetes is a complex group of diseases that cause high blood glucose (sugar) levels [3]. This happens when the body doesn't make enough insulin or can't use it effectively, leading to problems with how the body uses food for energy [3]. There are different types, such as type 1 diabetes, where the body stops making insulin, and type 2 diabetes, which involves less effective use of insulin [1][3].\n\nPlease consult a healthcare professional for personal advice.",
+    "claims": [
+      {
+        "claim": "Diabetes is a complex group of diseases that cause high blood glucose (sugar) levels .",
+        "cites": [
+          3
+        ],
+        "verdict": "SUPPORTED"
+      },
+      {
+        "claim": "This happens when the body doesn't make enough insulin or can't use it effectively, leading to problems with how the body uses food for energy .",
+        "cites": [
+          3
+        ],
+        "verdict": "SUPPORTED"
+      },
+      {
+        "claim": "There are different types, such as type 1 diabetes, where the body stops making insulin, and type 2 diabetes, which involves less effective use of insulin .",
+        "cites": [
+          1,
+          3
+        ],
+        "verdict": "SUPPORTED"
+      }
+    ],
+    "uncited_claims": [],
+    "support": 1.0,
+    "ref_similarity_answer": 0.8432044982910156,
+    "ref_similarity_top_passage": 0.7400546073913574,
+    "seconds": 18.4
+  },
+  {
+    "qid": "85",
+    "question": "General health. Hi I have heard in order to get benefit of calcium, it should take with Magnesium, is that right ? I bought Calcium Castco ( Kirkland ) brand with D please let me know if is good for me because I am osteoporosis . Please help me . thanks",
+    "outcome": "grounded",
+    "relevant_source_retrieved": true,
+    "answer": "I could not find information in the provided sources about whether calcium should be taken with magnesium, or about the specific product \"Calcium Castco (Kirkland)\" or its suitability for someone with osteoporosis.\n\nThe sources confirm that calcium is important for bone health and that a diet rich in calcium—such as dairy products, leafy green vegetables, and fish with soft bones—is essential [4]. They also mention vitamin D’s role in helping the body absorb calcium [1], and list risk factors like age, being small or thin, family history, and low intake of calcium or vitamin D for osteoporosis [2][3].\n\nHowever, there is no information about magnesium interactions with calcium, nor any evaluation of the Kirkland Calcium Castco product.\n\nPlease consult a healthcare professional before starting or changing supplements.",
+    "claims": [
+      {
+        "claim": "The sources confirm that calcium is important for bone health and that a diet rich in calcium—such as dairy products, leafy green vegetables, and fish with soft bones—is essential .",
+        "cites": [
+          4
+        ],
+        "verdict": "SUPPORTED"
+      },
+      {
+        "claim": "They also mention vitamin D’s role in helping the body absorb calcium , and list risk factors like age, being small or thin, family history, and low intake of calcium or vitamin D for osteoporosis .",
+        "cites": [
+          1,
+          2,
+          3
+        ],
+        "verdict": "SUPPORTED"
+      }
+    ],
+    "uncited_claims": [
+      "However, there is no information about magnesium interactions with calcium, nor any evaluation of the Kirkland Calcium Castco product."
+    ],
+    "support": 1.0,
+    "ref_similarity_answer": 0.6829107999801636,
+    "ref_similarity_top_passage": 0.6057904362678528,
+    "seconds": 29.7
+  },
+  {
+    "qid": "86",
+    "question": "Testing for EDS. I would like to know if you can point me in the direction of a laboratory in Southern California, Specifically San Bernardino County or LA County or even Riverside County that does genetic testing for EDS or Osteogenesis Imperfecta and do you know if the two diseases are similiar in symptoms? Thank you for you help and time",
+    "outcome": "grounded",
+    "relevant_source_retrieved": false,
+    "answer": "Genetic testing for Ehlers-Danlos syndrome, kyphoscoliosis type is available through laboratories that test for mutations in the PLOD1 gene [4]. For hereditary multiple osteochondromas, genetic testing is offered by labs specializing in EXT1 and EXT2 genes, with contact information listed via GeneTests [3], though most do not accept direct patient inquiries.  \n\nThe sources do not specify any laboratories located in Southern California (such as San Bernardino County, Los Angeles County, or Riverside County) that offer genetic testing for either Ehlers-Danlos syndrome or osteogenesis imperfecta. Additionally, the provided documents do not compare symptoms between EDS and osteogenesis imperfecta.  \n\nFor accurate information on labs in your area or symptom similarities, I recommend contacting a healthcare provider or using GeneTests to find local laboratories [3].  \n\nPlease consult a healthcare professional for personal medical advice.",
+    "claims": [
+      {
+        "claim": "Genetic testing for Ehlers-Danlos syndrome, kyphoscoliosis type is available through laboratories that test for mutations in the PLOD1 gene .",
+        "cites": [
+          4
+        ],
+        "verdict": "SUPPORTED"
+      },
+      {
+        "claim": "For hereditary multiple osteochondromas, genetic testing is offered by labs specializing in EXT1 and EXT2 genes, with contact information listed via GeneTests , though most do not accept direct patient inquiries.",
+        "cites": [
+          3
+        ],
+        "verdict": "SUPPORTED"
+      },
+      {
+        "claim": "For accurate information on labs in your area or symptom similarities, I recommend contacting a healthcare provider or using GeneTests to find local laboratories .",
+        "cites": [
+          3
+        ],
+        "verdict": "SUPPORTED"
+      }
+    ],
+    "uncited_claims": [
+      "The sources do not specify any laboratories located in Southern California (such as San Bernardino County, Los Angeles County, or Riverside County) that offer genetic testing for either Ehlers-Danlos syndrome or osteogenesis imperfecta.",
+      "Additionally, the provided documents do not compare symptoms between EDS and osteogenesis imperfecta."
+    ],
+    "support": 1.0,
+    "ref_similarity_answer": 0.571094810962677,
+    "ref_similarity_top_passage": 0.5291547179222107,
+    "seconds": 28.5
+  },
+  {
+    "qid": "87",
+    "question": "Consultation. Hello! I have acute chronic cervicitis caused by tampon use. It took a year and a half of treatment (medicines, cauterization), but the symptoms do not stop inflammation and analyzes not determined that bacteria produce inflammation me. I wonder if, despite not being a sexual cervicitis infection, it can cause infertility. And that's what makes a tampon that causes inflammation. Thank you very much!",
+    "outcome": "grounded",
+    "relevant_source_retrieved": false,
+    "answer": "I could not find information in the provided sources about cervicitis caused by tampon use, its long-term effects on fertility, or whether non-sexual cervical inflammation can lead to infertility.\n\nThe sources mention pelvic inflammatory disease (PID), which is a type of infection that affects reproductive organs and can cause infertility [1], but they do not address cervicitis from tampons or how such conditions might affect fertility. Also, the provided documents do not discuss the specific link between tampon use and cervical inflammation or its consequences.\n\nPlease consult a healthcare professional for personalized advice about your condition and treatment options.",
+    "claims": [
+      {
+        "claim": "The sources mention pelvic inflammatory disease (PID), which is a type of infection that affects reproductive organs and can cause infertility , but they do not address cervicitis from tampons or how such conditions might affect fertility.",
+        "cites": [
+          1
+        ],
+        "verdict": "SUPPORTED"
+      }
+    ],
+    "uncited_claims": [
+      "Also, the provided documents do not discuss the specific link between tampon use and cervical inflammation or its consequences."
+    ],
+    "support": 1.0,
+    "ref_similarity_answer": 0.5920528173446655,
+    "ref_similarity_top_passage": 0.6788691282272339,
+    "seconds": 23.6
+  },
+  {
+    "qid": "91",
+    "question": "intestines digestion and sbsorption. kindly explain the general effects of smoking or rather the effects of nicotine to digestion and arbsoption",
+    "outcome": "grounded",
+    "relevant_source_retrieved": false,
+    "answer": "The digestive system includes the intestines, where food is broken down and nutrients are absorbed into the body [2]. Smoking can affect this process by increasing the risk of heartburn and gastroesophageal reflux disease (GERD), which may interfere with proper digestion [1][3]. It also increases the risk of peptic ulcers and colon polyps, both of which can disrupt normal intestinal function [1][3]. However, the available sources do not specifically explain how nicotine affects absorption in the intestines.  \n\nFor personal health concerns or specific symptoms, please consult a healthcare professional.",
+    "claims": [
+      {
+        "claim": "The digestive system includes the intestines, where food is broken down and nutrients are absorbed into the body .",
+        "cites": [
+          2
+        ],
+        "verdict": "SUPPORTED"
+      },
+      {
+        "claim": "Smoking can affect this process by increasing the risk of heartburn and gastroesophageal reflux disease (GERD), which may interfere with proper digestion .",
+        "cites": [
+          1,
+          3
+        ],
+        "verdict": "SUPPORTED"
+      },
+      {
+        "claim": "It also increases the risk of peptic ulcers and colon polyps, both of which can disrupt normal intestinal function .",
+        "cites": [
+          1,
+          3
+        ],
+        "verdict": "SUPPORTED"
+      }
+    ],
+    "uncited_claims": [
+      "However, the available sources do not specifically explain how nicotine affects absorption in the intestines."
+    ],
+    "support": 1.0,
+    "ref_similarity_answer": 0.754131555557251,
+    "ref_similarity_top_passage": 0.9068793654441833,
+    "seconds": 20.8
+  },
+  {
+    "qid": "95",
+    "question": "CAN LIPNODES AND OR LIVER CANCER BE DETECTED IN A UPPER GI. CAN LIPNODES AND OR LIVER CANCER BE DETECTED IN A UPPER GI",
+    "outcome": "grounded",
+    "relevant_source_retrieved": false,
+    "answer": "Lipnodes (lumps) and liver cancer can be detected during an upper gastrointestinal (GI) exam, but not reliably or completely.\n\n- Upper GI exams, such as endoscopy, mainly look at the esophagus, stomach, and duodenum. They do not directly visualize the liver [4].  \n- Liver cancer is typically detected using imaging tests like ultrasound, CT scans, or MRI that specifically examine the liver [1][4].  \n- Lumps in the abdomen (which may be related to liver issues) can sometimes be felt during a physical exam but are not confirmed by upper GI exams.  \n\nFor accurate detection of liver problems including cancer, specific liver imaging tests are needed.\n\nAlways consult a healthcare professional for personal medical advice.",
+    "claims": [
+      {
+        "claim": "They do not directly visualize the liver .",
+        "cites": [
+          4
+        ],
+        "verdict": "UNSUPPORTED"
+      },
+      {
+        "claim": "Liver cancer is typically detected using imaging tests like ultrasound, CT scans, or MRI that specifically examine the liver .",
+        "cites": [
+          1,
+          4
+        ],
+        "verdict": "PARTIAL"
+      }
+    ],
+    "uncited_claims": [
+      "Lipnodes (lumps) and liver cancer can be detected during an upper gastrointestinal (GI) exam, but not reliably or completely.",
+      "Upper GI exams, such as endoscopy, mainly look at the esophagus, stomach, and duodenum.",
+      "Lumps in the abdomen (which may be related to liver issues) can sometimes be felt during a physical exam but are not confirmed by upper GI exams.",
+      "For accurate detection of liver problems including cancer, specific liver imaging tests are needed."
+    ],
+    "support": 0.25,
+    "ref_similarity_answer": 0.7022789716720581,
+    "ref_similarity_top_passage": 0.5486365556716919,
+    "seconds": 26.2
+  },
+  {
+    "qid": "96",
+    "question": "abscess teeth. Can an abscess teeth cause a heart attack",
+    "outcome": "grounded",
+    "relevant_source_retrieved": true,
+    "answer": "If you are experiencing chest pain, shortness of breath, nausea, or any symptoms of a heart attack, please contact emergency services immediately. These can be medical emergencies and require urgent care.\n\nAn abscess in the teeth is an infection in the tooth or gum tissue that may cause pain and swelling [1]. While dental infections like tooth abscesses can spread if not treated, there is no direct evidence from available sources linking a tooth abscess to causing a heart attack. However, untreated infections can lead to systemic issues, including bacterial spread.\n\nYou are clearly worried — thank you for sharing that. Please consult a healthcare professional or dentist for personal advice about your symptoms and health.",
+    "claims": [
+      {
+        "claim": "An abscess in the teeth is an infection in the tooth or gum tissue that may cause pain and swelling .",
+        "cites": [
+          1
+        ],
+        "verdict": "PARTIAL"
+      }
+    ],
+    "uncited_claims": [
+      "These can be medical emergencies and require urgent care.",
+      "While dental infections like tooth abscesses can spread if not treated, there is no direct evidence from available sources linking a tooth abscess to causing a heart attack.",
+      "However, untreated infections can lead to systemic issues, including bacterial spread.",
+      "You are clearly worried — thank you for sharing that."
+    ],
+    "support": 0.5,
+    "ref_similarity_answer": 0.5629854798316956,
+    "ref_similarity_top_passage": 0.38625648617744446,
+    "seconds": 22.7
+  },
+  {
+    "qid": "97",
+    "question": "ischemic syncope stroke diagonses. define?",
+    "outcome": "abstained",
+    "relevant_source_retrieved": true,
+    "answer": "If you are experiencing symptoms like sudden weakness, confusion, trouble speaking, vision problems, or loss of balance—especially if they come on suddenly—you should contact emergency services immediately. These can be signs of a stroke or other medical emergencies.  \n\nThe term \"ischemic syncope stroke diagnosis\" is not clearly defined in the provided sources. Syncope (fainting) and ischemic stroke are separate conditions: an ischemic stroke occurs when a blood clot blocks brain blood flow, while syncope involves sudden loss of consciousness due to reduced blood flow to the brain—often from heart or vascular issues—but there is no recognized medical condition called \"ischemic syncope stroke.\"  \n\nYou may be mixing terms. Please consult a healthcare professional for personal advice.",
+    "claims": [],
+    "uncited_claims": [
+      "These can be signs of a stroke or other medical emergencies.",
+      "The term \"ischemic syncope stroke diagnosis\" is not clearly defined in the provided sources.",
+      "Syncope (fainting) and ischemic stroke are separate conditions: an ischemic stroke occurs when a blood clot blocks brain blood flow, while syncope involves sudden loss of consciousness due to reduced blood flow to the brain—often from heart or vascular issues—but there is no recognized medical condition called \"ischemic syncope stroke.\""
+    ],
+    "support": null,
+    "ref_similarity_answer": 0.6640363335609436,
+    "ref_similarity_top_passage": 0.5158722400665283,
+    "seconds": 25.7
+  },
+  {
+    "qid": "99",
+    "question": "Autoimmune illness. What doctor specializes in testing for and treatment of autoimmune illness?",
+    "outcome": "grounded",
+    "relevant_source_retrieved": true,
+    "answer": "A hematologist specializes in diagnosing and treating blood diseases and disorders, including some autoimmune conditions like antiphospholipid antibody syndrome [1]. A rheumatologist specializes in treating disorders that affect joints, bones, or muscles, which can be part of autoimmune illnesses [1][3]. For autoimmune hepatitis specifically, a doctor may also involve specialists who treat liver disease, though the primary treatment is managed by a healthcare provider assessing immune system activity [4].\n\nAlways consult a healthcare professional for personal medical advice.",
+    "claims": [
+      {
+        "claim": "A hematologist specializes in diagnosing and treating blood diseases and disorders, including some autoimmune conditions like antiphospholipid antibody syndrome .",
+        "cites": [
+          1
+        ],
+        "verdict": "SUPPORTED"
+      },
+      {
+        "claim": "A rheumatologist specializes in treating disorders that affect joints, bones, or muscles, which can be part of autoimmune illnesses .",
+        "cites": [
+          1,
+          3
+        ],
+        "verdict": "SUPPORTED"
+      },
+      {
+        "claim": "For autoimmune hepatitis specifically, a doctor may also involve specialists who treat liver disease, though the primary treatment is managed by a healthcare provider assessing immune system activity .",
+        "cites": [
+          4
+        ],
+        "verdict": "PARTIAL"
+      }
+    ],
+    "uncited_claims": [],
+    "support": 0.8333333333333334,
+    "ref_similarity_answer": 0.6756898164749146,
+    "ref_similarity_top_passage": 0.5338406562805176,
+    "seconds": 19.8
+  },
+  {
+    "qid": "101",
+    "question": "NSAIDS as a potential cause of ED. How long has this non prescription drug been implicated in erectile dysfunction?",
+    "outcome": "abstained",
+    "relevant_source_retrieved": false,
+    "answer": "I could not find information about NSAIDs (nonsteroidal anti-inflammatory drugs) being a cause of erectile dysfunction or how long they have been implicated in this issue in the available documents.  \n\nThe sources provided discuss general causes of erectile dysfunction, such as diabetes, high blood pressure, and certain medical treatments, but do not mention NSAIDs or their potential link to ED.  \n\nIf you're concerned about medications affecting your health, it's important to talk with a doctor who knows your full medical history.  \n\nPlease consult a healthcare professional for personal advice.",
+    "claims": [],
+    "uncited_claims": [],
+    "support": null,
+    "ref_similarity_answer": 0.7814881801605225,
+    "ref_similarity_top_passage": 0.5021607875823975,
+    "seconds": 18.9
+  },
+  {
+    "qid": "102",
+    "question": "General health. i want to know more about aeortic stenosis",
+    "outcome": "abstained",
+    "relevant_source_retrieved": false,
+    "answer": "I could not find information about aortic stenosis in the available documents. The sources mention supravalvular aortic stenosis (in children) and renal artery stenosis, but do not cover general aortic stenosis or its treatments, symptoms, or prevention.  \n\nIf you're concerned about heart health or have specific questions about your symptoms, it's important to talk with a healthcare provider for personal advice.",
+    "claims": [],
+    "uncited_claims": [
+      "If you're concerned about heart health or have specific questions about your symptoms, it's important to talk with a healthcare provider for personal advice."
+    ],
+    "support": null,
+    "ref_similarity_answer": 0.6004747152328491,
+    "ref_similarity_top_passage": 0.36856210231781006,
+    "seconds": 18.0
+  },
+  {
+    "qid": "103",
+    "question": "What can cause white cells ti uprate",
+    "outcome": "abstained",
+    "relevant_source_retrieved": false,
+    "answer": "I could not find information in the available documents about what causes white blood cells to \"uprate.\" The sources discuss conditions where there are too many abnormal white blood cells (like in leukemia), but they do not explain a cause for an increase in white blood cell activity or production.  \n\nIf you meant something like “what can cause white blood cells to increase,” that might relate to infections, inflammation, or certain diseases—however, the provided sources don’t cover this specifically.  \n\nPlease rephrase your question so it matches what is covered by these documents, such as \"What are symptoms of chronic myeloid leukemia?\" or \"What causes too many white blood cells in bone marrow?\"  \n\nAlways consult a healthcare professional for personal health concerns.",
+    "claims": [],
+    "uncited_claims": [
+      "If you meant something like “what can cause white blood cells to increase,” that might relate to infections, inflammation, or certain diseases—however, the provided sources don’t cover this specifically."
+    ],
+    "support": null,
+    "ref_similarity_answer": 0.6978464126586914,
+    "ref_similarity_top_passage": 0.6383402347564697,
+    "seconds": 23.9
+  }
+]

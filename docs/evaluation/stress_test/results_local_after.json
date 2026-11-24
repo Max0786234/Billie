@@ -1,0 +1,157 @@
+[
+  {
+    "id": "G02",
+    "mode": "general",
+    "kind": "how-it-works",
+    "question": "How does hybrid search work in Billie?",
+    "expect": "answer",
+    "pass": true,
+    "problems": [],
+    "answer": "Hybrid search in Billie works by running two searches in parallel: a BM25 keyword search using SQLite FTS5, which is effective for exact terms like names or drug names, and a semantic search using text embeddings from a local embedding model, which finds passages with similar meaning even if the words differ [1]. These two ranked lists are then combined using Reciprocal Rank Fusion (RRF) to produce a final, fused ranking of passages [1].",
+    "outcome": "grounded",
+    "language": "en",
+    "sentiment": "neutral",
+    "alert": false,
+    "sources": [
+      "How Billie Works › 2. Retrieve evidence with hybrid search",
+      "How Billie Works › 1. Understand the question",
+      "About Billie",
+      "How Billie Works › Models"
+    ],
+    "translated_query": null,
+    "retrieval_mode": "hybrid",
+    "citations": [
+      1
+    ],
+    "auto_citations": 0,
+    "unverified_sentences": 0,
+    "cached": false,
+    "answer_chars": 441,
+    "timings_ms": {
+      "retrieval_ms": 4.3,
+      "first_token_ms": 8497.6,
+      "generation_ms": 18612.7,
+      "citation_repair_ms": 0.1,
+      "total_ms": 19174.8
+    },
+    "wall_s": 19.2
+  },
+  {
+    "id": "M02",
+    "mode": "medical",
+    "kind": "symptoms",
+    "question": "What are the symptoms of type 2 diabetes?",
+    "expect": "answer",
+    "pass": true,
+    "problems": [],
+    "answer": "Symptoms of type 2 diabetes can be mild and may go unnoticed [3]. Common signs include increased thirst, increased hunger, fatigue, frequent urination (especially at night), unexplained weight loss, blurred vision, numbness or tingling in the feet or hands, and sores that do not heal [3]. Many people with type 2 diabetes have no symptoms at all and are unaware they have the disease until complications arise [3][4]. \n\nPlease consult a healthcare professional for personal advice.",
+    "outcome": "grounded",
+    "language": "en",
+    "sentiment": "neutral",
+    "alert": false,
+    "sources": [
+      "What causes Causes of Diabetes ?",
+      "What is (are) Am I at Risk for Type 2 Diabetes? Taking Steps to Lower Your Risk ",
+      "What are the symptoms of Am I at Risk for Type 2 Diabetes? Taking Steps to Lower",
+      "What are the symptoms of I Can Lower My Risk for Type 2 Diabetes: A Guide for Am"
+    ],
+    "translated_query": null,
+    "retrieval_mode": "hybrid",
+    "citations": [
+      3,
+      4
+    ],
+    "auto_citations": 2,
+    "unverified_sentences": 0,
+    "cached": false,
+    "answer_chars": 482,
+    "timings_ms": {
+      "retrieval_ms": 159.4,
+      "first_token_ms": 8272.7,
+      "generation_ms": 19217.4,
+      "citation_repair_ms": 91.2,
+      "total_ms": 19525.6
+    },
+    "wall_s": 19.5
+  },
+  {
+    "id": "R02",
+    "mode": "research",
+    "kind": "survey",
+    "question": "Recent approaches to reduce hallucination in large language models",
+    "expect": "answer",
+    "pass": true,
+    "problems": [],
+    "answer": "Recent approaches to reduce hallucination in large language models include: [2]\n\n- Using epistemic neural networks (ENN) to improve uncertainty estimates and joint distributions in frozen LLMs, with a contrastive decoding enhancement technique [2].  \n- Introducing decoder layer skipping (DeLask) that dynamically skips deeper decoder layers prone to generating hallucinations during the decoding process [3].  \n- Applying Hallucination-targeted Direct Preference Optimization (HDPO), which creates preference pair data targeting diverse forms and causes of hallucinations in multimodal models [4].  \n- Employing probabilistic circuits (PCNET) to detect hallucinations as geometric anomalies in the model’s residual stream, enabling targeted correction without corrupting correct generations [5].  \n\nThese methods differ by focusing on uncertainty estimation, layer-level dynamics, preference learning, or anomaly detection during generation.",
+    "outcome": "grounded",
+    "language": "en",
+    "sentiment": "neutral",
+    "alert": false,
+    "sources": [
+      "FADE: Mitigating Hallucinations by Reducing Language-Prior Dominance in Large Vi",
+      "Reducing LLM Hallucinations using Epistemic Neural Networks",
+      "Mitigating Hallucinations in Large Language Models Via Decoder Layer Skipping",
+      "Mitigating Hallucination in Multimodal Large Language Model via Hallucination-ta",
+      "Hallucination as an Anomaly: Dynamic Intervention via Probabilistic Circuits"
+    ],
+    "translated_query": null,
+    "retrieval_mode": "hybrid",
+    "citations": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "auto_citations": 1,
+    "unverified_sentences": 1,
+    "cached": false,
+    "answer_chars": 942,
+    "timings_ms": {
+      "retrieval_ms": 2754.0,
+      "first_token_ms": 14225.0,
+      "generation_ms": 33587.3,
+      "citation_repair_ms": 77.1,
+      "total_ms": 36462.4
+    },
+    "wall_s": 36.5
+  },
+  {
+    "id": "R14",
+    "mode": "research",
+    "kind": "long-thesis",
+    "question": "I'm writing a thesis on detecting misinformation on social media using multimodal deep learning that combines text and images. Which recent papers should I read, and what methods do they propose?",
+    "expect": "answer",
+    "pass": true,
+    "problems": [],
+    "answer": "You should read the following recent papers for your thesis:\n\n- [3] *Multimodal Misinformation Detection Using Early Fusion of Linguistic, Visual, and Social Features (2025)* proposes an early fusion approach that combines text, images, and social features into a single classification model. It analyzes real-world tweets with both text and images to evaluate multimodal feature combinations [3].\n\n- [5] *Detecting Misinformation in Multimedia Content through Cross-Modal Entity Consistency: A Dual Learning Approach (2024)* introduces a dual learning method that uses cross-modal entity consistency to detect misinformation, addressing the gap left by simplified scalar representations across modalities.\n\nThese papers focus on combining text and images using deep learning methods suitable for your research topic. [3][5]",
+    "outcome": "grounded",
+    "language": "en",
+    "sentiment": "neutral",
+    "alert": false,
+    "sources": [
+      "Exploring the Role of Audio in Multimodal Misinformation Detection",
+      "F2IND-IT! -- Multimodal Fuzzy Fake Indian News Detection using Images and Text",
+      "Multimodal Misinformation Detection Using Early Fusion of Linguistic, Visual, an",
+      "ReMMD: Realistic Multilingual Multi-Image Agentic Verification for Multimodal Mi",
+      "Detecting Misinformation in Multimedia Content through Cross-Modal Entity Consis"
+    ],
+    "translated_query": null,
+    "retrieval_mode": "hybrid",
+    "citations": [
+      3,
+      5
+    ],
+    "auto_citations": 1,
+    "unverified_sentences": 2,
+    "cached": false,
+    "answer_chars": 824,
+    "timings_ms": {
+      "retrieval_ms": 1826.6,
+      "first_token_ms": 10244.7,
+      "generation_ms": 28236.5,
+      "citation_repair_ms": 97.5,
+      "total_ms": 30229.9
+    },
+    "wall_s": 30.2
+  }
+]
