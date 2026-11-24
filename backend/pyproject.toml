@@ -1,0 +1,90 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "billie"
+version = "0.2.0"
+description = "Billie: a retrieval-augmented, multimodal knowledge assistant with general, medical (MedQuAD) and research (arXiv) modes."
+requires-python = ">=3.12,<3.13"
+license = "MIT"
+dependencies = [
+    "fastapi==0.115.0",
+    "httpx==0.27.2",
+    "prometheus-client==0.21.0",
+    "pydantic==2.9.2",
+    "pypdf>=4.3",
+    "py3langid>=0.3",
+    "numpy>=1.26",
+    "python-dotenv==1.0.1",
+    "python-multipart>=0.0.9",
+    "uvicorn==0.30.6",
+]
+
+[project.optional-dependencies]
+# Anthropic Claude provider (official SDK).
+anthropic = ["anthropic>=2.0"]
+dev = [
+    "pytest==8.3.3",
+    "pytest-cov>=5.0",
+    "ruff>=0.6",
+    # 1.13 is the last release without the compiled `librt` dep (blocked by Windows Smart App Control here).
+    "mypy==1.13.0",
+    "pillow>=10",  # scripts/make_demo_gif.py
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+# ---------------------------------------------------------------- pytest
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# Makes the `evals` package importable from tests.
+pythonpath = ["."]
+addopts = "-ra"
+filterwarnings = [
+    # Upstream deprecations we cannot fix.
+    "ignore:Please use `import python_multipart` instead:PendingDeprecationWarning",
+    "ignore:The anyio.abc.BlockingPortal alias is deprecated:DeprecationWarning",
+]
+
+# ------------------------------------------------------------------ ruff
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+src = ["src", "tests", "evals"]
+
+[tool.ruff.lint]
+select = [
+    "E", "W",   # pycodestyle
+    "F",        # pyflakes
+    "I",        # isort
+    "B",        # bugbear
+    "UP",       # pyupgrade
+    "SIM",      # simplify
+    "RUF",      # ruff-specific
+]
+ignore = [
+    "RUF001", "RUF002", "RUF003",  # ambiguous unicode: intentional in multilingual lexicons
+    "B008",                        # FastAPI Depends() in defaults is idiomatic
+    "E501",                        # line length is owned by `ruff format`
+    "SIM905",                      # compact "a b c".split() word lists read better than 200-line lists
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["billie", "evals"]
+
+# ------------------------------------------------------------------ mypy
+[tool.mypy]
+python_version = "3.12"
+packages = ["billie"]
+mypy_path = "src"
+ignore_missing_imports = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+check_untyped_defs = true
+
+# ------------------------------------------------------------- coverage
+[tool.coverage.run]
+source = ["billie"]
+branch = true
