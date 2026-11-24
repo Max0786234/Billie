@@ -123,7 +123,7 @@ def test_keys_are_enforced_when_configured(settings, fake_llm):
 
 
 def test_production_refuses_to_start_without_keys(tmp_path):
-    with pytest.raises(RuntimeError, match="requires BILLIE_API_KEY"):
+    with pytest.raises(RuntimeError, match="requires BILLIE_ADMIN_KEY"):
         load_settings({"BILLIE_ENV": "production"}, data_dir=tmp_path)
     ok = load_settings({"BILLIE_ENV": "production", "BILLIE_API_KEY": "a", "BILLIE_ADMIN_KEY": "b"}, data_dir=tmp_path)
     assert ok.is_production

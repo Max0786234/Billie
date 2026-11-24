@@ -24,7 +24,17 @@ from billie.api.metrics import Metrics
 from billie.api.security import LIMITED_PREFIXES, SECURITY_HEADERS, TokenBucketLimiter
 
 _VALID_ID = re.compile(r"^[A-Za-z0-9._-]{1,64}$")
-_SECURITY_HEADER_BYTES = [(k.lower().encode(), v.encode()) for k, v in SECURITY_HEADERS.items()]
+
+
+def security_headers(frame_ancestors: tuple[str, ...] = ()) -> list[tuple[bytes, bytes]]:
+    """Header list; ``frame_ancestors`` lets e.g. the Hugging Face Space page frame the app."""
+    headers = dict(SECURITY_HEADERS)
+    if frame_ancestors:
+        headers.pop("X-Frame-Options")  # it cannot express an allow-list; CSP frame-ancestors can
+        headers["Content-Security-Policy"] = headers["Content-Security-Policy"].replace(
+            "frame-ancestors 'none'", "frame-ancestors 'self' " + " ".join(frame_ancestors)
+        )
+    return [(k.lower().encode(), v.encode()) for k, v in headers.items()]
 
 
 def _header(scope: Scope, name: bytes) -> str:
@@ -64,9 +74,10 @@ class MetricsMiddleware:
 class SecurityMiddleware:
     """Rate-limits expensive POST routes per client and adds browser security headers."""
 
-    def __init__(self, app: ASGIApp, limiter: TokenBucketLimiter) -> None:
+    def __init__(self, app: ASGIApp, limiter: TokenBucketLimiter, frame_ancestors: tuple[str, ...] = ()) -> None:
         self.app = app
         self.limiter = limiter
+        self.headers = security_headers(frame_ancestors)
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
         if scope["type"] != "http":
@@ -90,7 +101,7 @@ class SecurityMiddleware:
             if message["type"] == "http.response.start":
                 headers: list[Any] = list(message.get("headers", []))
                 present = {key.lower() for key, _ in headers}
-                headers.extend((k, v) for k, v in _SECURITY_HEADER_BYTES if k not in present)
+                headers.extend((k, v) for k, v in self.headers if k not in present)
                 message = {**message, "headers": headers}
             await send(message)
 

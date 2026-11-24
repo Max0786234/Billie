@@ -36,6 +36,10 @@ dev = [
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+# The trained sentiment head ships with the package (a non-editable install skipped it before).
+billie = ["nlp/models/*.npz"]
+
 # ---------------------------------------------------------------- pytest
 [tool.pytest.ini_options]
 testpaths = ["tests"]

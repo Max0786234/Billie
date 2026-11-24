@@ -8,6 +8,7 @@ from __future__ import annotations
 import json
 import logging
 import threading
+import time
 from collections.abc import AsyncIterator, Iterator
 from contextlib import asynccontextmanager
 from dataclasses import asdict
@@ -22,6 +23,7 @@ from starlette.concurrency import iterate_in_threadpool
 
 from billie import paths as P
 from billie.api.auth import require_admin_key, require_api_key
+from billie.api.demo import DailyQuota, client_ip, visitor_owner
 from billie.api.logging_setup import configure_logging, request_id_var
 from billie.api.middleware import MetricsMiddleware, RequestIdMiddleware, SecurityMiddleware
 from billie.api.schemas import (
@@ -77,6 +79,8 @@ def create_app(settings: Settings | None = None, *, services: Services | None = 
         lifespan=lifespan,
     )
     app.state.services = container
+    quota = DailyQuota(settings.demo_daily_limit, settings.demo_visitor_daily_limit) if settings.demo else None
+    app.state.quota = quota
     app.add_middleware(
         CORSMiddleware,
         allow_origins=list(settings.cors_origins),
@@ -86,11 +90,17 @@ def create_app(settings: Settings | None = None, *, services: Services | None = 
     # Pure ASGI middleware (see api/middleware.py): BaseHTTPMiddleware would break client-disconnect
     # detection for streamed answers. Added last = outermost, so every log line gets the request ID.
     app.add_middleware(MetricsMiddleware, metrics=container.metrics)
-    app.add_middleware(SecurityMiddleware, limiter=TokenBucketLimiter(settings.rate_limit_per_minute))
+    app.add_middleware(
+        SecurityMiddleware,
+        limiter=TokenBucketLimiter(settings.rate_limit_per_minute),
+        frame_ancestors=settings.frame_ancestors,
+    )
     app.add_middleware(RequestIdMiddleware)
 
     def services_of(request: Request) -> Services:
         return request.app.state.services
+
+    health_cache: dict[str, Any] = {}
 
     # ------------------------------------------------------------- health
     @app.get("/api/health", tags=["ops"])
@@ -102,15 +112,22 @@ def create_app(settings: Settings | None = None, *, services: Services | None = 
     def readiness(request: Request) -> dict[str, Any]:
         """Readiness: model reachable, indexes built, embeddings available."""
         s = services_of(request)
-        try:
-            llm_health = asdict(s.llm.provider().health())
-        except LLMError as exc:
-            llm_health = {
-                "ok": False,
-                "provider": s.llm.settings.provider,
-                "model": s.llm.settings.model,
-                "detail": str(exc),
-            }
+        cached = health_cache.get("value")
+        # A cloud health check is an API call (Groq counts it against the daily quota) and every page
+        # load asks for status, so the public demo reuses the answer for a minute.
+        if quota is not None and cached and time.monotonic() - health_cache["at"] < 60:
+            llm_health = cached
+        else:
+            try:
+                llm_health = asdict(s.llm.provider().health())
+            except LLMError as exc:
+                llm_health = {
+                    "ok": False,
+                    "provider": s.llm.settings.provider,
+                    "model": s.llm.settings.model,
+                    "detail": str(exc),
+                }
+            health_cache.update(value=llm_health, at=time.monotonic())
         embedder = s.corpora.embedder
         ready_event = getattr(request.app.state, "ready", None)
         return {
@@ -125,6 +142,7 @@ def create_app(settings: Settings | None = None, *, services: Services | None = 
             "feedback": s.conversations.feedback_stats(),
             "environment": s.settings.environment,
             "auth_required": bool(s.settings.api_key),
+            "demo": quota.stats(client_ip(request)) if quota else None,
         }
 
     @app.get("/metrics", tags=["ops"], include_in_schema=False)
@@ -141,13 +159,20 @@ def create_app(settings: Settings | None = None, *, services: Services | None = 
                 s.images.load(image_id)
             except UploadError as exc:
                 raise HTTPException(status.HTTP_400_BAD_REQUEST, str(exc)) from exc
-        turn = ChatTurn(body.question, body.mode, body.conversation_id, body.image_ids, body.regenerate)
+        client = client_ip(request)
+        if quota is not None and (refusal := quota.take(client)):
+            raise HTTPException(status.HTTP_429_TOO_MANY_REQUESTS, refusal)
+        turn = ChatTurn(
+            body.question, body.mode, body.conversation_id, body.image_ids, body.regenerate, visitor_owner(request)
+        )
         request_id = request_id_var.get()  # the streamed body runs after the middleware returns
 
         def events() -> Iterator[dict[str, Any]]:
             for event in s.pipeline.run(turn):
                 if event["event"] == "done":
                     done = event["data"]
+                    if quota is not None and done.get("cached"):
+                        quota.refund(client)  # a cached answer cost no model call
                     s.metrics.observe_turn(body.mode, done)
                     log.info("chat_turn", extra={"fields": _turn_log_fields(request_id, body.mode, done)})
                 yield event
@@ -170,12 +195,14 @@ def create_app(settings: Settings | None = None, *, services: Services | None = 
     # ------------------------------------------------------ conversations
     @app.get("/api/conversations", tags=["conversations"], dependencies=[Depends(require_api_key)])
     def list_conversations(request: Request, limit: int = 50):
-        return [asdict(c) for c in services_of(request).conversations.recent(min(limit, 200))]
+        return [
+            asdict(c) for c in services_of(request).conversations.recent(min(limit, 200), owner=visitor_owner(request))
+        ]
 
     @app.get("/api/conversations/{conversation_id}", tags=["conversations"], dependencies=[Depends(require_api_key)])
     def get_conversation(request: Request, conversation_id: str):
         try:
-            summary, messages = services_of(request).conversations.get(conversation_id)
+            summary, messages = services_of(request).conversations.get(conversation_id, owner=visitor_owner(request))
         except ConversationNotFound as exc:
             raise HTTPException(status.HTTP_404_NOT_FOUND, "Conversation not found.") from exc
         return {**asdict(summary), "messages": [asdict(m) for m in messages]}
@@ -183,7 +210,7 @@ def create_app(settings: Settings | None = None, *, services: Services | None = 
     @app.patch("/api/conversations/{conversation_id}", tags=["conversations"], dependencies=[Depends(require_api_key)])
     def rename_conversation(request: Request, conversation_id: str, body: RenameRequest):
         try:
-            services_of(request).conversations.rename(conversation_id, body.title)
+            services_of(request).conversations.rename(conversation_id, body.title, owner=visitor_owner(request))
         except ConversationNotFound as exc:
             raise HTTPException(status.HTTP_404_NOT_FOUND, "Conversation not found.") from exc
         return {"ok": True}
@@ -191,7 +218,7 @@ def create_app(settings: Settings | None = None, *, services: Services | None = 
     @app.delete("/api/conversations/{conversation_id}", tags=["conversations"], dependencies=[Depends(require_api_key)])
     def delete_conversation(request: Request, conversation_id: str):
         try:
-            services_of(request).conversations.delete(conversation_id)
+            services_of(request).conversations.delete(conversation_id, owner=visitor_owner(request))
         except ConversationNotFound as exc:
             raise HTTPException(status.HTTP_404_NOT_FOUND, "Conversation not found.") from exc
         return {"ok": True}
@@ -201,7 +228,7 @@ def create_app(settings: Settings | None = None, *, services: Services | None = 
         """Thumbs up/down on an answer. A thumbs-down also evicts the answer from the cache."""
         s = services_of(request)
         try:
-            meta = s.conversations.set_feedback(message_id, body.value or None)
+            meta = s.conversations.set_feedback(message_id, body.value or None, owner=visitor_owner(request))
         except MessageNotFound as exc:
             raise HTTPException(status.HTTP_404_NOT_FOUND, "Message not found.") from exc
         if body.value == -1 and s.cache and meta.get("cache_key"):
@@ -274,7 +301,9 @@ def create_app(settings: Settings | None = None, *, services: Services | None = 
     @app.put("/api/settings/llm", tags=["settings"], dependencies=[Depends(require_admin_key)])
     def update_llm_settings(request: Request, body: LLMSettingsUpdate):
         try:
-            return services_of(request).llm.update(body)
+            updated = services_of(request).llm.update(body)
+            health_cache.clear()  # the next status check must reflect the new model
+            return updated
         except LLMError as exc:
             raise HTTPException(status.HTTP_400_BAD_REQUEST, str(exc)) from exc
 

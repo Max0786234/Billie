@@ -155,6 +155,8 @@ export interface SystemStatus {
   feedback: Record<string, { up: number; down: number }>;
   environment: string;
   auth_required: boolean;
+  /** Public demo quotas; null when running locally. */
+  demo: { daily_limit: number; used_today: number; per_visitor_limit: number; remaining_for_you: number } | null;
 }
 
 export interface DocumentInfo {

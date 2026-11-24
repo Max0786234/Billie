@@ -61,6 +61,7 @@ class ChatTurn:
     image_ids: list[str] = field(default_factory=list)
     # Replace the last question/answer pair instead of appending (regenerate / edit question).
     regenerate: bool = False
+    owner: str | None = None  # public demo: the visitor this chat belongs to (None = local user)
 
 
 def contextual_query(question: str, history: list[tuple[str, str]]) -> str:
@@ -119,8 +120,8 @@ class ChatPipeline:
         question = turn.question.strip()
 
         conversation_id = turn.conversation_id
-        if not conversation_id or not self.conversations.exists(conversation_id):
-            conversation_id = self.conversations.create(turn.mode, title=_title(question))
+        if not conversation_id or not self.conversations.exists(conversation_id, owner=turn.owner):
+            conversation_id = self.conversations.create(turn.mode, title=_title(question), owner=turn.owner)
         elif turn.regenerate:
             self.conversations.pop_last_turn(conversation_id)
         history = self.conversations.recent_turns(conversation_id, self.history_turns)
@@ -277,7 +278,9 @@ class ChatPipeline:
         valid, invalid = cited_numbers(answer, len(hits))
         # grounded: True = cites only real sources; False = cites sources that do not exist;
         # None = not applicable, or abstained (no citations, e.g. "I could not find this").
-        abstained = bool(hits) and used_llm and not valid and not invalid
+        # A refusal can still cite the sources it describes ("the sources only cover X [1]"); stronger
+        # models do this, and it is still a refusal, not a grounded answer (stress test, P2.16).
+        abstained = bool(hits) and used_llm and not invalid and (not valid or opens_with_refusal(answer))
         grounded: bool | None = None if (not hits or not used_llm or abstained) else not invalid
         cited_sources = [sources[n - 1] for n in valid]
 
@@ -447,6 +450,20 @@ def _analysis_payload(analysis: Analysis) -> dict[str, Any]:
         "sentiment_score": round(analysis.sentiment_score, 3),
         "method": analysis.method,
     }
+
+
+_REFUSAL_OPENER = re.compile(
+    r"^\W*(i (could not|couldn't|cannot|can't|can not|am unable to|was unable to|did not|didn't) (find|provide|recommend|help|answer|give|write)"
+    r"|i'm (unable|not able) to|i am not able to|unfortunately,? (i|the (provided )?(sources|documents))"
+    r"|the (provided |available )?(sources|documents) (do not|don't|does not|doesn't)|none of the (provided )?(sources|documents)"
+    r"|no encontr|je n'ai pas trouv|ich konnte keine|mujhe .{0,40}nahi? mil)",
+    re.IGNORECASE,
+)
+
+
+def opens_with_refusal(answer: str) -> bool:
+    """True if the answer's first sentence declines (not found / won't help)."""
+    return bool(_REFUSAL_OPENER.search(answer.strip()[:200]))
 
 
 def _title(question: str) -> str:

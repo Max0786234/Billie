@@ -189,12 +189,18 @@ class LLMManager:
             except (ValueError, OSError):
                 pass  # corrupt file -> fall back to env defaults
         provider = self._env.get("BILLIE_LLM_PROVIDER", "ollama")
+        vision_cloud = self._env.get("BILLIE_VISION_CLOUD", "").strip() or None
         preset = PRESETS.get(provider, PRESETS["ollama"])
         return LLMSettings(
             provider=preset.id,
             model=self._env.get("BILLIE_LLM_MODEL", preset.default_model),
             base_url=self._env.get("OLLAMA_BASE_URL", preset.base_url) if preset.kind == "ollama" else preset.base_url,
             vision_model=self._env.get("BILLIE_VISION_MODEL", DEFAULT_OLLAMA_VISION_MODEL),
+            # Deployments without local models (e.g. a Space) turn the local fallback off.
+            local_fallback=self._env.get("BILLIE_LOCAL_FALLBACK", "1").strip().lower()
+            not in ("0", "false", "no", "off"),
+            vision_cloud=vision_cloud if vision_cloud in PRESETS else None,  # type: ignore[arg-type]
+            vision_cloud_model=self._env.get("BILLIE_VISION_CLOUD_MODEL", "gemini-3.5-flash-lite"),
         )
 
     @property

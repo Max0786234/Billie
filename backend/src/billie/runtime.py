@@ -69,6 +69,13 @@ class Settings:
     max_image_mb: int = 8
     max_document_mb: int = 20
     rate_limit_per_minute: int = 30
+    # Public demo mode (e.g. a Hugging Face Space): visitors chat without keys, each sees only
+    # their own conversations, and daily caps protect the free cloud-model quota.
+    demo: bool = False
+    demo_daily_limit: int = 150
+    demo_visitor_daily_limit: int = 25
+    # Sites allowed to embed the UI in an iframe (the Space page frames the app); empty = none.
+    frame_ancestors: tuple[str, ...] = ()
     top_k: dict[str, int] = field(default_factory=lambda: {"general": 4, "medical": 4, "research": 5})
 
     @property
@@ -97,11 +104,22 @@ def load_settings(env: dict[str, str] | None = None, *, data_dir: Path | None = 
         max_image_mb=int(env.get("BILLIE_MAX_IMAGE_MB", "8")),
         max_document_mb=int(env.get("BILLIE_MAX_DOCUMENT_MB", "20")),
         rate_limit_per_minute=int(env.get("BILLIE_RATE_LIMIT_PER_MINUTE", "30")),
+        demo=_flag(env.get("BILLIE_DEMO")),
+        demo_daily_limit=int(env.get("BILLIE_DEMO_DAILY_LIMIT", "150")),
+        demo_visitor_daily_limit=int(env.get("BILLIE_DEMO_VISITOR_DAILY_LIMIT", "25")),
+        frame_ancestors=tuple(a.strip() for a in env.get("BILLIE_FRAME_ANCESTORS", "").split(",") if a.strip()),
     )
-    if settings.is_production and not (settings.api_key and settings.admin_key):
-        # Fail closed: a production deployment without keys would be open to anyone.
-        raise RuntimeError("BILLIE_ENV=production requires BILLIE_API_KEY and BILLIE_ADMIN_KEY to be set.")
+    if settings.is_production and not settings.admin_key:
+        # Fail closed: settings and the knowledge base must never be open to anyone.
+        raise RuntimeError("BILLIE_ENV=production requires BILLIE_ADMIN_KEY to be set.")
+    if settings.is_production and not settings.demo and not settings.api_key:
+        # A private deployment also needs a chat key; a public demo is open on purpose (with quotas).
+        raise RuntimeError("BILLIE_ENV=production requires BILLIE_API_KEY (or BILLIE_DEMO=1 for a public demo).")
     return settings
+
+
+def _flag(value: str | None) -> bool:
+    return (value or "").strip().lower() in ("1", "true", "yes", "on")
 
 
 def build_corpus_service(settings: Settings) -> CorpusService:

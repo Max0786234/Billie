@@ -91,3 +91,16 @@ def test_pipeline_repairs_citations_and_reports_them(settings):
     assert done["unverified_sentences"] == 0
     _, messages = services.conversations.get(done["conversation_id"])
     assert messages[1].content == done["answer"]  # the repaired answer is what gets stored
+
+
+def test_refusal_openers_count_as_abstained_even_with_citations():
+    from billie.chat.pipeline import opens_with_refusal
+
+    # Real answers from the Groq stress test: refusals that cite what the sources *do* cover.
+    assert opens_with_refusal("I could not find a Python function in the documents. They only cover Billie [1].")
+    assert opens_with_refusal("I cannot provide instructions for that. The sources only describe its effects [1].")
+    assert opens_with_refusal("The provided sources do not state who invented the transformer [1].")
+    assert opens_with_refusal("No encontré esa información en los documentos.")
+    # Real answers that merely contain a negative later on are not refusals.
+    assert not opens_with_refusal("Glaucoma damages the optic nerve [1]. It cannot be reversed [2].")
+    assert not opens_with_refusal("Metformin is first-line therapy [1]; the sources do not mention dosing.")

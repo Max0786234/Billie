@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import re
 import statistics
 import tempfile
@@ -62,7 +63,7 @@ def check(case: dict, done: dict, meta: dict) -> tuple[bool, list[str]]:
         if case.get("kw") and not any(k in lower for k in case["kw"]):
             problems.append(f"none of the expected facts {case['kw']}")
     elif expect == "abstain":
-        if done.get("citations"):
+        if done.get("citations") and not done.get("abstained"):
             problems.append("answered with citations although the documents don't cover it")
     elif expect == "alert" and not meta.get("alert"):
         problems.append("emergency banner NOT shown")
@@ -131,7 +132,7 @@ def summarise(rows: list[dict]) -> dict:
             "n": len(values),
             "mean": round(statistics.mean(values), 1),
             "p50": round(statistics.median(values), 1),
-            "p90": round(ordered[int(0.9 * (len(ordered) - 1))], 1),
+            "p90": round(ordered[max(0, math.ceil(0.9 * len(ordered)) - 1)], 1),  # nearest-rank
             "max": round(max(values), 1),
         }
 

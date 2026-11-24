@@ -80,6 +80,10 @@ class ConversationStore:
             columns = {row[1] for row in conn.execute("PRAGMA table_info(messages)")}
             if "feedback" not in columns:
                 conn.execute("ALTER TABLE messages ADD COLUMN feedback INTEGER")
+            # Migration: per-visitor ownership for the public demo ('' = the local single user).
+            columns = {row[1] for row in conn.execute("PRAGMA table_info(conversations)")}
+            if "owner" not in columns:
+                conn.execute("ALTER TABLE conversations ADD COLUMN owner TEXT NOT NULL DEFAULT ''")
 
     @contextmanager
     def _connect(self) -> Iterator[sqlite3.Connection]:
@@ -94,34 +98,39 @@ class ConversationStore:
             conn.close()
 
     # ---------------------------------------------------------- conversations
-    def create(self, mode: str, title: str = "New chat") -> str:
+    # ``owner``: None = unscoped (local single-user app); a string = only that visitor's chats
+    # (public demo). A chat owned by someone else behaves exactly like one that does not exist.
+    def create(self, mode: str, title: str = "New chat", *, owner: str | None = None) -> str:
         conversation_id = uuid.uuid4().hex
         now = time.time()
         with self._connect() as conn:
             conn.execute(
-                "INSERT INTO conversations(id, title, mode, created_at, updated_at) VALUES (?,?,?,?,?)",
-                (conversation_id, title[:120], mode, now, now),
+                "INSERT INTO conversations(id, title, mode, created_at, updated_at, owner) VALUES (?,?,?,?,?,?)",
+                (conversation_id, title[:120], mode, now, now, owner or ""),
             )
         return conversation_id
 
-    def exists(self, conversation_id: str) -> bool:
+    def exists(self, conversation_id: str, *, owner: str | None = None) -> bool:
+        where, args = _scope("id = ?", [conversation_id], owner)
         with self._connect() as conn:
-            return conn.execute("SELECT 1 FROM conversations WHERE id = ?", (conversation_id,)).fetchone() is not None
+            return conn.execute(f"SELECT 1 FROM conversations WHERE {where}", args).fetchone() is not None
 
-    def recent(self, limit: int = 50) -> list[ConversationSummary]:
+    def recent(self, limit: int = 50, *, owner: str | None = None) -> list[ConversationSummary]:
+        where, args = _scope("1 = 1", [], owner, column="c.owner")
         with self._connect() as conn:
             rows = conn.execute(
                 "SELECT c.id, c.title, c.mode, c.created_at, c.updated_at, COUNT(m.id) "
-                "FROM conversations c LEFT JOIN messages m ON m.conversation_id = c.id "
+                f"FROM conversations c LEFT JOIN messages m ON m.conversation_id = c.id WHERE {where} "
                 "GROUP BY c.id ORDER BY c.updated_at DESC LIMIT ?",
-                (limit,),
+                (*args, limit),
             ).fetchall()
         return [ConversationSummary(*row) for row in rows]
 
-    def get(self, conversation_id: str) -> tuple[ConversationSummary, list[StoredMessage]]:
+    def get(self, conversation_id: str, *, owner: str | None = None) -> tuple[ConversationSummary, list[StoredMessage]]:
+        where, args = _scope("id = ?", [conversation_id], owner)
         with self._connect() as conn:
             row = conn.execute(
-                "SELECT id, title, mode, created_at, updated_at FROM conversations WHERE id = ?", (conversation_id,)
+                f"SELECT id, title, mode, created_at, updated_at FROM conversations WHERE {where}", args
             ).fetchone()
             if row is None:
                 raise ConversationNotFound(conversation_id)
@@ -134,17 +143,19 @@ class ConversationStore:
         summary = ConversationSummary(cid, title, mode, created, updated, message_count=len(messages))
         return summary, [_to_message(m) for m in messages]
 
-    def rename(self, conversation_id: str, title: str) -> None:
+    def rename(self, conversation_id: str, title: str, *, owner: str | None = None) -> None:
+        where, args = _scope("id = ?", [conversation_id], owner)
         with self._connect() as conn:
             updated = conn.execute(
-                "UPDATE conversations SET title = ? WHERE id = ?", (title.strip()[:120] or "Untitled", conversation_id)
+                f"UPDATE conversations SET title = ? WHERE {where}", (title.strip()[:120] or "Untitled", *args)
             ).rowcount
         if not updated:
             raise ConversationNotFound(conversation_id)
 
-    def delete(self, conversation_id: str) -> None:
+    def delete(self, conversation_id: str, *, owner: str | None = None) -> None:
+        where, args = _scope("id = ?", [conversation_id], owner)
         with self._connect() as conn:
-            if not conn.execute("DELETE FROM conversations WHERE id = ?", (conversation_id,)).rowcount:
+            if not conn.execute(f"DELETE FROM conversations WHERE {where}", args).rowcount:
                 raise ConversationNotFound(conversation_id)
 
     # --------------------------------------------------------------- messages
@@ -176,11 +187,12 @@ class ConversationStore:
             conn.execute("UPDATE conversations SET updated_at = ? WHERE id = ?", (now, conversation_id))
             return int(cursor.lastrowid or 0)
 
-    def set_feedback(self, message_id: int, value: int | None) -> dict[str, Any]:
+    def set_feedback(self, message_id: int, value: int | None, *, owner: str | None = None) -> dict[str, Any]:
         """Record +1 / -1 (or clear with None) on an assistant message. Returns its meta."""
+        where, args = _scope("m.id = ? AND m.role = 'assistant'", [message_id], owner, column="c.owner")
         with self._connect() as conn:
             row = conn.execute(
-                "SELECT meta FROM messages WHERE id = ? AND role = 'assistant'", (message_id,)
+                f"SELECT m.meta FROM messages m JOIN conversations c ON c.id = m.conversation_id WHERE {where}", args
             ).fetchone()
             if row is None:
                 raise MessageNotFound(message_id)
@@ -226,6 +238,13 @@ class ConversationStore:
                 turns.append((pending_user, content))
                 pending_user = None
         return turns[-max_turns:]
+
+
+def _scope(where: str, args: list[Any], owner: str | None, column: str = "owner") -> tuple[str, list[Any]]:
+    """Add an owner filter to a WHERE clause when the store is used per visitor."""
+    if owner is None:
+        return where, args
+    return f"{where} AND {column} = ?", [*args, owner]
 
 
 def _to_message(row: tuple[Any, ...]) -> StoredMessage:

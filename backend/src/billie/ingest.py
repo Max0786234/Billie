@@ -4,6 +4,7 @@
     python -m billie.ingest knowledge
     python -m billie.ingest medquad [--no-embed]
     python -m billie.ingest arxiv [--limit N] [--embed-limit N] [--embed-since YEAR] [--no-embed]
+    python -m billie.ingest bundle --out DIR      # smaller indexes for deployment
 
 Embedding runs are checkpointed: if interrupted (Ctrl+C, power loss), rerun the
 same command with ``--embed-only`` and it continues where it stopped.
@@ -12,12 +13,14 @@ same command with ``--embed-only`` and it continues where it stopped.
 from __future__ import annotations
 
 import argparse
+import shutil
 import sys
 import time
+from pathlib import Path
 
 from billie.corpora.arxiv import iter_arxiv
 from billie.corpora.medquad import iter_medquad
-from billie.retrieval.index import build_index, embed_index
+from billie.retrieval.index import build_index, embed_index, subset_index
 from billie.runtime import build_corpus_service, load_settings
 
 
@@ -58,6 +61,8 @@ def main(argv: list[str] | None = None) -> int:
     arx.add_argument("--embed-since", type=int, default=2022, help="embed only papers from this year onward")
     arx.add_argument("--no-embed", action="store_true")
     arx.add_argument("--embed-only", action="store_true")
+    bundle = sub.add_parser("bundle", help="copy deployable indexes (embedded passages only) to a folder")
+    bundle.add_argument("--out", required=True, help="output folder, e.g. ../deploy/index")
     args = parser.parse_args(argv)
 
     settings = load_settings()
@@ -79,6 +84,16 @@ def main(argv: list[str] | None = None) -> int:
 
     embedder = service.embedder
     index_dir = paths.index_dir
+
+    if args.command == "bundle":
+        # MedQuAD ships whole (BM25 needs every chunk); arXiv keeps only its embedded papers.
+        out = Path(args.out)
+        out.mkdir(parents=True, exist_ok=True)
+        for suffix in (".sqlite", ".vec.npy", ".vec_ids.npy"):
+            shutil.copy2(index_dir / f"medquad{suffix}", out / f"medquad{suffix}")
+        n = subset_index(index_dir, "arxiv", out, progress=_progress("copying embedded arXiv papers"))
+        print(f"\nbundle written to {out}: MedQuAD (full) + {n:,} arXiv papers")
+        return 0
 
     if args.command == "medquad":
         if not paths.medquad_dir.exists():

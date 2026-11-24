@@ -38,8 +38,26 @@ export class ApiError extends Error {
   }
 }
 
+const VISITOR_STORAGE = "billie.visitor";
+
+/** Random per-browser id. On the public demo the server keeps each visitor's chats separate by it. */
+export function visitorId(): string {
+  try {
+    let id = localStorage.getItem(VISITOR_STORAGE);
+    if (!id || !/^[A-Za-z0-9-]{16,64}$/.test(id)) {
+      id = crypto.randomUUID();
+      localStorage.setItem(VISITOR_STORAGE, id);
+    }
+    return id;
+  } catch {
+    return ""; // storage blocked: the server falls back to the client IP
+  }
+}
+
 function headers(extra?: HeadersInit): Headers {
   const h = new Headers(extra);
+  const visitor = visitorId();
+  if (visitor) h.set("X-Visitor-Id", visitor);
   const keys = loadKeys();
   if (keys.apiKey) h.set("X-API-Key", keys.apiKey);
   if (keys.adminKey) h.set("X-Admin-Key", keys.adminKey);

@@ -35,7 +35,14 @@ export default function App() {
     api.conversations().then(setConversations).catch((e: Error) => setLoadError(e.message));
   }, []);
 
-  const chat = useChat(refreshConversations);
+  const isDemo = useRef(false);
+  isDemo.current = Boolean(status?.demo);
+  const afterTurn = useCallback(() => {
+    refreshConversations();
+    if (isDemo.current) api.status().then(setStatus).catch(() => undefined); // update "questions left"
+  }, [refreshConversations]);
+
+  const chat = useChat(afterTurn);
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", dark);
@@ -142,6 +149,17 @@ export default function App() {
             {loadError
               ? `Cannot reach the Billie API (${loadError}). Is the backend running on port 8000?`
               : `The language model is unavailable: ${status?.llm.detail}. Answers will show retrieved passages only.`}
+          </div>
+        )}
+
+        {status?.demo && (
+          <div className="border-b border-sky-200 bg-sky-50 px-4 py-1.5 text-center text-xs text-sky-800 dark:border-sky-900 dark:bg-sky-950/40 dark:text-sky-300">
+            Public demo · {status.demo.remaining_for_you} of {status.demo.per_visitor_limit} questions left for you today
+            · chats are private to this browser ·{" "}
+            <a className="underline" href="https://github.com/Vishaljhaaa/Billie" target="_blank" rel="noreferrer">
+              run it locally
+            </a>{" "}
+            for unlimited use
           </div>
         )}
 

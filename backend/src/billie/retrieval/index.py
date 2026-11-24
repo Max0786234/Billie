@@ -364,6 +364,40 @@ def embed_index(
     return len(ids)
 
 
+def subset_index(src_dir: Path, name: str, dst_dir: Path, *, progress: ProgressFn | None = None) -> int:
+    """Copy only the passages that have embeddings into a new, smaller index.
+
+    Used to ship a deployable bundle: the full arXiv index is 2.6 GB (980k papers) but only
+    the 50k newest are embedded. The copy keeps hybrid search identical for those papers.
+    Rowids change, so the vector ids are remapped to the new rows; the vectors are copied as-is.
+    Returns the number of passages written.
+    """
+    src = PassageIndex(src_dir, name)
+    with src._lock:
+        conn = src._connection()
+        vectors, ids = src._load_vectors()
+        meta = dict(conn.execute("SELECT key, value FROM meta").fetchall())
+    if vectors is None or ids is None:
+        raise ValueError(f"index '{name}' has no embeddings to subset by")
+    order = [int(i) for i in ids]
+
+    def passages() -> Iterable[Passage]:
+        for start in range(0, len(order), 2000):  # same order as the vector matrix
+            chunk = src.get(order[start : start + 2000])
+            for rowid in order[start : start + 2000]:
+                yield chunk[rowid]
+
+    keep = {k: v for k, v in meta.items() if k not in ("schema_version", "built_at")}
+    count = build_index(
+        dst_dir, name, passages(), meta={**keep, "subset_of": str(meta.get("variant", ""))}, progress=progress
+    )
+    src.close()
+    # build_index assigns rowids 1..N in insertion order, i.e. matrix row i -> rowid i+1.
+    np.save(dst_dir / f"{name}.vec_ids.npy", np.arange(1, count + 1, dtype=np.int64))
+    np.save(dst_dir / f"{name}.vec.npy", vectors.astype(np.float32))
+    return count
+
+
 def _set_meta(db_path: Path, values: dict[str, str]) -> None:
     conn = sqlite3.connect(db_path)
     try:
