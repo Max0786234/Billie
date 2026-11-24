@@ -588,6 +588,13 @@ The test file was removed afterwards.
 - **Page limit corrected:** dense pages produce ~6 passages each. The 22-page report made 137 passages, close to the 150 limit, so the upload message now says "about 25 pages of dense text" instead of 40.
 - **Upload time locally:** 20.7 s for the 137-passage PDF and 15.5 s for 88 passages (embedding on the laptop CPU). The live site uses the same CPU-only embedding on 2 vCPUs, so expect a similar or longer wait.
 
+**Deployed** as image `4724b78`. On the live site:
+- The project report, which crashed uploads before the fix, uploaded with 88 passages.
+- An answer drew 3 of its 4 sources from that file (before the chunk fix: 1).
+- "qwen3:8b speed?" was answered correctly: "5.1 tokens/s [3]".
+
+The test file was removed afterwards.
+
 ---
 
 ## Remaining backlog (updated 2026-11-24, end of P2.16)
