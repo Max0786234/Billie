@@ -74,6 +74,7 @@ class Settings:
     demo: bool = False
     demo_daily_limit: int = 150
     demo_visitor_daily_limit: int = 25
+    private_docs_ttl_minutes: int = 60  # visitors' own documents are deleted after this long unused
     # Sites allowed to embed the UI in an iframe (the Space page frames the app); empty = none.
     frame_ancestors: tuple[str, ...] = ()
     top_k: dict[str, int] = field(default_factory=lambda: {"general": 4, "medical": 4, "research": 5})
@@ -107,6 +108,7 @@ def load_settings(env: dict[str, str] | None = None, *, data_dir: Path | None = 
         demo=_flag(env.get("BILLIE_DEMO")),
         demo_daily_limit=int(env.get("BILLIE_DEMO_DAILY_LIMIT", "150")),
         demo_visitor_daily_limit=int(env.get("BILLIE_DEMO_VISITOR_DAILY_LIMIT", "25")),
+        private_docs_ttl_minutes=int(env.get("BILLIE_PRIVATE_DOCS_TTL_MINUTES", "60")),
         frame_ancestors=tuple(a.strip() for a in env.get("BILLIE_FRAME_ANCESTORS", "").split(",") if a.strip()),
     )
     if settings.is_production and not settings.admin_key:

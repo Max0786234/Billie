@@ -471,6 +471,61 @@ API checks on fresh questions in Medical mode:
 
 **Deployed** as image `b2171d5`, built by the fork's workflow; `az containerapp update` switched the app to it. On the live site: the suggestions return MedQuAD questions, the overview shows the live index (50,000 papers from 2025–2026), and the BM25 question asked in Medical mode suggests General mode with no noise topics.
 
+### P2.19 Visitors' own documents: private and temporary (2026-11-25)
+**Request (owner):** let demo visitors use their own documents, deleted when they leave so storage isn't wasted. Before this change, uploads on the demo were admin-only, because they went into the shared knowledge base, so visitors saw "missing admin key".
+
+**Design** (`private_docs.py`, enabled only in demo mode):
+- **Searched with Billie's docs.** Each visitor's files get a separate small index (BM25 + embeddings), stored under their hashed visitor id. In General mode, Billie searches it together with Billie's docs.
+  - Both result lists carry RRF scores, which depend only on ranks, so they merge directly. On a tie the visitor's file comes first.
+  - Sources are labelled "Your document · name". Ids are namespaced as `private:…`.
+- **"When they leave" means 1 hour after last use.** A browser can't reliably report a closed tab, so an inactivity timer replaces it.
+  - Uploading, listing and asking all count as use.
+  - A background sweep runs every `min(300 s, ttl/4)`.
+  - Removing a file, or any restart, also deletes it; the folder is wiped on start because the store is temporary by design.
+  - The lifetime is configurable: `BILLIE_PRIVATE_DOCS_TTL_MINUTES`.
+- **Never cached.** When a visitor has files, General-mode answers skip the shared answer cache, both lookup and store. Otherwise a cached answer built from one visitor's file could be served to another. Tested.
+- **Limits:**
+  - 3 files per visitor, 5 MB per file, and 150 passages per file (~40 pages; this bounds embedding time on 2 CPUs)
+  - 300 MB total on disk and 100 visitors holding files at once
+  - the existing rate limit and daily question caps
+
+  Files are validated by type, encoding and PDF signature. Unreadable files, scanned PDFs (no text layer), oversized files and wrong types get clear messages, and a rejected file leaves nothing behind.
+- **UI:** the Documents dialog becomes "Your private documents" on the demo.
+  - It shows a privacy note ("passages are sent to the AI model"), the limits, passage counts and the time until deletion.
+  - General mode's start screen shows a "Have your own document?" link.
+  - Admin uploads to the shared knowledge base are still reachable from the dialog.
+
+**Problems found by testing with real files** (demo mode on port 8010, local qwen3:4b-instruct, so no cloud quota was used):
+1. **An oversized file took 88 s to be rejected.** All its passages were embedded before the length check.
+   - Fix: parse the new file on its own and check its length and text before any embedding.
+   - Now rejected in 0.03 s.
+2. **Every upload re-embedded all of the visitor's files.**
+   - Fix: embeddings cached per file (`<file>.vectors.npz`, tagged with the model) and the vector matrix reassembled in rowid order. Adding a second file embedded only it: 0.26 s for a Markdown file. Unit-tested with a counting fake embedder.
+3. **"What is the daily meal allowance?" wasn't found** although the PDF says 1,800 rupees. Knowledge chunks are 900 characters, but the prompt shows at most 650 per source, so the end of the travel section was cut off.
+   - Fix: private documents use 600-character chunks.
+   - After the fix the answer was found and cited.
+
+**Results on real documents** (a 3-page PDF handbook and Markdown trip notes, all on the local model):
+- Correct cited answers (cited as "Your document"):
+  - 24 days of leave, up to 5 carried over: 20.7 s
+  - the meal allowance (1,800 rupees): 6.7 s
+  - the remote-work approver (Priya Raman): 8.4 s
+  - password length (14 characters): 3.9 s
+  - the Leh flight (06:15): 10 s
+  - the Hinglish question "remote work hafte mein kitne din…" got "3 din [1]": 17 s
+- Billie's own docs still answer next to the private files ("How does hybrid search work?" cited `how_billie_works.md`).
+- **Isolation:**
+  - Visitor B's listing is empty, B gets a 404 deleting A's file, and B asking the same question gets an honest "not found" with no private sources.
+  - Nothing was cached.
+
+**Tests:** 12 new backend tests (`tests/test_private_docs.py`) cover:
+- indexing and search, labels and namespacing
+- expiry with a fake clock, and the wipe on start
+- every limit and bad-file case, and the visitor and storage caps
+- invalid owners
+- API isolation, the cache exclusion, shared docs still answering, 404 outside the demo, clean 400s
+- the per-file embedding cache
+
 ---
 
 ## Remaining backlog (updated 2026-11-24, end of P2.16)

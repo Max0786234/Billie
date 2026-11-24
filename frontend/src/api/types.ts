@@ -199,3 +199,17 @@ export interface ModeOverview {
 export interface Overview {
   modes: Record<Mode, ModeOverview>;
 }
+
+/** A visitor's own temporary document on the public demo. */
+export interface PrivateDocument {
+  name: string;
+  size: number;
+  passages: number;
+}
+
+export interface PrivateDocuments {
+  documents: PrivateDocument[];
+  /** Unix seconds when the documents are deleted if unused; null when there are none. */
+  expires_at: number | null;
+  limits: { max_files: number; max_mb: number; ttl_minutes: number };
+}

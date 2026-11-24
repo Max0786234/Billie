@@ -1,4 +1,4 @@
-import { Check, Sparkles, X } from "lucide-react";
+import { Check, FileUp, Sparkles, X } from "lucide-react";
 import type { Mode, ModeOverview } from "../api/types";
 import { cx } from "../lib/format";
 import { MODES } from "../lib/modes";
@@ -45,10 +45,13 @@ interface Props {
   mode: Mode;
   overview?: ModeOverview;
   onPick: (question: string) => void;
+  /** General mode: open the documents dialog; ``privateUploads`` = public demo (temporary, private files). */
+  onOpenDocuments?: () => void;
+  privateUploads?: boolean;
 }
 
 /** Start screen: what this mode contains, what it is good for, what it can't answer, and examples that work. */
-export function ModeGuide({ mode, overview, onPick }: Props) {
+export function ModeGuide({ mode, overview, onPick, onOpenDocuments, privateUploads }: Props) {
   const info = MODES[mode];
   const chips =
     mode === "medical"
@@ -91,6 +94,22 @@ export function ModeGuide({ mode, overview, onPick }: Props) {
               ))}
             </div>
           </div>
+        )}
+
+        {mode === "general" && onOpenDocuments && (
+          <button
+            type="button"
+            onClick={onOpenDocuments}
+            className={cx("mt-3 flex w-full items-start gap-2 rounded-xl px-3 py-2 text-left text-xs", info.accent.soft)}
+          >
+            <FileUp className="mt-0.5 size-4 shrink-0" />
+            <span>
+              <b>Have your own document?</b>{" "}
+              {privateUploads
+                ? "Upload a PDF, Markdown or text file and ask about it here. Only you can search it, and it is deleted an hour after you last use it."
+                : "Upload a PDF, Markdown or text file and General mode will search it too."}
+            </span>
+          </button>
         )}
 
         {overview && (

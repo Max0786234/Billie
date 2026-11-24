@@ -13,6 +13,7 @@ from billie.conversations import ConversationStore
 from billie.corpora.service import CorpusService
 from billie.llm.base import GenerationOptions, LLMError, Message, complete
 from billie.llm.manager import LLMManager
+from billie.private_docs import PrivateDocuments
 from billie.runtime import Settings, build_corpus_service
 from billie.uploads import DocumentStore, ImageStore
 
@@ -28,6 +29,7 @@ class Services:
     pipeline: ChatPipeline
     metrics: Metrics
     cache: AnswerCache | None = None
+    private: PrivateDocuments | None = None
 
 
 def build_services(
@@ -44,6 +46,14 @@ def build_services(
     images = ImageStore(paths.image_uploads_dir, settings.max_image_mb * 1024 * 1024)
     documents = DocumentStore(paths.doc_uploads_dir, settings.max_document_mb * 1024 * 1024)
     cache = AnswerCache(paths.data_dir / "answer_cache.sqlite")
+    # Public demo only: visitors' own documents, private and deleted after an hour of inactivity.
+    private = (
+        PrivateDocuments(
+            paths.data_dir / "private", corpora.embedder, ttl_seconds=settings.private_docs_ttl_minutes * 60
+        )
+        if settings.demo
+        else None
+    )
     pipeline = ChatPipeline(
         llm=llm,
         corpora=corpora,
@@ -53,8 +63,9 @@ def build_services(
         history_turns=settings.history_turns,
         top_k=settings.top_k,
         cache=cache,
+        private=private,
     )
-    return Services(settings, llm, corpora, conversations, images, documents, pipeline, Metrics(), cache)
+    return Services(settings, llm, corpora, conversations, images, documents, pipeline, Metrics(), cache, private)
 
 
 def warm_up(services: Services) -> None:

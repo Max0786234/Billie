@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { api } from "./api/client";
 import type { ConversationSummary, LLMSettings, Mode, Overview, SystemStatus } from "./api/types";
 import { Composer } from "./components/Composer";
-import { DocumentsDialog } from "./components/DocumentsDialog";
+import { DocumentsDialog, PrivateDocumentsDialog } from "./components/DocumentsDialog";
 import { ModeGuide } from "./components/ModeGuide";
 import { AssistantMessage, UserMessage } from "./components/MessageView";
 import { SettingsDialog } from "./components/SettingsDialog";
@@ -13,7 +13,7 @@ import { useChat } from "./hooks/useChat";
 import { cx } from "./lib/format";
 import { MODES } from "./lib/modes";
 
-type DialogName = "settings" | "documents" | "status" | null;
+type DialogName = "settings" | "documents" | "shared-documents" | "status" | null;
 
 function initialDark(): boolean {
   const stored = localStorage.getItem("billie.theme");
@@ -190,7 +190,13 @@ export default function App() {
         >
           <div className="mx-auto max-w-3xl px-4 py-6">
             {chat.messages.length === 0 ? (
-              <ModeGuide mode={mode} overview={overview?.modes[mode]} onPick={(q) => void chat.send(q, mode)} />
+              <ModeGuide
+                mode={mode}
+                overview={overview?.modes[mode]}
+                onPick={(q) => void chat.send(q, mode)}
+                onOpenDocuments={() => setDialog("documents")}
+                privateUploads={Boolean(status?.demo)}
+              />
             ) : (
               <div className="space-y-7">
                 {chat.messages.map((m, i) => {
@@ -233,7 +239,13 @@ export default function App() {
         setLlm(s);
         api.status().then(setStatus).catch(() => undefined);
       }} />}
-      {dialog === "documents" && <DocumentsDialog onClose={() => setDialog(null)} />}
+      {dialog === "documents" &&
+        (status?.demo ? (
+          <PrivateDocumentsDialog onClose={() => setDialog(null)} onAdmin={() => setDialog("shared-documents")} />
+        ) : (
+          <DocumentsDialog onClose={() => setDialog(null)} />
+        ))}
+      {dialog === "shared-documents" && <DocumentsDialog onClose={() => setDialog(null)} />}
       {dialog === "status" && <StatusDialog onClose={() => setDialog(null)} />}
     </div>
   );

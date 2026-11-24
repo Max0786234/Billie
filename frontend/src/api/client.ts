@@ -7,6 +7,7 @@ import type {
   LLMSettings,
   Mode,
   Overview,
+  PrivateDocuments,
   ProviderPreset,
   Suggestion,
   SystemStatus,
@@ -117,6 +118,14 @@ export const api = {
     form.append("file", file);
     return request<DocumentInfo>("/api/documents", { method: "POST", body: form });
   },
+  privateDocuments: () => request<PrivateDocuments>("/api/private-documents"),
+  uploadPrivateDocument: (file: File) => {
+    const form = new FormData();
+    form.append("file", file);
+    return request<PrivateDocuments>("/api/private-documents", { method: "POST", body: form });
+  },
+  deletePrivateDocument: (name: string) =>
+    request<PrivateDocuments>(`/api/private-documents/${encodeURIComponent(name)}`, { method: "DELETE" }),
   deleteDocument: (name: string) => request(`/api/documents/${encodeURIComponent(name)}`, { method: "DELETE" }),
 
   llmSettings: () => request<LLMSettings>("/api/settings/llm"),

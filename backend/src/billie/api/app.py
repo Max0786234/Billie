@@ -76,7 +76,22 @@ def create_app(settings: Settings | None = None, *, services: Services | None = 
                 warm_up(container)
 
         threading.Thread(target=prepare, name="corpus-prepare", daemon=True).start()
+        stop = threading.Event()
+        if container.private is not None:
+            private = container.private
+
+            def sweep() -> None:  # delete visitors' documents after an hour without use
+                # Check often enough that expiry is never late by more than a quarter of the lifetime.
+                while not stop.wait(max(10, min(300, private.ttl_seconds // 4))):
+                    try:
+                        if removed := private.sweep():
+                            log.info("private documents expired", extra={"fields": {"visitors": removed}})
+                    except Exception:  # pragma: no cover - keep sweeping
+                        log.exception("private document sweep failed")
+
+            threading.Thread(target=sweep, name="private-docs-sweep", daemon=True).start()
         yield
+        stop.set()
 
     app = FastAPI(
         title="Billie API",
@@ -274,6 +289,51 @@ def create_app(settings: Settings | None = None, *, services: Services | None = 
         except UploadError as exc:
             raise HTTPException(status.HTTP_404_NOT_FOUND, str(exc)) from exc
         return FileResponse(s.images.directory / image_id)
+
+    # ------------------------------------------------- visitors' own documents
+    def private_store(request: Request):
+        store = services_of(request).private
+        owner = visitor_owner(request)
+        if store is None or owner is None:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "Private documents are only available on the public demo.")
+        return store, owner
+
+    def private_listing(store, owner: str) -> dict[str, Any]:
+        return {
+            "documents": [asdict(d) for d in store.documents(owner)],
+            "expires_at": store.expires_at(owner),
+            "limits": {
+                "max_files": store.max_files,
+                "max_mb": store.max_bytes // (1024 * 1024),
+                "ttl_minutes": store.ttl_seconds // 60,
+            },
+        }
+
+    @app.get("/api/private-documents", tags=["documents"], dependencies=[Depends(require_api_key)])
+    def list_private_documents(request: Request):
+        """This visitor's own documents (public demo). Deleted after an hour without use."""
+        store, owner = private_store(request)
+        return private_listing(store, owner)
+
+    @app.post("/api/private-documents", tags=["documents"], dependencies=[Depends(require_api_key)])
+    async def upload_private_document(request: Request, file: UploadFile = File(...)):
+        store, owner = private_store(request)
+        data = await file.read(store.max_bytes + 1)
+        try:
+            # Parsing and embedding take seconds on a small CPU: keep them off the event loop.
+            await anyio.to_thread.run_sync(store.add, owner, file.filename or "document.txt", data)
+        except UploadError as exc:
+            raise HTTPException(status.HTTP_400_BAD_REQUEST, str(exc)) from exc
+        return private_listing(store, owner)
+
+    @app.delete("/api/private-documents/{name}", tags=["documents"], dependencies=[Depends(require_api_key)])
+    def delete_private_document(request: Request, name: str):
+        store, owner = private_store(request)
+        try:
+            store.delete(owner, name)
+        except UploadError as exc:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, str(exc)) from exc
+        return private_listing(store, owner)
 
     # ---------------------------------------------------------- documents
     @app.get(

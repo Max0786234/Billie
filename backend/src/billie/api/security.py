@@ -7,7 +7,7 @@ import time
 from collections.abc import Callable
 
 # Routes that run the LLM, embeddings or indexing - the ones worth protecting from floods.
-LIMITED_PREFIXES = ("/api/chat", "/api/uploads", "/api/documents", "/api/llm/test")
+LIMITED_PREFIXES = ("/api/chat", "/api/uploads", "/api/documents", "/api/private-documents", "/api/llm/test")
 
 SECURITY_HEADERS = {
     "X-Content-Type-Options": "nosniff",

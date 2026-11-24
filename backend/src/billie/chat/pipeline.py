@@ -18,7 +18,7 @@ import re
 import time
 from collections.abc import Iterator
 from concurrent.futures import ThreadPoolExecutor
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from typing import Any, Literal
 
 from billie.analysis import Analysis, MessageAnalyzer
@@ -40,6 +40,7 @@ from billie.corpora.service import CORPUS_FOR_MODE, CorpusService
 from billie.llm.base import GenerationOptions, ImagePart, LLMError, Message, complete
 from billie.llm.manager import LLMManager
 from billie.nlp.safety import PROMPT_HINT, EmergencyAlert, detect_emergency
+from billie.private_docs import PrivateDocuments
 from billie.retrieval.base import SearchHit, SearchResult
 from billie.uploads import ImageStore
 
@@ -102,6 +103,7 @@ class ChatPipeline:
         top_k: dict[str, int] | None = None,
         cache: AnswerCache | None = None,
         citation_threshold: float = 0.60,
+        private: PrivateDocuments | None = None,
     ) -> None:
         self.llm = llm
         self.corpora = corpora
@@ -111,6 +113,7 @@ class ChatPipeline:
         self.history_turns = history_turns
         self.top_k = top_k or {"general": 4, "medical": 4, "research": 5}
         self.cache = cache
+        self.private = private  # public demo: each visitor's own temporary documents (General mode)
         # Calibrated on judged baseline answers: at 0.60, 89% of added citations point to the right
         # passage (54% of true pairs recovered). Precision over recall: a wrong citation is worse than none.
         self.citation_threshold = citation_threshold
@@ -131,8 +134,15 @@ class ChatPipeline:
         alert = detect_emergency(question)  # deterministic safety net, independent of the LLM
         images = [self.images.load(image_id) for image_id in turn.image_ids]
 
+        # The visitor's own documents join General-mode search. Answers that may use them are never
+        # cached: the cache is shared, so a cached answer could show one visitor's file to another.
+        private_search = (
+            self.private.retriever(turn.owner) if self.private is not None and turn.mode == "general" else None
+        )
+
         # ---- answer cache: stand-alone text questions only ----------------------
-        key = self._cache_key(turn, question) if self.cache and not history and not turn.image_ids else None
+        cacheable = self.cache and not history and not turn.image_ids and private_search is None
+        key = self._cache_key(turn, question) if cacheable else None
         if key and self.cache and not turn.regenerate:
             cached = self.cache.get(key)
             if cached is not None:
@@ -170,6 +180,9 @@ class ChatPipeline:
         result: SearchResult = self.corpora.retriever(CORPUS_FOR_MODE[turn.mode]).search(
             query, top_k=self.top_k[turn.mode]
         )
+        if private_search is not None:
+            mine = private_search.search(query, top_k=self.top_k[turn.mode])
+            result = replace(result, hits=merge_hits(mine.hits, result.hits, self.top_k[turn.mode]))
         timings["retrieval_ms"] = _ms(t)
         hits = result.hits
         sources = [source_payload(n, hit) for n, hit in enumerate(hits, start=1)]
@@ -515,6 +528,17 @@ _REFUSAL_OPENER = re.compile(
 def opens_with_refusal(answer: str) -> bool:
     """True if the answer's first sentence declines (not found / won't help)."""
     return bool(_REFUSAL_OPENER.search(answer.strip()[:200]))
+
+
+def merge_hits(mine: list[SearchHit], shared: list[SearchHit], top_k: int) -> list[SearchHit]:
+    """Merge the visitor's document hits with the shared corpus hits.
+
+    Both lists carry RRF scores, which depend only on ranks, so they are directly comparable;
+    on a tie the visitor's own document goes first (they uploaded it to ask about it).
+    """
+    tagged = [(h.score, 1, i, h) for i, h in enumerate(mine)] + [(h.score, 0, i, h) for i, h in enumerate(shared)]
+    tagged.sort(key=lambda t: (-t[0], -t[1], t[2]))
+    return [replace(h, rank=n) for n, (_, _, _, h) in enumerate(tagged[:top_k], start=1)]
 
 
 BETTER_MODE_MIN = 0.45

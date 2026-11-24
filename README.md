@@ -19,6 +19,10 @@
 - **Fast cloud answers, offline fallback.** The recommended setup uses Groq (`qwen/qwen3.8-27b`) for text and Gemini 3.5 Flash-Lite for images, both on free tiers: ~1–3 s per answer. If the cloud fails or hits a rate limit, the local Ollama model answers instead. Anthropic Claude, OpenAI, OpenRouter or any OpenAI-compatible server can be switched in from the Settings panel.
 - **Shows what it knows.** Each mode opens with a coverage card computed from its index. Medical, for example, lists 16,407 NIH answers on 5,126 topics, the kinds of questions, the sources, and what isn't covered. Examples are taken from questions that passed the stress test, and typing suggests real questions or paper titles from the index. When Billie can't answer, it points to a better-suited mode or the closest topics it does have, instead of leaving a dead end.
 - **Public demo mode.** `BILLIE_DEMO=1` gives every visitor private chats and caps questions per visitor and per day, so a public link can't drain a free model quota.
+- **Ask about your own documents, privately.** On the demo, a visitor can upload up to 3 files (PDF, Markdown or text) and ask about them in General mode alongside Billie's docs.
+  - Each visitor gets a separate small index that nobody else can search.
+  - Answers that use those files are never cached, because the cache is shared between visitors.
+  - Everything is deleted an hour after last use.
 - **Multimodal.** Attach a photo or screenshot; a vision model (Gemini, or local gemma3:4b offline) reads it and extracts search terms that drive retrieval.
 - **Multilingual.** Language detection by script rules, romanised-Hindi ("Hinglish") detection and py3langid. Non-English questions get an English search query, and the answer comes back in the user's language.
 - **Sentiment-aware.** A softmax classifier trained on multilingual sentiment data, using the same embedding model as search. Worried or frustrated users get a gentler, clearer answer.
@@ -183,7 +187,7 @@ The classifier adds one ~30 ms embedding call and no extra model download. On th
 
 ### Tests
 
-- **Backend:** 160 pytest tests, offline, in ~13 s. They cover BM25/RRF math, resumable embedding, LLM providers via mocked HTTP, the full chat pipeline with a scripted LLM, the API, security, language detection, and demo-mode isolation and quotas.
+- **Backend:** 172 pytest tests, offline, in ~13 s. They cover BM25/RRF math, resumable embedding, LLM providers via mocked HTTP, the full chat pipeline with a scripted LLM, the API, security, language detection, and demo-mode isolation and quotas.
 - **Frontend:** 15 Vitest tests (SSE parsing, citation rendering, the streaming chat hook, regenerate, feedback, the mode guide) and 4 Playwright end-to-end tests in Microsoft Edge against the live stack (cited answer, emergency banner + Stop, dialogs).
 - **Static checks:** `ruff`, `ruff format`, `mypy` and `tsc` are all clean, and CI runs them on every push.
 
