@@ -526,6 +526,14 @@ API checks on fresh questions in Medical mode:
 - API isolation, the cache exclusion, shared docs still answering, 404 outside the demo, clean 400s
 - the per-file embedding cache
 
+**Deployed** as image `0bfacfa`. Checked on the live site:
+- the handbook PDF uploaded in 1.2 s
+- a fake PDF was rejected
+- another visitor's listing was empty
+- "daily meal allowance?" was answered on Groq in 0.8 s: "1,800 rupees [1]", cited as "Your document", not cached
+
+The test file was removed afterwards.
+
 ---
 
 ## Remaining backlog (updated 2026-11-24, end of P2.16)
