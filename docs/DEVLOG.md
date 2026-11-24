@@ -469,6 +469,8 @@ API checks on fresh questions in Medical mode:
 - "best smartphone camera" gets only an honest decline
 - "ibuprofen side effects" offers osteoarthritis treatment and immune thrombocytopenia
 
+**Deployed** as image `b2171d5`, built by the fork's workflow; `az containerapp update` switched the app to it. On the live site: the suggestions return MedQuAD questions, the overview shows the live index (50,000 papers from 2025–2026), and the BM25 question asked in Medical mode suggests General mode with no noise topics.
+
 ---
 
 ## Remaining backlog (updated 2026-11-24, end of P2.16)
