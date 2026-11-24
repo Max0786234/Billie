@@ -1,0 +1,48 @@
+# Builds the single-container demo image (deploy/huggingface/Dockerfile) and pushes it to a
+# container registry. Manual only: run it from the Actions tab of a repository that has the
+# ACR_PASSWORD secret and an "index-v1" release holding the prebuilt search indexes
+# (made with `python -m billie.ingest bundle`).
+name: Build demo image
+
+on:
+  workflow_dispatch:
+    inputs:
+      registry:
+        description: Registry login server
+        default: billiemaxacr.azurecr.io
+      username:
+        description: Registry username
+        default: billiemaxacr
+      index_release:
+        description: Release holding the index files
+        default: index-v1
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Stage the build context
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/space/index"
+          gh release download "${{ inputs.index_release }}" -R "${{ github.repository }}" -D "$RUNNER_TEMP/space/index"
+          ls -la "$RUNNER_TEMP/space/index"
+          python3 deploy/huggingface/stage.py "$RUNNER_TEMP/space"
+
+      - name: Log in to the registry
+        run: echo "${{ secrets.ACR_PASSWORD }}" | docker login "${{ inputs.registry }}" -u "${{ inputs.username }}" --password-stdin
+
+      - name: Build and push
+        run: |
+          image="${{ inputs.registry }}/billie"
+          docker build -t "$image:${GITHUB_SHA::7}" -t "$image:latest" "$RUNNER_TEMP/space"
+          docker push "$image:${GITHUB_SHA::7}"
+          docker push "$image:latest"
+          echo "Pushed $image:${GITHUB_SHA::7}" >> "$GITHUB_STEP_SUMMARY"
