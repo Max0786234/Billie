@@ -1,6 +1,6 @@
 # Billie
 
-**A local-first, retrieval-augmented AI assistant that answers from documents and cites every claim.** Billie searches ~1 million documents with hybrid BM25 + semantic retrieval, streams answers from a local LLM (or any cloud model you plug in), reads images, and replies in the user's language.
+**A local-first, retrieval-augmented AI assistant that answers from documents and cites every claim.** Billie searches ~1 million documents with hybrid BM25 + semantic retrieval, streams answers from free cloud models (Groq for text, Gemini for images) or fully offline local models, falling back automatically, reads images, and replies in the user's language.
 
 ![Billie: a medical question streams into a cited answer, with the emergency banner and source cards](docs/images/demo.gif)
 
@@ -14,8 +14,9 @@
 
 - **Hybrid retrieval.** BM25 through SQLite FTS5 (searches 980k papers on disk in ~0.4 s) plus dense cosine search over multilingual embeddings, fused with Reciprocal Rank Fusion. Degrades gracefully to BM25 if the embedding model is down.
 - **Grounded, cited answers.** Sources are numbered in the prompt; every `[n]` in the answer is checked. The UI marks answers as grounded, ungrounded (cites a source that doesn't exist) or abstained ("not in the documents").
-- **Any LLM, switchable at runtime.** Local Ollama by default (free, offline). Anthropic Claude (official SDK), OpenAI, Gemini, Groq or any OpenAI-compatible server can be added from the Settings panel with your own API key.
-- **Multimodal.** Attach a photo or screenshot; a local vision model (gemma3:4b) transcribes it and extracts search terms that drive retrieval.
+- **Fast cloud answers, offline fallback.** The recommended setup uses Groq (`qwen/qwen3.8-27b`) for text and Gemini 3.5 Flash-Lite for images, both on free tiers: ~1–3 s per answer. If the cloud fails or hits a rate limit, the local Ollama model answers instead. Anthropic Claude, OpenAI, OpenRouter or any OpenAI-compatible server can be switched in from the Settings panel.
+- **Public demo mode.** `BILLIE_DEMO=1` gives every visitor private chats and caps questions per visitor and per day, so a public link can't drain a free model quota.
+- **Multimodal.** Attach a photo or screenshot; a vision model (Gemini, or local gemma3:4b offline) reads it and extracts search terms that drive retrieval.
 - **Multilingual.** Language detection by script rules, romanised-Hindi ("Hinglish") detection and py3langid. Non-English questions get an English search query, and the answer comes back in the user's language.
 - **Sentiment-aware.** A softmax classifier trained on multilingual sentiment data, using the same embedding model as search. Worried or frustrated users get a gentler, clearer answer.
 - **Medical safety net.** A deterministic detector (English, Hindi, Spanish) shows an emergency banner with phone numbers or crisis helplines for chest pain, stroke signs, overdose or self-harm, whatever the model writes. It caught a real overdose question in the benchmark set.
@@ -39,6 +40,8 @@ ollama pull embeddinggemma         # multilingual embeddings
 
 Open **http://127.0.0.1:5173**. The API and its interactive docs are at http://127.0.0.1:8000/docs.
 
+This runs fully offline. For ~10× faster answers, open **Settings** and add free API keys: a [Groq](https://console.groq.com/keys) key for text and a [Gemini](https://aistudio.google.com/apikey) key for images. Billie keeps the local models as automatic fallback. Keys are stored only in the git-ignored `data/` folder.
+
 Billie works immediately with small bundled samples. To index the full corpora (see [`datasets/README.md`](datasets/README.md) for downloads):
 
 ```bash
@@ -55,6 +58,8 @@ Embedding runs checkpoint as they go. If interrupted, rerun with `--embed-only` 
 ```bash
 docker compose up --build            # http://localhost:8000 (Ollama runs as a service and pulls the models)
 ```
+
+A single-container image for a public demo (Groq + Gemini, embeddings inside the container, prebuilt indexes, demo mode on) is in [`deploy/huggingface/`](deploy/huggingface). `python -m billie.ingest bundle` shrinks the indexes from 2.6 GB to ~300 MB for it.
 
 ## How it works
 
@@ -120,10 +125,21 @@ The same 39 questions run through the full live pipeline (`python -m evals.answe
 
 `python -m evals.stress_test` sends 96 questions (General, Medical, Research, follow-ups, images, Hindi / Hinglish / Bengali / Spanish / French, emergencies, out-of-scope, prompt injection, gibberish) plus 4 cache repeats through the live pipeline. Each case states the expected behaviour, and every answer was also read by hand.
 
-- **96/100 passed** on the local 4B model. The 4 failures (two missed emergency phrasings, one answer from memory with no evidence, one misdetected Spanish question) were fixed and re-tested.
-- English answers were accurate and cited; refusals were correct (including a drug-synthesis request and a personal insulin-dose question).
-- Non-English answers from the small local model had word-level errors; the cloud model (Groq) writes fluent Hindi and Hinglish, so the demo uses it.
-- Latency: local model mean 26 s (generation-bound at ~9 tokens/s); Groq + Gemini 1–3 s for text and 3–7 s for images; cached repeats 0.1 s.
+The same 100 cases ran on both setups:
+
+| | Local `qwen3:4b-instruct` (laptop CPU) | **Groq `qwen3.8-27b` + Gemini (default)** |
+|---|---|---|
+| Passed | 96/100 (before the fixes below) | **100/100** |
+| Mean / median / p90 latency | 26.1 s / 23.6 s / 40.7 s | **2.0 s / 1.7 s / 3.1 s** |
+| General · Medical · Research (mean) | 14.4 s · 27.9 s · 33.1 s | 2.3 s · 1.8 s · 2.2 s |
+| Non-English · images · emergencies | 38.9 s · 79 s · – | 3.0 s · 4.4 s · 1.2 s |
+| Cached repeats | 0.1 s | 0.0 s |
+| Non-English quality (read by hand) | Word-level errors | Fluent Hindi, Hinglish, Bengali, Spanish, French |
+
+- The local run found 4 real failures: two missed emergency phrasings, one answer from memory with no evidence, and one misdetected Spanish question. All were fixed and re-tested.
+- The Groq run found a scoring bug, not a behaviour bug. Its first score was 95/100 because the stronger model cites the sources it describes when it declines ("I could not find X; the sources only cover Y [1]"). Those answers are now counted as refusals (*abstained*), the rule is unit-tested, and the run was re-scored.
+- Refusals were correct on both setups, including a drug-synthesis request and a personal insulin-dose question. Emergency answers open with "call emergency services", and the deterministic banner shows regardless.
+- Where the cloud time goes: first token 0.96 s, generation 1.33 s, search 0.16 s, citation repair 0.02 s, query translation 1.2 s (non-English only), image reading 3.0 s.
 
 Details: [`docs/evaluation/stress_test`](docs/evaluation/stress_test).
 
@@ -147,7 +163,7 @@ The classifier adds one ~30 ms embedding call and no extra model download. On th
 
 ### Tests
 
-- **Backend:** 141 pytest tests, offline, in ~12 s. They cover BM25/RRF math, resumable embedding, LLM providers via mocked HTTP, the full chat pipeline with a scripted LLM, the API, security and language detection.
+- **Backend:** 152 pytest tests, offline, in ~13 s. They cover BM25/RRF math, resumable embedding, LLM providers via mocked HTTP, the full chat pipeline with a scripted LLM, the API, security, language detection, and demo-mode isolation and quotas.
 - **Frontend:** 13 Vitest tests (SSE parsing, citation rendering, the streaming chat hook, regenerate, feedback) and 4 Playwright end-to-end tests in Microsoft Edge against the live stack (cited answer, emergency banner + Stop, dialogs).
 - **Static checks:** `ruff`, `ruff format`, `mypy` and `tsc` are all clean, and CI runs them on every push.
 
@@ -168,7 +184,8 @@ backend/
 frontend/         React + TypeScript + Tailwind UI
 knowledge/        General-mode documents
 datasets/         samples (tracked); full MedQuAD / arXiv (downloaded)
-docs/             architecture, evaluation results, archived audit notes
+deploy/           single-container demo image (Hugging Face Space format)
+docs/             architecture, development log, evaluation results
 ```
 
 ## Configuration
@@ -177,11 +194,14 @@ Everything has a working default. See [`.env.example`](.env.example) for the ful
 
 | Variable | Default | Purpose |
 |---|---|---|
-| `BILLIE_ENV` | `development` | `production` refuses to start without API/admin keys |
-| `BILLIE_LLM_MODEL` | `qwen3:4b-instruct` | Initial chat model (changeable in the UI) |
-| `BILLIE_VISION_MODEL` | `gemma3:4b` | Reads images when the chat model is text-only |
+| `BILLIE_ENV` | `development` | `production` refuses to start without an admin key (and a chat key unless it's a public demo) |
+| `BILLIE_LLM_PROVIDER` / `BILLIE_LLM_MODEL` | `ollama` / `qwen3:4b-instruct` | Initial chat model (changeable in the UI) |
+| `GROQ_API_KEY`, `GEMINI_API_KEY` | – | Free cloud models for text and images (or paste keys in Settings) |
+| `BILLIE_VISION_MODEL` / `BILLIE_VISION_CLOUD` | `gemma3:4b` / – | Local and optional cloud image readers |
+| `BILLIE_LOCAL_FALLBACK` | `1` | Fall back to the local model when the cloud fails |
+| `BILLIE_DEMO` | `0` | Public demo: private chats per visitor, daily question caps |
 | `BILLIE_EMBED_MODEL` | `embeddinggemma` | Semantic search; `off` = keyword search only |
-| `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, … | – | Optional cloud providers (or paste keys in Settings) |
+| `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, … | – | Other optional cloud providers |
 
 ## Limitations
 

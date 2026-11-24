@@ -333,14 +333,75 @@ Re-runs of the affected cases: all pass. Results: `docs/evaluation/stress_test/`
 **Local Ollama runtime settings, benchmarked and NOT changed:** num_thread 6/8/16 and num_batch 1024 vs default on a real 950-token prompt (prompt cache defeated). Generation stayed at 9.2–9.4 tok/s (16 threads was slower: 7.9); no setting beat the default. Reason: decoding is **memory-bandwidth bound**. Each token reads the ~2.5 GB model (≈ 9 tok/s × 2.5 GB ≈ 23 GB/s, typical laptop DDR4). Only a smaller model, heavier quantization or a GPU would help, and the first two cost quality.
 **Checked, not a regression:** one arXiv search took 2.75 s in an eval run. Repeated direct measurement showed 0.44–0.9 s warm; the outlier was a cold start (loading the 61 MB vector matrix). Remaining arXiv cost is FTS5 BM25 over 980k papers (0.4–0.8 s); reducing it would mean scoring fewer candidates, which risks recall, so it's left as is.
 
+### P2.14 Published to GitHub (2026-11-24)
+- Pushed to `Vishaljhaaa/Billie` `main` as 4 commits (8730da4), authored by the owner, as a normal fast-forward on top of the existing history.
+- A secret scan of the published tree found no real keys. The only matches are fake test keys.
+- Kept out of the repository: `.env*`, `data/` (API keys, indexes, sessions), datasets, virtualenvs and `node_modules`.
+
+### P2.15 Public demo mode and a deployable bundle (2026-11-24)
+**Goal:** let an interviewer try Billie from a link, without the free Groq quota being drained by anyone who finds it.
+
+**Problems found while planning:**
+1. **Everyone shared one chat history.** `/api/conversations` returned every conversation, so a public demo would show visitors each other's chats.
+2. **Production startup required a chat API key,** which a public demo can't hand out.
+3. **Unlimited questions.** The free quota is ~1k requests and 200k tokens per day, i.e. ~110–160 questions. One curious visitor or a bot could use it all.
+4. **Status checks cost quota.** `/api/status` runs a cloud health check (`GET /models`) on every page load, and Groq counts those calls.
+5. **The sentiment model was missing from installs.** `pip install ./backend` (the Docker path) left out `nlp/models/*.npz`, because setuptools ignores non-Python files without `package-data`. A Docker image would have silently fallen back to the word list.
+6. **The full arXiv index is 2.6 GB** (980k papers), but only 50k papers have embeddings.
+7. **Framing.** The CSP `frame-ancestors 'none'` and `X-Frame-Options: DENY` would block the Space page, which shows the app in an iframe.
+
+**Changes:**
+- **`BILLIE_DEMO=1`** (`api/demo.py`):
+  - Each browser sends a random `X-Visitor-Id`. Conversations get an `owner` column (migrated in place) holding a SHA-256 of that id.
+  - Every conversation query (list, get, rename, delete, feedback, and continuing a chat) is scoped to the owner. Someone else's chat behaves exactly like one that doesn't exist (404); continuing it starts a new chat instead.
+  - Locally, `owner=None` keeps the single-user behaviour unchanged.
+- **Daily quotas:** 25 questions per visitor IP and 150 in total per UTC day, with a friendly 429 message.
+  - The personal cap uses the IP, not the visitor id, because clearing browser storage would reset the id.
+  - Answers served from the cache are refunded, since they cost no model call.
+  - Counters live in memory; a restart only errs towards availability.
+- **Production rules:** a demo needs only `BILLIE_ADMIN_KEY` (settings and the knowledge base stay admin-only). A private production deployment still needs both keys.
+- **Status cost:** in demo mode the LLM health result is cached for 60 s and cleared when settings change.
+- **New settings via environment variables:** `BILLIE_LOCAL_FALLBACK`, `BILLIE_VISION_CLOUD`, `BILLIE_VISION_CLOUD_MODEL`, and `BILLIE_FRAME_ANCESTORS` (CSP allow-list; drops `X-Frame-Options`, which can't express one).
+- **`python -m billie.ingest bundle --out DIR`** (`retrieval/index.subset_index`) copies MedQuAD whole and only the embedded arXiv papers.
+  - Rowids are remapped to the vector matrix order, and the vectors are copied unchanged.
+  - Result: 2.6 GB → **150 MB + 147 MB of vectors**. Spot checks returned the same hybrid results on both corpora.
+- **Packaging:** added `[tool.setuptools.package-data]` so the sentiment head ships with the package.
+- **UI:** a "Public demo · N of 25 questions left today" banner, refreshed after every answer.
+- **Hugging Face files** in `deploy/huggingface/`:
+  - A three-stage Dockerfile: the React build; Ollama 0.40.17 with `embeddinggemma` pulled at build time (GPU libraries deleted); and a Python 3.12 slim image serving on 7860 as uid 1000.
+  - `start.sh` starts Ollama, waits until it answers, then runs `uvicorn --proxy-headers` so rate limits see the real visitor IP.
+  - The Space card README, and `stage.py`, which builds the upload folder and refuses to stage anything named `.env*` or `llm_settings.json`.
+- **Bug fix:** the stress-test p90 used `ordered[int(0.9*(n-1))]`, which returns the minimum for n=2 (p90 < median in an earlier summary). It now uses nearest rank, `ordered[ceil(0.9n)-1]`.
+
+**Tests:** 10 new tests in `tests/test_demo.py`, covering quota maths and the daily reset, visitor isolation for every route (including continuing someone else's chat), feedback scoping, the 429 and cache refund, admin-only settings and documents in demo mode, unscoped local mode, frame headers, production rules, environment defaults, and `subset_index` with a dense-only search. **151 backend tests pass**; ruff and mypy are clean.
+
+**Blocker: Hugging Face now charges for Docker Spaces.** Creating the Space returned `402 Payment Required`: "hosting Gradio and Docker Spaces on free cpu-basic requires a PRO subscription". Only static Spaces stay free, and a static page can't keep API keys secret. Nothing was created and no secrets were sent. The bundle and Dockerfile are ready either for HF PRO or for another Docker host with ≥2 GB RAM. Hosts with 512 MB free tiers (Render, Koyeb) would need the embeddings moved to an API and the corpora re-embedded, a quality-relevant change that would have to be measured first.
+
+**Frontend test runner false alarm:** Vitest reported "failed to find the current suite" for every file, even with the changes stashed. Root cause: the shell's working directory used a lowercase drive letter (`c:\...`) while Vitest resolved `C:\...`, so Windows loaded the `vitest` module twice under two paths. Run from an uppercase `C:` path, all **13/13 tests pass**, and `tsc` and `vite build` are clean. It was environmental, not a code regression; noted for anyone running the tests from Git Bash on Windows.
+
+### P2.16 Full stress test on the cloud setup (2026-11-24)
+**Why:** the README only had cloud numbers from 8 questions, and the owner wanted the default (Groq + Gemini) setup measured as thoroughly as the local model. This deliberately used ~100 Groq requests, paced at 12 s for the 8k tokens/min limit. No demo depended on the quota that day.
+
+**Results (96 fresh questions + 4 cache repeats):**
+- Latency: mean **2.0 s**, median 1.7 s, p90 3.1 s, max 13.4 s (one general question).
+- By mode: General 2.3 s, Medical 1.8 s, Research 2.2 s. Non-English 3.0 s, images 4.4 s, emergencies 1.2 s, cached 0.0 s.
+- Stages: first token 0.96 s, generation 1.33 s, retrieval 0.16 s, citation repair 0.02 s, translation 1.17 s, vision 2.97 s.
+- Hindi, Hinglish, Bengali, Spanish and French answers read fluently and were cited. One word slip: Hinglish "siyahi" (ink) used for wheezing.
+
+**First score 95/100; all 5 "failures" were correct refusals.** The cases were coding, smartphone, meth synthesis, boiling point and movie recommendation. The 27B model declines and then cites what the sources *do* cover ("the sources only describe its health effects [1]"). The verdict logic treated any valid citation as *grounded*, and the eval failed abstain cases that had citations.
+
+**Fix:** `opens_with_refusal()` in `chat/pipeline.py`. An answer whose first sentence declines counts as **abstained** even with citations; English plus Spanish, French, German and Hinglish openers are covered. A unit test uses real answers from this run, and negatives check that later "cannot" sentences aren't misread. The eval now accepts abstained answers with citations.
+
+**Re-scoring:** applying the same rule to the saved results moved 7 answers to *abstained*: the 5 above, plus two honest "the sources don't say" answers (ibuprofen side effects, inventor of the transformer). The result is **100/100**. The local full run wasn't re-scored; it stays the record from before its own fixes.
+
+**Bug found on the way:** the stress-test p90 formula (see P2.15).
+
 ---
 
-## Remaining backlog (updated 2026-11-24)
-Done since the pause: P2.6 Stop button, P2.7 e2e + incremental embedding, P2.8 answer-quality eval (prompt v2 negative), P2.9 citation repair, P2.10 arXiv 50k + demo GIF + docs.
-
-Open items (all optional polish):
-1. Grow arXiv dense coverage further: `python -m billie.ingest arxiv --embed-only --embed-limit 100000` (~1 h per 30k on this CPU; slows answers while running).
-2. Refresh the README screenshots (the medical-hindi and research images predate feedback buttons and citation repair).
-3. Retrieval for misspelled or slang medical terms (e.g. "VDRL" found nothing): a query-expansion step via the translation prompt for English too was considered, but it costs ~3-4 s per question on CPU. Measure before adopting.
-4. Owner decisions pending: delete the `repo/` and `zip_extract/` scratch folders; git commit/push (only when asked); Docker can't be verified on this laptop.
-5. When asked: produce the full project PDF from this DEVLOG + README + ARCHITECTURE.
+## Remaining backlog (updated 2026-11-24, end of P2.16)
+Open items:
+1. **Hosting the public demo.** Hugging Face now requires PRO for Docker Spaces (402). Ready to deploy with `deploy/huggingface/` on HF PRO or any Docker host with ~2 GB RAM. Secrets needed: `GROQ_API_KEY`, `GEMINI_API_KEY`, `BILLIE_ADMIN_KEY`.
+2. Grow arXiv dense coverage further: `python -m billie.ingest arxiv --embed-only --embed-limit 100000` (~1 h per 30k on this CPU).
+3. Refresh the README screenshots (they predate feedback buttons and citation repair).
+4. Retrieval for misspelled or abbreviated medical terms (e.g. "VDRL"): measure an English query-expansion step before adopting it.
+5. Owner decision: delete the `repo/` and `zip_extract/` scratch folders.

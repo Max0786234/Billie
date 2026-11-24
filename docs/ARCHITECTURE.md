@@ -100,15 +100,23 @@ Prompt processing dominates time-to-first-token, so the design budgets context c
 
 | Threat | Mitigation |
 |---|---|
-| Open deployment | `BILLIE_ENV=production` refuses to start without `BILLIE_API_KEY` and `BILLIE_ADMIN_KEY`; keys are compared in constant time |
+| Open deployment | `BILLIE_ENV=production` refuses to start without `BILLIE_ADMIN_KEY`, and without `BILLIE_API_KEY` unless it is a public demo; keys are compared in constant time |
+| Public demo abuse | `BILLIE_DEMO=1`: conversations are owned by a hashed per-browser visitor id (someone else's chat is a 404); daily question caps per visitor IP and in total protect the free model quota; cached answers are refunded; settings and documents stay admin-only |
 | Arbitrary file read | The original API accepted server *paths* for images. Uploads are now validated by magic bytes and size, stored under random IDs, and referenced only by ID |
 | Path traversal | IDs must match `^[0-9a-f]{32}\.(png\|jpg\|gif\|webp)$`; document names are reduced to a safe base name |
 | Prompt injection via documents | Sources are fenced in `<sources>` and declared untrusted in the system prompt; fence tags inside third-party text are neutralised, so a document cannot close the block |
 | SSRF | URL ingestion was removed; the knowledge base only takes local files and uploads |
 | Abuse of expensive endpoints | Per-client token-bucket rate limit on chat, uploads and model tests |
-| Browser hardening | CSP, `X-Frame-Options: DENY`, `nosniff`, `no-referrer`; CORS limited to configured origins |
+| Browser hardening | CSP (`frame-ancestors` configurable for hosted demos), `X-Frame-Options: DENY`, `nosniff`, `no-referrer`; CORS limited to configured origins |
 | Medical emergencies | Deterministic multilingual detector → banner with emergency numbers / crisis helplines, plus a prompt instruction; doesn't rely on the model |
 | Runaway generation | Pure ASGI middleware, so a client disconnect (Stop button, closed tab) closes the stream to Ollama within ~0.1 s; a regression test forbids `BaseHTTPMiddleware` |
+
+## Deployment
+
+- **Local** (default): two processes (`uvicorn` + Vite dev server) or `docker compose up`, with Ollama models on the host.
+- **Hosted demo** (`deploy/huggingface/`): one container serves the API and the built React app on port 7860. Answers come from Groq (text) and Gemini (images), with keys stored as host secrets. Ollama + `embeddinggemma` run *inside* the container for embeddings, because the indexes were embedded with that exact model; mixing embedding models would make the vectors incomparable.
+- **Index bundle:** `python -m billie.ingest bundle` copies MedQuAD and only the 50k embedded arXiv papers. It remaps rowids to the vector order, cutting 2.6 GB to ~300 MB with identical hybrid results for those papers.
+- **Hosting constraint found:** Hugging Face Docker Spaces now need a paid plan on the free CPU tier. The container needs ~2 GB RAM (embedding model + vectors), which rules out 512 MB free tiers without moving embeddings to an API.
 
 ## Testing
 
