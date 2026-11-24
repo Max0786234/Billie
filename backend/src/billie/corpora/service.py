@@ -67,7 +67,8 @@ class CorpusService:
         return self._indexes[name]
 
     def retriever(self, name: CorpusName) -> HybridRetriever:
-        return HybridRetriever(self._indexes[name], self.embedder)
+        # Chunk collapsing suits MedQuAD (one answer split in chunks), not documents.
+        return HybridRetriever(self._indexes[name], self.embedder, collapse_chunks=name != "knowledge")
 
     # ------------------------------------------------------------ startup
     def prepare(self) -> None:

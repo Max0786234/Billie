@@ -127,7 +127,7 @@ class PrivateDocuments:
         if not index.exists():
             return None
         self._touch(owner)
-        return HybridRetriever(index, self.embedder)
+        return HybridRetriever(index, self.embedder, collapse_chunks=False)  # keep every chunk of a document
 
     # -------------------------------------------------------------- write
     def add(self, owner: str, filename: str, data: bytes) -> list[PrivateDocument]:
@@ -158,7 +158,7 @@ class PrivateDocuments:
                 if added > self.max_passages:
                     raise UploadError(
                         f"This document is too long for the demo (about {added} passages; the limit is "
-                        f"{self.max_passages}, roughly 40 pages). Try a shorter document."
+                        f"{self.max_passages}, roughly 25 pages of dense text). Try a shorter document."
                     )
             except UploadError:
                 self._discard(path)
@@ -169,7 +169,13 @@ class PrivateDocuments:
                 raise UploadError(
                     "This file could not be read. Check that it is a valid PDF, Markdown or text file."
                 ) from exc
-            self._rebuild(owner)
+            try:
+                self._rebuild(owner)
+            except Exception as exc:  # never leave a half-added file or a 500 behind
+                log.warning("indexing private document failed: %s", exc)
+                self._discard(path)
+                self._rebuild(owner)
+                raise UploadError("This file could not be indexed. Please try a different file.") from exc
             return self.documents(owner)
 
     def delete(self, owner: str, name: str) -> list[PrivateDocument]:

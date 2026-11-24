@@ -195,3 +195,24 @@ def test_each_file_is_embedded_once_and_meaning_search_works(tmp_path):
     store.delete(OWNER, "eyes.md")
     assert not (tmp_path / "private" / OWNER / "files" / "eyes.md.vectors.npz").exists()
     assert embedder.embedded - first == 1  # removing a file re-embeds nothing
+
+
+def test_repeated_headings_and_code_comments_do_not_collide(tmp_path):
+    # Found by the evaluation: a document repeating a heading (or with "# ..." lines in code
+    # samples) produced duplicate passage ids and crashed the index build with a 500.
+    store = PrivateDocuments(tmp_path / "private", None)
+    doc = b"# Setup\n\nInstall it.\n\n# Usage\n\nRun it.\n\n# Setup\n\nInstall it again.\n\n```\n# Setup\n```\n"
+    docs = store.add(OWNER, "repeats.md", doc)
+    assert docs[0].passages >= 3
+    store.add(OWNER, "falcon.md", SECRET)  # and a second file still works
+    assert {d.name for d in store.documents(OWNER)} == {"repeats.md", "falcon.md"}
+
+
+def test_a_document_without_headings_keeps_all_its_chunks_in_search(tmp_path):
+    # Found by the evaluation: PDF text has no headings, so every chunk shares one title and the
+    # MedQuAD rule "one source per (document, title)" kept only one chunk of the whole PDF.
+    store = PrivateDocuments(tmp_path / "private", None)
+    facts = [f"Budget line {n}: the parks budget item number {n} was approved by the council." for n in range(40)]
+    store.add(OWNER, "plain.txt", " ".join(facts).encode())
+    hits = store.retriever(OWNER).search("parks budget approved council", top_k=4).hits
+    assert len(hits) == 4 and len({h.passage.id for h in hits}) == 4

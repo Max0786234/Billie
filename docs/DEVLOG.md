@@ -485,7 +485,7 @@ API checks on fresh questions in Medical mode:
   - The lifetime is configurable: `BILLIE_PRIVATE_DOCS_TTL_MINUTES`.
 - **Never cached.** When a visitor has files, General-mode answers skip the shared answer cache, both lookup and store. Otherwise a cached answer built from one visitor's file could be served to another. Tested.
 - **Limits:**
-  - 3 files per visitor, 5 MB per file, and 150 passages per file (~40 pages; this bounds embedding time on 2 CPUs)
+  - 3 files per visitor, 5 MB per file, and 150 passages per file (~25 dense pages, measured in P2.20; this bounds embedding time on 2 CPUs)
   - 300 MB total on disk and 100 visitors holding files at once
   - the existing rate limit and daily question caps
 
@@ -533,6 +533,60 @@ API checks on fresh questions in Medical mode:
 - "daily meal allowance?" was answered on Groq in 0.8 s: "1,800 rupees [1]", cited as "Your document", not cached
 
 The test file was removed afterwards.
+
+### P2.20 Evaluating answers over visitors' own documents (2026-11-25)
+**Question (owner):** are answers correct for the documents a user provides, and does a local test say anything about Groq + Gemini?
+
+**Method** (`evals/private_docs_eval.py`; data in `evals/datasets/private_docs/`). Two PDFs are uploaded as one demo visitor:
+- a generated **22-page city annual report** (`make_city_report.py`). Its known facts sit in prose and tables, among plausible filler that shares their vocabulary, so search has real distractors.
+- the real **20-page project report**, which has real tables.
+
+**30 questions:**
+
+| Kind | Count |
+|---|---|
+| Plain facts | 11 |
+| Table values | 8 |
+| Combining two figures (e.g. a difference or a sum) | 4 |
+| Lists | 2 |
+| Summary | 1 |
+| Not answered by the documents | 4 |
+
+**Two scores:**
+- **Retrieval:** did a source contain the answer, or the figures it's computed from? This is model-independent, because the search code and embedding model are identical locally and live.
+- **Answer correctness:** checked automatically against expected facts. For unanswerable questions, the answer must decline without inventing a figure.
+
+**Why a local run says something about Groq:** search and embeddings are identical, so retrieval results transfer exactly. Writing quality is a lower bound, so a 10-question Groq spot-check (~10 requests) confirms it.
+
+**First run: 25/30 (retrieval 22/26). Failures traced to real bugs:**
+1. **Uploading the project report crashed** with `UNIQUE constraint failed: passages.id`.
+   - Passage ids were (file, section title, chunk number), so a repeated heading, or `# …` lines inside code samples (which parse as Markdown headings), produced the same id twice. This also affected shared admin uploads.
+   - Because the rebuild ran outside the error handling, the visitor got a 500 and the file stayed half-added.
+   - Fixes: the section's position is now part of the id, and an indexing failure now rolls back the upload with a clear message. Regression test added.
+2. **A PDF collapsed into a single source.**
+   - Search drops repeated chunks of the same (document, title). That rule is right for MedQuAD, where one answer is split into chunks, but PDF text has no headings, so every chunk of a 137-passage report shared one title and only one survived.
+   - This caused "Which department had the largest budget?" → "Public transport" (Billie saw half the table), and two missed facts in the project report. Long sections in the shared knowledge base were affected the same way.
+   - Fix: `collapse_chunks` applies only to MedQuAD and arXiv; documents keep every distinct chunk, and identical text is still removed. Regression test added.
+3. **Three scoring mistakes in the evaluation itself** (fixed, never by changing answers):
+   - a refusal flagged for "2023." echoed from the question;
+   - a computed sum checked against the sources (which can only contain its parts);
+   - years and citation markers like "[1]" counted as invented figures.
+
+**Final results (`docs/evaluation/private_docs/`; the first run is kept as `*_before_fixes.json`):**
+
+| | Local qwen3:4b-instruct (30 questions) | Groq qwen3.8-27b (10 hardest) |
+|---|---|---|
+| Correct | **28/30** | **9/10** |
+| Right passage among the sources | 25/26 | 8/9 |
+| Facts, tables, combined figures, lists, unanswerable | 10/11, 8/8, 4/4, 2/2, 4/4 | 2/2, 3/3, 2/2, 1/1, 1/1 |
+| Whole-document summary | 0/1 | 0/1 |
+| Mean time per answer | 9.2 s | 0.9 s |
+
+**What's left, and why:**
+- **"Summarise the report" fails on both models.** Billie answers from the 4 most relevant passages, and a 22-page report can't be summarised from 4 passages, so it picks up two real achievements plus generic text. This is a limit of question-driven retrieval, not of the model. A real fix would need a separate summarise path (e.g. sampling passages across the whole document, or summarising section by section). That's possible, but slow on a CPU.
+- **One local miss:** asked for the Stop-button timings, the 4B model found "20–35 s before" but missed "35.7 s → 0.6 s" in its sources. Groq answered it correctly (35 s → 0.6 s).
+- **Page limit corrected:** dense pages produce ~6 passages each. The 22-page report made 137 passages, close to the 150 limit, so the upload message now says "about 25 pages of dense text" instead of 40.
+- **Upload time locally:** 20.7 s for the 137-passage PDF and 15.5 s for 88 passages (embedding on the laptop CPU). The live site uses the same CPU-only embedding on 2 vCPUs, so expect a similar or longer wait.
 
 ---
 

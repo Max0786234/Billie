@@ -1,0 +1,424 @@
+[
+  {
+    "id": "F04",
+    "kind": "fact",
+    "doc": "riverton",
+    "q": "What is the capacity of the new water treatment plant and where is it?",
+    "any": [
+      [
+        "120",
+        "Kharadi"
+      ]
+    ],
+    "retrieval": true,
+    "correct": true,
+    "detail": "",
+    "answer": "The new water treatment plant is located at Kharadi and has a capacity of 120 million litres per day [1].",
+    "grounded": true,
+    "abstained": false,
+    "sources": [
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      }
+    ],
+    "cited_private": true,
+    "model": "qwen/qwen3.8-27b",
+    "seconds": 2.0
+  },
+  {
+    "id": "T03",
+    "kind": "table",
+    "doc": "riverton",
+    "q": "What was the average daily bus ridership in Q3?",
+    "any": [
+      [
+        "341,000"
+      ],
+      [
+        "341000"
+      ]
+    ],
+    "retrieval": true,
+    "correct": true,
+    "detail": "",
+    "answer": "The average daily bus ridership in Q3 was 341,000 [1].",
+    "grounded": true,
+    "abstained": false,
+    "sources": [
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · billie_project_report.pdf",
+        "title": "Stage"
+      }
+    ],
+    "cited_private": true,
+    "model": "qwen/qwen3.8-27b",
+    "seconds": 0.7
+  },
+  {
+    "id": "T06",
+    "kind": "table",
+    "doc": "riverton",
+    "q": "Which department received the largest budget?",
+    "any": [
+      [
+        "Roads"
+      ]
+    ],
+    "retrieval": true,
+    "correct": true,
+    "detail": "",
+    "answer": "The Roads department received the largest budget, with an allocation of 2,115 crore rupees [1].",
+    "grounded": true,
+    "abstained": false,
+    "sources": [
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      }
+    ],
+    "cited_private": true,
+    "model": "qwen/qwen3.8-27b",
+    "seconds": 0.8
+  },
+  {
+    "id": "M01",
+    "kind": "multi-hop",
+    "doc": "riverton",
+    "q": "By how many cases did dengue fall from 2024 to 2025?",
+    "any": [
+      [
+        "1,910"
+      ],
+      [
+        "1910"
+      ],
+      [
+        "4,820",
+        "2,910"
+      ]
+    ],
+    "evidence": [
+      "4,820",
+      "2,910"
+    ],
+    "retrieval": true,
+    "correct": true,
+    "detail": "",
+    "answer": "Dengue cases fell by 1,910 from 2024 to 2025 [1]. This decrease occurred after a city-wide fogging and larvae-control drive [1].",
+    "grounded": true,
+    "abstained": false,
+    "sources": [
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      }
+    ],
+    "cited_private": true,
+    "model": "qwen/qwen3.8-27b",
+    "seconds": 0.8
+  },
+  {
+    "id": "M04",
+    "kind": "multi-hop",
+    "doc": "riverton",
+    "q": "What was the combined budget for water supply and sanitation?",
+    "any": [
+      [
+        "2,220"
+      ],
+      [
+        "2220"
+      ]
+    ],
+    "evidence": [
+      "1,240",
+      "980"
+    ],
+    "retrieval": true,
+    "correct": true,
+    "detail": "",
+    "answer": "The combined budget for water supply and sanitation in 2025 was 2,220 crore rupees [1]. This total is calculated by adding the water supply budget of 1,240 crore rupees to the sanitation budget of 980 crore rupees [1].",
+    "grounded": true,
+    "abstained": false,
+    "sources": [
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      }
+    ],
+    "cited_private": true,
+    "model": "qwen/qwen3.8-27b",
+    "seconds": 0.7
+  },
+  {
+    "id": "S01",
+    "kind": "list",
+    "doc": "riverton",
+    "q": "List all the departments in the 2025 budget table.",
+    "min_of": 6,
+    "terms": [
+      "Water",
+      "Roads",
+      "Health",
+      "Education",
+      "Sanitation",
+      "Parks",
+      "transport",
+      "Administration"
+    ],
+    "retrieval": true,
+    "correct": true,
+    "detail": "answer has 8/8, sources have 8",
+    "answer": "The departments listed in the 2025 budget table are: [1]\n*   Water supply\n*   Roads\n*   Health\n*   Education\n*   Sanitation\n*   Parks\n*   Public transport\n*   Administration\n\n[1]",
+    "grounded": true,
+    "abstained": false,
+    "sources": [
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      }
+    ],
+    "cited_private": true,
+    "model": "qwen/qwen3.8-27b",
+    "seconds": 0.8
+  },
+  {
+    "id": "S02",
+    "kind": "summary",
+    "doc": "riverton",
+    "q": "Summarise the main achievements in Riverton's 2025 annual report.",
+    "min_of": 3,
+    "terms": [
+      "treatment plant",
+      "electric bus",
+      "trees",
+      "homes",
+      "dengue",
+      "leakage",
+      "STEM",
+      "air quality"
+    ],
+    "retrieval": false,
+    "correct": false,
+    "detail": "answer has 2/8, sources have 2",
+    "answer": "Riverton's 2025 annual report highlights several key achievements across financial, infrastructure, and environmental sectors: [4]\n\n*   **Financial and Administrative Improvements:** The council modernized audited accounts, expanded revenue collection, and strengthened state grants while coordinating with ward offices to improve communication and timelines [1][2][3].\n*   **Capital Works and Budgeting:** There were improvements to capital works and an expansion of the annual budget, with continued coordination on ward office initiatives [2][3].\n*   **Parks and Environment:** The city maintained 1,150 hectares of green space, planted 48,000 trees, and improved the annual average air quality index from 104 in 2024 to 92 in 2025 [4].\n*   **Urban Forests and Heat Management:** The council expanded and upgraded urban forests while coordinating with ward offices on heat action plans [4].",
+    "grounded": true,
+    "abstained": false,
+    "sources": [
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      }
+    ],
+    "cited_private": true,
+    "model": "qwen/qwen3.8-27b",
+    "seconds": 0.8
+  },
+  {
+    "id": "U03",
+    "kind": "unanswerable",
+    "doc": "riverton",
+    "q": "What was the council's total budget in 2023?",
+    "retrieval": null,
+    "correct": true,
+    "detail": "declined=True invented=[] (re-scored: years and citation markers are not figures)",
+    "answer": "I could not find the council's total budget for 2023 in the available documents. The provided sources only contain budget information for the year 2025 [1]. You might want to check the Riverton Annual Report for 2023 or 2024 for that specific figure.",
+    "grounded": null,
+    "abstained": true,
+    "sources": [
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      },
+      {
+        "source": "Your document · riverton_annual_report_2025.pdf",
+        "title": "Riverton Annual Report 2025"
+      }
+    ],
+    "cited_private": true,
+    "model": "qwen/qwen3.8-27b",
+    "seconds": 0.7
+  },
+  {
+    "id": "R03",
+    "kind": "table",
+    "doc": "billie_report",
+    "q": "What generation speed in tokens per second did qwen3:8b reach?",
+    "any": [
+      [
+        "5.1"
+      ]
+    ],
+    "retrieval": true,
+    "correct": true,
+    "detail": "",
+    "answer": "The qwen3:8b model reached a generation speed of 5.1 tokens per second [3].",
+    "grounded": true,
+    "abstained": false,
+    "sources": [
+      {
+        "source": "faq.md",
+        "title": "Frequently Asked Questions › Which local models are recommended?"
+      },
+      {
+        "source": "Your document · billie_project_report.pdf",
+        "title": "Stage"
+      },
+      {
+        "source": "Your document · billie_project_report.pdf",
+        "title": "Stage"
+      },
+      {
+        "source": "Your document · billie_project_report.pdf",
+        "title": "Stage"
+      }
+    ],
+    "cited_private": true,
+    "model": "qwen/qwen3.8-27b",
+    "seconds": 0.8
+  },
+  {
+    "id": "R04",
+    "kind": "fact",
+    "doc": "billie_report",
+    "q": "How long did the Stop button take to stop generation before and after the fix?",
+    "any": [
+      [
+        "35.7",
+        "0.6"
+      ],
+      [
+        "35 s",
+        "0.6"
+      ],
+      [
+        "35 seconds",
+        "0.6"
+      ]
+    ],
+    "evidence": [
+      "35.7",
+      "0.6"
+    ],
+    "retrieval": true,
+    "correct": true,
+    "detail": "",
+    "answer": "Before the fix, the Stop button failed to stop generation immediately, causing the next answer to wait for an extra 20–35 seconds [1][3]. After the fix, which involved rewriting the middleware as pure ASGI, the generation stop time was reduced from 35.7 seconds to 0.6 seconds [4].",
+    "grounded": true,
+    "abstained": false,
+    "sources": [
+      {
+        "source": "Your document · billie_project_report.pdf",
+        "title": "Stage"
+      },
+      {
+        "source": "Your document · billie_project_report.pdf",
+        "title": "Stage"
+      },
+      {
+        "source": "Your document · billie_project_report.pdf",
+        "title": "Stage"
+      },
+      {
+        "source": "Your document · billie_project_report.pdf",
+        "title": "Stage"
+      }
+    ],
+    "cited_private": true,
+    "model": "qwen/qwen3.8-27b",
+    "seconds": 0.8
+  }
+]

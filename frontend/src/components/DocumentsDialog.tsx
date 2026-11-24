@@ -167,7 +167,7 @@ export function PrivateDocumentsDialog({ onClose, onAdmin }: { onClose: () => vo
         {busy ??
           (full
             ? `Limit reached: ${limits?.max_files} documents. Remove one to add another.`
-            : `Upload a PDF, Markdown or text file (up to ${limits?.max_mb ?? 5} MB, about 40 pages)`)}
+            : `Upload a PDF, Markdown or text file (up to ${limits?.max_mb ?? 5} MB, about 25 pages of text)`)}
       </button>
       {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
       <ul className="mt-4 divide-y divide-zinc-100 dark:divide-zinc-800">

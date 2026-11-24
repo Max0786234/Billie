@@ -55,9 +55,12 @@ def iter_knowledge(files: Iterable[Path], root: Path, max_chars: int = 900) -> I
         text = read_document(path)
         rel = _relative(path, root)
         title_default = _title_from_name(path)
-        for section_title, section_text in _sections(text, title_default):
+        # The section's position is part of the id: a document can repeat a heading (or contain
+        # "# ..." lines in code samples), and identical (file, title, chunk) ids crashed the index
+        # build (found by the private-documents evaluation, DEVLOG P2.20).
+        for position, (section_title, section_text) in enumerate(_sections(text, title_default)):
             for n, chunk in enumerate(chunk_text(section_text, max_chars=max_chars, overlap_chars=150)):
-                digest = hashlib.sha1(f"{rel}|{section_title}|{n}".encode()).hexdigest()[:12]
+                digest = hashlib.sha1(f"{rel}|{position}|{section_title}|{n}".encode()).hexdigest()[:12]
                 yield Passage(
                     id=f"kb:{digest}",
                     doc_id=rel,

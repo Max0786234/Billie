@@ -1,0 +1,16 @@
+{
+  "questions": 10,
+  "correct": 9,
+  "retrieval_hit": "8/9",
+  "by_kind": {
+    "fact": "2/2",
+    "list": "1/1",
+    "multi-hop": "2/2",
+    "summary": "0/1",
+    "table": "3/3",
+    "unanswerable": "1/1"
+  },
+  "mean_seconds": 0.9,
+  "model": "qwen/qwen3.8-27b",
+  "note": "U03 re-scored after the year false positive was fixed in the scorer; answers unchanged"
+}

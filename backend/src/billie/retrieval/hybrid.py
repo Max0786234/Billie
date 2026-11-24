@@ -44,6 +44,7 @@ class HybridRetriever:
         candidates: int = 30,
         rrf_k: int = 60,
         min_dense_score: float = 0.30,
+        collapse_chunks: bool = True,
     ) -> None:
         self.index = index
         self.embedder = embedder
@@ -52,6 +53,10 @@ class HybridRetriever:
         self.rrf_k = rrf_k
         # Dense search always returns *something*; below this cosine a dense-only hit is noise.
         self.min_dense_score = min_dense_score
+        # MedQuAD: chunks of one answer (same doc + title) count once. Documents (Billie's docs,
+        # uploads) keep every distinct chunk: a PDF's text has no headings, so all its chunks
+        # share one title and would collapse into a single source (found in DEVLOG P2.20).
+        self.collapse_chunks = collapse_chunks
 
     def search(self, query: str, top_k: int = 5) -> SearchResult:
         timings: dict[str, float] = {}
@@ -95,7 +100,7 @@ class HybridRetriever:
             content_key = content_fingerprint(passage.title, passage.text)
             # (doc, title): chunks of one answer collapse; different sections of one file do not.
             doc_key = (passage.doc_id, passage.title)
-            if doc_key in seen_docs or content_key in seen_content:
+            if (self.collapse_chunks and doc_key in seen_docs) or content_key in seen_content:
                 continue
             seen_docs.add(doc_key)
             seen_content.add(content_key)

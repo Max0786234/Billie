@@ -1,0 +1,15 @@
+{
+  "questions": 30,
+  "correct": 25,
+  "retrieval_hit": "22/26",
+  "by_kind": {
+    "fact": "10/11",
+    "list": "2/2",
+    "multi-hop": "4/4",
+    "summary": "0/1",
+    "table": "6/8",
+    "unanswerable": "3/4"
+  },
+  "mean_seconds": 8.7,
+  "model": "qwen3:4b-instruct"
+}
